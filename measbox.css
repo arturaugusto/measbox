@@ -1,0 +1,185 @@
+/* CSS declarations go here */
+
+#pdfChartContainer svg {
+  width:100%;
+  height:100%;
+  min-height: 400px;
+  margin-left: -20px;
+}
+
+#rangeChartContainer svg {
+  position: absolute;
+  min-height: 200px;
+  width:100%;
+  height:80%;
+  margin: 0px;
+  padding: 0px;
+}
+
+#rangeChartContainer .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
+    fill-opacity: 1 !important;
+    stroke-opacity: 1 !important;
+}
+
+svg text{
+  font-family: sans-serif;
+}
+
+
+.wrap {
+  min-height: 100%;
+  right: 60%;
+}
+
+
+.bottom-row,
+.top-row {
+  position: absolute;
+  width: 60%;
+  overflow-y: scroll;
+}
+
+.top-row {
+  top:0%;
+  bottom:50%; /* handler change this */
+}
+
+
+.worksheet-selects-panel {
+  margin-bottom: 0px;
+}
+
+.middle-row {
+  position: absolute;
+  width: 60%;
+  top:50%; /* handler change this */
+  overflow-y: hidden;
+  
+}
+
+
+.middle-row > .pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 0px 0;
+    border-radius: 0 !important;
+}
+
+.middle-row > .pagination-sm > li > a, .pagination-sm > li > span {
+    padding: 0px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 0 !important;
+}
+
+
+
+.bottom-row {
+  top:51%; /* handler change this */
+  height:49%; /* handler change this */
+  bottom:100%;
+}
+
+.results-col {
+  top:0%;
+  position: absolute;
+  left: 60%;
+  width: 40%;
+  min-height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 12px;
+  align-content: center;
+}
+
+.bottom-row .tab-content {
+  overflow-y: auto;
+}
+
+.bottom-row .tab-content,
+.top-row {
+  padding: 0px;
+}
+
+.middle-row-handler {
+  background: #F6F6F6;
+  -webkit-box-shadow: 0 0 1px black;
+  cursor: row-resize;
+  
+  z-index: 10;
+  /* height: 44px; */
+  /*background-color: #F5F5F5;*/
+}
+
+
+
+*::-webkit-scrollbar {
+    width: 1em;
+}
+ 
+*::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.3);
+
+}
+ 
+*::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.panel-tools {
+  display: inline-block;
+  float: right;
+  margin-top: 0;
+  padding: 0;
+  position: relative;
+}
+
+.panel-tools a {
+  margin-left: 2px;
+  color: #949ba2;
+  cursor: pointer;
+}
+/*
+.selectize-input {
+  background: #494B54;
+}
+*/
+.btn.btn-squared {
+  border-radius: 0;
+}
+
+.instruments-select .input-group {
+  padding-bottom: 12px;
+}
+.json-editor-holder {
+  padding: 12px;
+}
+
+.nav-tabs a {
+  color: black;
+}
+
+.dashed {
+  stroke-dasharray: 5,5;
+}
+
+#uncertaintiesComponents td {
+  width: 60%;
+}
+
+#uncertaintiesComponents td:first-child {
+  width: 40%;
+}
+
+#uncertaintiesComponents td div {
+  height: 15px;
+}
+
+.form-group {
+  margin-bottom: 0px;
+}
+
+#procedureFuncShow {
+  text-align: center;
+}

@@ -1,0 +1,58 @@
+<template name="showResults">
+  <!--
+  <div>
+    <div id="renderedResult">
+    </div>  
+  </div>
+  -->
+
+  {{#with rowData._results}}
+  <center>
+    <strong>Mathematical model: </strong>
+    
+    <!--{{mathjax}}--><p id="procedureFuncShow"> y = {{funcLaTeX}} </p><!--{{
+    mathjax}}-->
+    
+  </center>
+  {{/with}}
+
+  <div id="pdfChartContainer">
+    <svg/>
+  </div>
+  
+  <div class="">
+    <div>
+      {{#with uncertaintiesChartDatum}}
+      <table class="table table-bordered table-condensed" id="uncertaintiesComponents">
+        <caption>Uncertainty budget:</caption>
+        <thead>
+          <tr>
+            <th style="text-align:left">quantity</th>
+            <th style="text-align:center;width: 8%;">type</th>
+            <th style="text-align:center;width: 8%;">dist.</th>
+            <th style="text-align:center;width: 8%;">coef.</th>
+            <th style="text-align:center;width: 8%;">contribution</th>
+            <th>chart</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this}}
+          <tr>
+            <td style="text-align:left">{{label}}</td>
+            <td style="text-align:center;width: 8%;">{{type}}</td>
+            <td style="text-align:center;width: 8%;">{{distribution}}</td>
+            <td style="text-align:center;width: 8%;">{{coef}}</td>
+            <td style="text-align:center;width: 8%;">{{contribution}}</td>
+            <td><div style="width: {{_barWidth}}%; background: {{_barColor}}"></div></td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{/with}}
+    </div>
+
+  </div>
+  
+
+
+</template>

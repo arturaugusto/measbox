@@ -1,0 +1,58 @@
+<template name="showSpreadsheet">
+  <head>
+    <title>measbox</title>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top-row">
+
+        <!-- Nav tabs -->
+        <div class="tabs-left">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#worksheets" aria-controls="worksheets" data-toggle="tab"><i class="fa fa-table"></i></a></li>
+            <li><a href="#procedures" aria-controls="procedures" data-toggle="tab"><i class="fa fa-tasks"></i></a></li>
+            <li><a href="#instruments" aria-controls="instruments" data-toggle="tab"><i class="fa fa-tachometer"></i></a></li>
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div class="tab-pane active" id="worksheets">
+              {{#with selectedWorksheetWithIndex}}
+                {{> worksheets }}
+              {{/with}}
+            </div>
+            <div class="tab-pane" id="procedures">
+              {{> jsonEditorForm field="procedures"}}
+            </div>
+            <div class="tab-pane" id="instruments">
+              {{> jsonEditorForm field="instruments"}}
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="middle-row middle-row-handler">
+        <ul class="pagination pagination-sm">
+
+          {{#each worksheetsWithIndex}}
+          <li class="squared {{#if isSelectedWorksheet this._id}}active{{/if}}"><a href="#" class="squared select-worksheet" data-worksheet="{{this._id}}">{{worksheetName this._id}}</a></li>
+          {{/each}}
+          <li class="squared"><a href="#" id="newWorksheet"><i class="glyphicon glyphicon-plus"></i></a></li>
+
+        </ul>
+      </div>
+
+      <div class="bottom-row">
+
+        {{> rangeChart}}
+        
+      </div>
+      <div class="results-col">
+        
+        {{> showResults}}
+        
+      </div>
+    </div>
+
+  </body>
+</template>

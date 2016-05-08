@@ -1,0 +1,86 @@
+<template name="worksheets">
+  {{#let worksheetIndex=index}}
+  <div class="panel panel-filled panel-c-accent worksheet-selects-panel">
+    <div class="panel-heading">
+      <div class="panel-tools">
+        <a class="remove-worksheet btn btn-default btn-xs">Delete <i class="fa fa-times"></i></a>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+
+        <div class="instruments-select">
+          <div class="input-group">
+            <span class="input-group-addon">Procedure</span>
+            <select class="form-control" name="procedureId" db-path="worksheets.{{worksheetIndex}}.procedureId">
+              {{#if procedureIdIsNothing}}
+              <option value="">Choose a procedure...</option>
+              {{/if}}
+              {{#each procedureLabelAndIdMap}}
+              <option value="{{value}}" {{isSelected}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+        <br>
+        <div class="row">
+        {{#each variables this.procedureId}}
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-addon">{{name}}</span>
+              <select class="form-control" name="{{name}}InstrumentId" db-path="worksheets.{{worksheetIndex}}.{{name}}InstrumentId">
+                {{#if instrumentIdIsNothing worksheetIndex}}
+                <option value="">Choose a instrument...</option>
+                {{/if}}
+                {{#each instrumentNameAndIdMap name ..}}
+                <option value="{{this.id}}" {{isSelected}}>{{this.name}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div><!-- /input-group -->
+        {{/each}}
+        </div>
+        <br>
+          
+        </div>
+        <!-- EDIT TABLE WAS HERE -->
+
+      </div>
+    </div>
+
+  </div>
+  <!-- EDIT TABLE -->
+  <div class="editTable">
+    {{#if this.procedureId}}
+    {{#let procedureId=this.procedureId worksheetId=this._id}}
+    <table class="etCore" spellcheck="false" index="{{index}}">
+      <thead>           
+        <tr>
+          <th></th>
+          {{#each colHeaders}}
+          <th>{{this.name}}{{#unless this.isInfluence}}<sub>{{plusOne this.index}}</sub>{{/unless}}</th>
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rowsWithIndex}}
+        {{#let rowDBIndex=dbIndex}}
+        <tr id="{{id}}" db-index={{dbIndex}}>
+          <td>{{index}}</td>
+
+          {{#each variablesWithIndex procedureId worksheetIndex rowDBIndex ..}}
+
+          <td var-name="{{varName}}" style="background-color: {{this.color}}" db-path="worksheets.{{worksheetIndex}}.rows.{{rowDBIndex}}.{{varName}}.{{readoutIndex}}">{{this.readout}}</td>
+          
+          {{/each}}
+        </tr>
+        {{/let}}
+        {{/each}}
+      </tbody>
+    </table>
+    {{/let}}<!--procedureId=this.procedureId worksheetId=this._id-->
+    {{/if}}<!--if this.procedureId-->
+  </div>
+  <!-- EDIT TABLE -->
+  {{/let}}<!--worksheetIndex=index-->
+</template>
