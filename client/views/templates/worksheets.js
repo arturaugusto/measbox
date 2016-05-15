@@ -25,14 +25,16 @@ Template.worksheets.onRendered(function() {
       // SEE: https://github.com/meteor/meteor/issues/1964#issuecomment-57948734 for possible solution
       setFieldData(td);
       clearTimeout(U_ANALIZER_TIMER);
-      try {
+      UncertantyAnalizer($(td).parent(), td, that.data._id);
+      
+      /*try {
         U_ANALIZER_TIMER = setTimeout(function() {
           UncertantyAnalizer($(td).parent(), td, that.data._id);
         }, 1000);
       }
       catch (e) {
         console.log(e);
-      }
+      }*/
     },
     onSelectedCellChange: function(td) {
       var $row = $(td).parent();
@@ -60,6 +62,9 @@ Template.worksheets.onCreated(function() {
 });
 
 Template.worksheets.helpers({
+  content: function(worksheetIndex, rowDBIndex) {
+    return '<td var-name="'+this.varName+'" style="background-color:'+this.color+'" db-path="worksheets.'+worksheetIndex+'.rows.'+rowDBIndex+'.'+this.varName+'.'+this.readoutIndex+'">'+this.readout+'</td>';
+  },
   procedureIdIsNothing: function() {
     return isNothing(this.procedureId);
   },

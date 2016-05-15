@@ -11,6 +11,14 @@ nv.utils.symbolMap.set('error-bar-line', function(size) {
          'h' + size
 });
 
+nv.utils.symbolMap.set('thin-x', function(size) {
+  size = Math.sqrt(size);
+  return 'M' + (-size/2) + ',' + (-size/2) +
+          'l' + size + ',' + size +
+          'm0,' + -(size) +
+          'l' + (-size) + ',' + size;
+});
+
 var buildRangeTitle = function(range, instrument) {
   var rangeTitle = instrument.name + 
   " (" + range.limits.start + 
@@ -146,6 +154,7 @@ var rangeDatum = function() {
     pointsDataMPE.push({
       _group: p._groups.toString(),
       _pos: "top",
+      shape: "thin-x",
       x: p.uutReadout,
       y: +p.mpe
     });
@@ -153,6 +162,7 @@ var rangeDatum = function() {
     pointsDataMPE.push({
       _group: p._groups.toString(),
       _pos: "bottom",
+      shape: "thin-x",
       x: p.uutReadout,
       y: -p.mpe
     });
@@ -259,6 +269,7 @@ var rangeChartBuilder = function() {
       yDomain(fixDomain(yScale.domain(), y_boundary));
       xDomain(fixDomain(xScale.domain(), x_boundary));
       redraw();
+      $('#redrawRangeChartBtn').show();
     };
 
     // zoom event handler
@@ -316,18 +327,29 @@ var addGraphRangeChart = function() {
   nv.addGraph(rangeChartBuilder);
 }
 
+var renderChart = function() {
+  if (!window.rangeChart) {
+    addGraphRangeChart();
+  };
+
+  d3.select("#rangeChartContainer svg")
+  .datum(
+    rangeDatum()
+  ).call(rangeChart);
+  rangeChart.update();
+  $('#redrawRangeChartBtn').hide();
+};
+
 Template.rangeChart.rendered = function() {
   var that = this;
-  this.autorun(function() {
-    if (!window.rangeChart) {
-      addGraphRangeChart();
-    };
-
-    d3.select("#rangeChartContainer svg")
-    .datum(
-      rangeDatum()
-    ).call(rangeChart);
-    rangeChart.update();
-  });
+  this.autorun(renderChart);
 
 };
+
+
+Template.rangeChart.events({
+  'click #redrawRangeChartBtn': function(evt) {
+    rangeChartNoData();
+    renderChart();
+  }
+});

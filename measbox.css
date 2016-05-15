@@ -16,6 +16,11 @@
   padding: 0px;
 }
 
+#redrawRangeChartBtn {
+  position: absolute;
+  display: none;
+}
+
 #rangeChartContainer .nvd3.nv-line .nvd3.nv-scatter .nv-groups .nv-point {
     fill-opacity: 1 !important;
     stroke-opacity: 1 !important;

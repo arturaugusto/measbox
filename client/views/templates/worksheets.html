@@ -41,9 +41,7 @@
         {{/each}}
         </div>
         <br>
-          
         </div>
-        <!-- EDIT TABLE WAS HERE -->
 
       </div>
     </div>
@@ -69,9 +67,10 @@
           <td>{{index}}</td>
 
           {{#each variablesWithIndex procedureId worksheetIndex rowDBIndex ..}}
-
-          <td var-name="{{varName}}" style="background-color: {{this.color}}" db-path="worksheets.{{worksheetIndex}}.rows.{{rowDBIndex}}.{{varName}}.{{readoutIndex}}">{{this.readout}}</td>
-          
+            {{{content worksheetIndex rowDBIndex}}}
+            <!--
+            <td var-name="{{varName}}" style="background-color: {{this.color}}" db-path="worksheets.{{worksheetIndex}}.rows.{{rowDBIndex}}.{{varName}}.{{readoutIndex}}">{{this.readout}}</td>
+            -->
           {{/each}}
         </tr>
         {{/let}}

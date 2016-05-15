@@ -104,7 +104,8 @@ Theme
   /*background-color: #FFF;*/
   vertical-align: top;
   /*overflow: hidden;*/
-  overflow-wrap: break-word;
+  /*overflow-wrap: break-word;*/
+  word-wrap: break-word;
   outline-width: 0;
   white-space: pre-line;
   /* preserve new line character in cell */
