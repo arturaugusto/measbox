@@ -65,17 +65,17 @@
         {{#let rowDBIndex=dbIndex}}
         <tr id="{{id}}" db-index={{dbIndex}}>
           <td>{{index}}</td>
-
           {{#each variablesWithIndex procedureId worksheetIndex rowDBIndex ..}}
-            {{{content worksheetIndex rowDBIndex}}}
-            <!--
-            <td var-name="{{varName}}" style="background-color: {{this.color}}" db-path="worksheets.{{worksheetIndex}}.rows.{{rowDBIndex}}.{{varName}}.{{readoutIndex}}">{{this.readout}}</td>
-            -->
+            <!--{{{content worksheetIndex rowDBIndex}}}-->
+            
+            <td var-name="{{varName}}" style="background-color: {{this.color}}" db-path="worksheets.{{worksheetIndex}}.rows.{{rowDBIndex}}.{{varName}}.{{readoutIndex}}"><span class="cellContentWrap">{{this.readout}}</span></td>
+            
           {{/each}}
         </tr>
         {{/let}}
         {{/each}}
       </tbody>
+      <!--{{setEditTableCurrent}}-->
     </table>
     {{/let}}<!--procedureId=this.procedureId worksheetId=this._id-->
     {{/if}}<!--if this.procedureId-->

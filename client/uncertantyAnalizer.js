@@ -1,5 +1,5 @@
 window.U_ANALIZER_TIMER = null;
-this.UncertantyAnalizer = function($tr, td, worksheetId) {
+this.UncertantyAnalizer = function($tr, rowDBPath, worksheetId) {
   var that = this;
 
   var worksheet = _.findWhere(
@@ -23,7 +23,7 @@ this.UncertantyAnalizer = function($tr, td, worksheetId) {
 
   this.groups = [];
 
-  this.rowDBPath = $(td).attr("db-path").split(".").slice(0,4).join(".");
+  this.rowDBPath = rowDBPath;
   var numberEx = new RegExp(/^[+-]?([\.,]\d+|\d+[\.,]|\d+|\d+[\.,]?\d+|\d*[\.,]?\d*[Ee][+-]?\d*)+/g);
   var propertiesToExport = ('U k uncertainties uncertainties_var_names uc ui veff y df ci');
   var propertiesToExportMC = ('M _iterations_mean d_high d_low gum_curve histogram p sci_limits uc');
@@ -162,7 +162,7 @@ this.UncertantyAnalizer = function($tr, td, worksheetId) {
     var $elements = $tr.find("td[var-name='"+varName+"']");
     var parserResult;
     $.each($elements, function(readoutIndex, td) {
-      parserResult = that.parseReadout(td.innerHTML);
+      parserResult = that.parseReadout($(td).text());
       if (varName === that.uutVarName && readoutIndex === 0) {
         that.results.uutPrefix = parserResult.prefix;
       }

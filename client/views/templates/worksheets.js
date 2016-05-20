@@ -2,6 +2,14 @@ window.CELL_CHANGE_TIMER = null;
 
 Template.worksheets.onRendered(function() {
   var that = this;
+  this.U_ANALIZER_TIMER = {};
+  
+  this.clearRowTimeout = function(td) {
+    var changedRowId = $(td).parent().attr("id");
+    if (_.has(that.U_ANALIZER_TIMER, changedRowId)) {
+      clearTimeout(that.U_ANALIZER_TIMER[changedRowId]);
+    }
+  };
 
   var editorDiv = $(".editTable")[0];
   if (!editorDiv) {
@@ -20,21 +28,27 @@ Template.worksheets.onRendered(function() {
       .join(".")+"._deleted";
       setData(path, true);
     },
+    onStartEdit: function(td) {
+      //that.clearRowTimeout(td);
+    },
+    
     onChange: function(td) {
-      // BUG ON FIREFOX
-      // SEE: https://github.com/meteor/meteor/issues/1964#issuecomment-57948734 for possible solution
-      setFieldData(td);
-      clearTimeout(U_ANALIZER_TIMER);
-      UncertantyAnalizer($(td).parent(), td, that.data._id);
-      
-      /*try {
-        U_ANALIZER_TIMER = setTimeout(function() {
-          UncertantyAnalizer($(td).parent(), td, that.data._id);
-        }, 1000);
-      }
-      catch (e) {
-        console.log(e);
-      }*/
+      var rowDBPath = $(td).attr("db-path").split(".").slice(0,4).join(".");
+      var changedRowId = $(td).parent().attr("id");
+      var $tr = $(td).parent();
+
+      setFieldData(td, function() {
+        that.clearRowTimeout(td);
+        try {
+          that.U_ANALIZER_TIMER[changedRowId] = setTimeout(function() {
+            UncertantyAnalizer($tr, rowDBPath, that.data._id);
+          }, 4000);
+        }
+        catch (e) {
+          console.log(e);
+        }
+
+      });
     },
     onSelectedCellChange: function(td) {
       var $row = $(td).parent();
@@ -48,7 +62,7 @@ Template.worksheets.onRendered(function() {
             "id": $row.attr("id"),
             "worksheetId": Session.get("selectedWorksheetId")
           });
-        }, 1000);
+        }, 400);
       }
       catch (e) {
         console.log(e);
@@ -61,9 +75,16 @@ Template.worksheets.onRendered(function() {
 Template.worksheets.onCreated(function() {
 });
 
+Template.worksheets.rendered = function() {
+  this.autorun(function() {
+    //
+  });
+}
+
+
 Template.worksheets.helpers({
-  content: function(worksheetIndex, rowDBIndex) {
-    return '<td var-name="'+this.varName+'" style="background-color:'+this.color+'" db-path="worksheets.'+worksheetIndex+'.rows.'+rowDBIndex+'.'+this.varName+'.'+this.readoutIndex+'">'+this.readout+'</td>';
+  readoutContent: function(content) {
+    return '<span class="cellContentWrap">'+content+'</span>';
   },
   procedureIdIsNothing: function() {
     return isNothing(this.procedureId);

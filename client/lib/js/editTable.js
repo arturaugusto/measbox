@@ -388,6 +388,9 @@
 
   this.startEdit = function(evt) {
     var $el = $(that.selectedTd);
+    if (typeof that.options.onStartEdit === "function") {
+      that.options.onStartEdit(that.selectedTd);
+    };
     that.selectedTd.focus();
     that.setPrevCellHTML();
     
@@ -426,8 +429,8 @@
       var td = $(tr).children()[change.x];
       // swap the content value, so 
       // user can redo
-      var swap = td.innerText;
-      td.innerText = change.content;
+      var swap = td.innerHTML;
+      td.innerHTML = change.content;
       change.content = swap;
 
       if (typeof that.options.onChange === "function") {
@@ -468,11 +471,11 @@
     var index;
     var elements = $(that.editor).find(".editTableSelected");
     if (elements.length <= 1) {
-      clipBoardText = that.selectedTd.innerText;
+      clipBoardText = that.selectedTd.innerHTML;
     }
     var width = $(that.selectedTd).parent().find(".editTableSelected").length;
     for (var i = 0; i < elements.length; i++) {
-      clipBoardText += elements[i].innerText;
+      clipBoardText += elements[i].innerHTML;
       if ( (i+1) % width ) {
         clipBoardText += "\t";
       } else {

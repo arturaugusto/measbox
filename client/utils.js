@@ -34,20 +34,23 @@ this.setNestedFieldData = function(el) {
   Meteor.call("setNestedFieldData", getDocumentId(), parent, parentId, field, data);
 }
 
-this.setData = function(path, data) {
+this.setData = function(path, data, cb) {
   Meteor.call("setData", getDocumentId(), path, data);
+  if (cb) {
+    cb();
+  }
 }
 
-this.setFieldData = function(el) {
+this.setFieldData = function(el, cb) {
   var path = el.getAttribute("db-path");
   var data;
   var nodeName = el.nodeName;
   if (nodeName === "SELECT") {
     data = el.value;
   } else {
-    var data = el.innerHTML;
+    var data = $(el).text();
   }
-  setData(path, data);
+  setData(path, data, cb);
 }
 
 this.addNewRow = function (worksheetId) {
