@@ -34,23 +34,35 @@ this.setNestedFieldData = function(el) {
   Meteor.call("setNestedFieldData", getDocumentId(), parent, parentId, field, data);
 }
 
-this.setData = function(path, data, cb) {
-  Meteor.call("setData", getDocumentId(), path, data);
-  if (cb) {
-    cb();
-  }
+this.setChangedCells = function(cb) {
+  var data = {};
+  $('td[changed=true]').each(function(i, td){
+    var key = $(td).attr("db-path");
+    data[key] = $(td).text();
+    $(td).removeAttr("changed");
+  });
+  setData(data, cb);
+}
+
+this.setData = function(data, cb) {
+  Meteor.call("setData", getDocumentId(), data, function(err, cbData) {
+    // Run callback form client only when data is ready
+    if (typeof cb === "function") {
+      cb(data);
+    }
+  });
 }
 
 this.setFieldData = function(el, cb) {
   var path = el.getAttribute("db-path");
-  var data;
+  var data = {};
   var nodeName = el.nodeName;
   if (nodeName === "SELECT") {
-    data = el.value;
+    data[path] = el.value;
   } else {
-    var data = $(el).text();
+    data[path] = $(el).text();
   }
-  setData(path, data, cb);
+  setData(data, cb);
 }
 
 this.addNewRow = function (worksheetId) {
@@ -61,7 +73,7 @@ this.addNewRow = function (worksheetId) {
     worksheetId,        //parentId
     "rows",             //field
     {_id: Random.id()}, //data
-    "$push"             //operator
+    "$push"            //operator
   );
 }
 

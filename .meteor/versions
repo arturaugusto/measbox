@@ -1,7 +1,4 @@
-aldeed:autoform@4.2.2
-aldeed:simple-schema@1.5.3
 allow-deny@1.0.4
-arch:ace-editor@1.2.1
 autoupdate@1.2.9
 babel-compiler@6.6.4
 babel-runtime@0.1.8
@@ -11,7 +8,6 @@ blaze@2.1.7
 blaze-html-templates@1.0.4
 blaze-tools@1.0.8
 boilerplate-generator@1.0.8
-bshamblen:autoform-ace@0.0.1
 caching-compiler@1.0.4
 caching-html-compiler@1.0.6
 callback-hook@1.0.8
@@ -51,7 +47,6 @@ jquery@1.11.8
 launch-screen@1.0.11
 livedata@1.0.18
 logging@1.0.12
-mdg:validation-error@0.2.0
 meteor@1.1.14
 meteor-base@1.0.4
 meteorhacks:async@1.0.0
@@ -63,10 +58,8 @@ mobile-experience@1.0.4
 mobile-status-bar@1.0.12
 modules@0.6.1
 modules-runtime@0.6.3
-momentjs:moment@2.8.4
 mongo@1.1.7
 mongo-id@1.0.4
-mrt:mathjax@0.6.3
 npm-container@1.2.0
 npm-mongo@1.4.43
 observe-sequence@1.0.11

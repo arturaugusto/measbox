@@ -41,7 +41,10 @@ var setChartRangeTitle = function(rangeTitle, uutRangeId) {
 }
 // get only items from selected row range
 var selectedRangeData = function(notDeleted) {
-
+  // Return if no data exists
+  if (!notDeleted.length) {
+    return;
+  }
   var selectedRowId;
   var selectedRowWorksheetId;
 
@@ -57,6 +60,8 @@ var selectedRangeData = function(notDeleted) {
   var selectedRowData = _.findWhere(
     notDeleted, {_id: selectedRowId}
   );
+
+  if (!selectedRowData._results) return;
 
   var worksheets = Spreadsheets.findOne().worksheets
   var worksheet = _.findWhere(
@@ -101,6 +106,7 @@ var rangeDatum = function() {
   );
 
   var selectedRowRangeData = selectedRangeData(notDeleted);
+  if (!selectedRowRangeData) return;
 
   // Set chart unit
   var axUnit = selectedRowRangeData[0]._results.uutUnit;
@@ -224,7 +230,12 @@ var rangeChartBuilder = function() {
   ;
   //$("#rangeChartContainer")
   //.css({"padding-top": $(".middle-row").height()+"px"});
-  rangeChart.update();
+  
+  try {
+    rangeChart.update();
+  } catch (e) {
+    //
+  }
   function addZoom(options) {
     // scaleExtent
     var scaleExtent = 10;
@@ -332,9 +343,11 @@ var renderChart = function() {
     addGraphRangeChart();
   };
 
+  var datum = rangeDatum();
+  if (!datum) return;
   d3.select("#rangeChartContainer svg")
   .datum(
-    rangeDatum()
+    datum
   ).call(rangeChart);
   rangeChart.update();
   $('#redrawRangeChartBtn').hide();

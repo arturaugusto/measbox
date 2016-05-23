@@ -3,6 +3,10 @@ Template.showSpreadsheet.events({
     Meteor.call("newWorksheet");
   },
   'click .select-worksheet': function(evt) {
-    Session.set("selectedWorksheetId", $(evt.target).data("worksheet"));
+    //$(".editTable tbody").html("")
+    Session.set("selectedWorksheetId", "");
+    setTimeout(function() {
+      Session.set("selectedWorksheetId", $(evt.target).data("worksheet"));
+    }, 100);
   }  
 });

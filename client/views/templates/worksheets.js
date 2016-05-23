@@ -1,16 +1,9 @@
-window.CELL_CHANGE_TIMER = null;
-
-Template.worksheets.onRendered(function() {
+window.CREATING_NEW_ROW = false;
+Template.worksheets.rendered = function() {
   var that = this;
-  this.U_ANALIZER_TIMER = {};
+  this.changedCellsTimeout = null;
+  this.cellChangeTimer = null;
   
-  this.clearRowTimeout = function(td) {
-    var changedRowId = $(td).parent().attr("id");
-    if (_.has(that.U_ANALIZER_TIMER, changedRowId)) {
-      clearTimeout(that.U_ANALIZER_TIMER[changedRowId]);
-    }
-  };
-
   var editorDiv = $(".editTable")[0];
   if (!editorDiv) {
     return;
@@ -33,31 +26,43 @@ Template.worksheets.onRendered(function() {
     },
     
     onChange: function(td) {
-      var rowDBPath = $(td).attr("db-path").split(".").slice(0,4).join(".");
-      var changedRowId = $(td).parent().attr("id");
-      var $tr = $(td).parent();
-
-      setFieldData(td, function() {
-        that.clearRowTimeout(td);
-        try {
-          that.U_ANALIZER_TIMER[changedRowId] = setTimeout(function() {
-            UncertantyAnalizer($tr, rowDBPath, that.data._id);
-          }, 4000);
-        }
-        catch (e) {
-          console.log(e);
-        }
-
-      });
+      $(td).attr("changed", true);
+      clearTimeout(that.changedCellsTimeout);
+      that.changedCellsTimeout = setTimeout(function() {
+        setChangedCells(function(data) {
+          var uniqChangedRowsPath = _.uniq(
+            _.keys(data).map(function(path) {
+              return path.split(".").slice(0,4).join(".");
+            })
+          );
+          uniqChangedRowsPath.map(function(path) {
+            // TODO: Use some lib to get item by dot-notation
+            // Get rows for path
+            var rows = _.findWhere(Spreadsheets.findOne().worksheets,
+              {_id: Session.get("selectedWorksheetId")}
+            ).rows;
+            // Get data from row, by index from the path
+            var rowData = rows[parseInt(path.split(".rows.")[1])];
+            
+            try {
+              UncertantyAnalizer(rowData, path, that.data._id);
+            }
+            catch (e) {
+              console.log(e);
+            }
+            
+          });
+        });
+      }, 2000);
     },
     onSelectedCellChange: function(td) {
       var $row = $(td).parent();
       if ($row[0].tagName !== "TR") return;
       var id = $row.attr("id");
       if (!id || id === "") return;
-      clearTimeout(CELL_CHANGE_TIMER);
+      clearTimeout(that.cellChangeTimer);
       try {
-        CELL_CHANGE_TIMER = setTimeout(function() {
+        that.cellChangeTimer = setTimeout(function() {
           Session.set("selectedRow", {
             "id": $row.attr("id"),
             "worksheetId": Session.get("selectedWorksheetId")
@@ -70,19 +75,17 @@ Template.worksheets.onRendered(function() {
     }
   });
 
-});
+};
 
 Template.worksheets.onCreated(function() {
 });
 
-Template.worksheets.rendered = function() {
-  this.autorun(function() {
-    //
-  });
-}
-
 
 Template.worksheets.helpers({
+  sessionVarUpdate: function() {
+    return Session.get("selectedWorksheetId");
+  },
+
   readoutContent: function(content) {
     return '<span class="cellContentWrap">'+content+'</span>';
   },
@@ -193,19 +196,23 @@ Template.worksheets.helpers({
       
       var n = v.kind === "Influence" ? 0 : Procedure.n-1;
 
-      if (typeof readouts !== "object"){
+      var readoutsIsUndefined = (readouts === undefined);
+      var readoutsIsNotObject = (typeof readouts !== "object")
+      if ( readoutsIsNotObject || readoutsIsUndefined) {
         readouts = [];
       }
-      var isEmpty = !readouts.length;
-      var readoutsIsNull = readouts === null;
+      var readoutsIsEmpty = !readouts.length;
+      var readoutsIsNull = (readouts === null);
 
-      if ( readoutsIsNull || isEmpty ) {
+      if ( readoutsIsNull || readoutsIsEmpty ) {
         // Create buffer array if variable dont exists on db
         for (var i = n; i >= 0; i--) {
           readouts.push(null);
         }
         var dbPath = "worksheets."+worksheetIndex+".rows."+rowDBIndex+"."+v.name;
-        setData(dbPath, readouts);
+        var data = {};
+        data[dbPath] = readouts;
+        setData(data);
       }
 
       return readouts.slice(0, n+1).map(function(readout, readoutIndex) {

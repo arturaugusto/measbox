@@ -15,18 +15,13 @@ tracker                 # Meteor's client-side reactive programming library
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
-#insecure                # Allow all DB writes from clients (for prototyping)
 iron:router
-#aldeed:collection2
 twbs:bootstrap
 random
 meteorhacks:npm
 
-
-bshamblen:autoform-ace
 standard-minifier-css
 standard-minifier-js
-
 
 npm-container
 jeremy:selectize
@@ -34,4 +29,3 @@ cosmos:browserify
 d3js:d3
 fortawesome:fontawesome
 jesperwe:bootstrap-select
-mrt:mathjax

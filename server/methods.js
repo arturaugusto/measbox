@@ -6,12 +6,10 @@ Meteor.methods({
       "$pull": query
     });
   },
-  setData: function(id, path, data) {
-    var obj = {};
-    obj[path] = data;
+  setData: function(id, data) {
     Spreadsheets.update(
       {_id: id}, 
-      {$set: obj}
+      {$set: data}
     )
   },
   newWorksheet: function() {

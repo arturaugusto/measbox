@@ -1,5 +1,5 @@
 window.U_ANALIZER_TIMER = null;
-this.UncertantyAnalizer = function($tr, rowDBPath, worksheetId) {
+this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   var that = this;
 
   var worksheet = _.findWhere(
@@ -111,7 +111,7 @@ this.UncertantyAnalizer = function($tr, rowDBPath, worksheetId) {
 
   this.setRangeIdOnDB = function(rangeId, varName) {
     var path = that.rowDBPath + "." + varName + "RangeId";
-    setData(path, rangeId);
+    that.data[path] = rangeId;
   }
 
   this.setUUTResolution = function(range) {
@@ -159,15 +159,17 @@ this.UncertantyAnalizer = function($tr, rowDBPath, worksheetId) {
 
   this.extractRowData = function (varName) {
     var res = [];
-    var $elements = $tr.find("td[var-name='"+varName+"']");
+    var cells = rowData[varName];
     var parserResult;
-    $.each($elements, function(readoutIndex, td) {
-      parserResult = that.parseReadout($(td).text());
+
+    cells.map(function(cellValue, readoutIndex) {
+      parserResult = that.parseReadout(cellValue);
       if (varName === that.uutVarName && readoutIndex === 0) {
         that.results.uutPrefix = parserResult.prefix;
       }
-      res.push(parserResult.value);
+      res.push(parserResult.value);      
     });
+
     return res;
   }
 
@@ -233,11 +235,12 @@ this.UncertantyAnalizer = function($tr, rowDBPath, worksheetId) {
     
   }
 
+  this.data = {};
+
   this.buildGumArg(worksheet);
   this.gum = new GUM(this.gumArg);
   this.postProcess();
   this.results._groups = this.groups;
-  
-  setData(this.rowDBPath+"._results", this.results);
-
+  data[this.rowDBPath+"._results"] = this.results;
+  setData(data);
 }
