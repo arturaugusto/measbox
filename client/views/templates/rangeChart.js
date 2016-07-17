@@ -12,7 +12,7 @@ nv.utils.symbolMap.set('error-bar-line', function(size) {
 });
 
 nv.utils.symbolMap.set('thin-x', function(size) {
-  size = Math.sqrt(size);
+  size = Math.sqrt(size)*2;
   return 'M' + (-size/2) + ',' + (-size/2) +
           'l' + size + ',' + size +
           'm0,' + -(size) +
@@ -61,6 +61,7 @@ var selectedRangeData = function(notDeleted) {
     notDeleted, {_id: selectedRowId}
   );
 
+  if (!selectedRowData) return;
   if (!selectedRowData._results) return;
 
   var worksheets = Spreadsheets.findOne().worksheets
@@ -134,6 +135,7 @@ var rangeDatum = function() {
       x: p.uutReadout,
       y: p.y,
     });
+
     // goto bottom error bar
     pointsData.push({
       _group: p._groups.toString(),
@@ -180,7 +182,7 @@ var rangeDatum = function() {
   _.keys(pointsDataGrouped).map(function(k, i) {
     var obj = {
       key: k,
-      yAxis: 1,
+      yAxis: 0,
       type: "line",
       values: pointsDataGrouped[k],
       color: COLOR_SCHEMA[i]
@@ -212,6 +214,7 @@ var rangeDatum = function() {
       color: COLOR_SCHEMA[i]
     };
     data.push(objMpeBOTTOM);
+    
   });
 
   return data;
@@ -232,10 +235,11 @@ var rangeChartBuilder = function() {
   //.css({"padding-top": $(".middle-row").height()+"px"});
   
   try {
-    rangeChart.update();
+    if (rangeChart) rangeChart.update();
   } catch (e) {
     //
   }
+  
   function addZoom(options) {
     // scaleExtent
     var scaleExtent = 10;
@@ -293,8 +297,7 @@ var rangeChartBuilder = function() {
     };
     
     // initialize wrapper
-    d3zoom.x(xScale)
-        .y(yScale)
+    d3zoom.y(yScale).x(xScale)
         .scaleExtent([1, scaleExtent])
         .on('zoom', zoomed);
         
@@ -308,21 +311,24 @@ var rangeChartBuilder = function() {
     yAxis  : rangeChart.yAxis,
     yDomain: rangeChart.yDomain,
     xDomain: rangeChart.xDomain,
-    redraw : function() { rangeChart.update() },
+    redraw : function() { 
+      if (rangeChart) rangeChart.update();
+    },
     svg    : d3.select("#rangeChartContainer svg")
   });    
-
-  nv.utils.windowResize(function() { rangeChart.update(); });
+  
   return rangeChart;
 }
 
 var rangeChartNoData = function() {
   // Remove tooltip
+  /*
   try {
     $(rangeChart.tooltip.node()).remove();
   }  catch (e) {
     //
   }
+  */
   
   // Clean chart
   $("#rangeChartContainer svg").html("");
@@ -332,6 +338,10 @@ var rangeChartNoData = function() {
 
 var addGraphRangeChart = function() {
   window.rangeChart = nv.models.lineChart()
+    .options({
+        duration: 300,
+        useInteractiveGuideline: false
+    })
     .interpolate("linear")
     .showLegend(true)
   ;
@@ -349,7 +359,7 @@ var renderChart = function() {
   .datum(
     datum
   ).call(rangeChart);
-  rangeChart.update();
+  if (rangeChart) rangeChart.update();
   $('#redrawRangeChartBtn').hide();
 };
 

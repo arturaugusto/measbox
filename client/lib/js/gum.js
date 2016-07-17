@@ -685,8 +685,17 @@
       // apply correction to histogram samples
       this.mc.histogram.y = jStat( this.mc.histogram.y ).divide(hist_area)[0];
       // Studentt curve
-      this.mc.gum_curve = this.mc.histogram.x.map(function(i){
-        return jStat.studentt.pdf((i-that.mc._iterations_mean)/that.uc, that.veff)/that.uc;
+      
+
+      var gum_curve_x = seq(that.y-that.U, that.y+that.U, ((that.y+that.U) - (that.y-that.U))/this.mc.histogram.x.length);
+
+      this.mc.gum_curve = gum_curve_x.map(function(i){
+
+        return {
+          x: i,
+          y: jStat.studentt.pdf((i-that.mc._iterations_mean)/that.uc, that.veff)/that.uc
+
+        }
       });
 
       // Validation
@@ -766,8 +775,8 @@
         args = [u.alpha, u.beta];
       }else if(u.distribution === "arcsine"){
         // For arcsin, values will be post-processed from uniform (0,1) distribution
-        effective_dist = "uniform";
-        args = [0, 1];
+        effective_dist = "beta";
+        args = [1/2, 1/2];
       }else{ 
         args = [0, u.value]; // Arguments for normal distribution
       }
@@ -794,21 +803,32 @@
     }
 
     var sample;
-    for (var i = that.mc.M - 1; i >= 0; i--) {
-      sample = pdf_sampler.apply(void 0, args);
-      // Sum samples to expectation/modified expectation
-      // and update scope value for the iteration
-      this.mc._scope[i][this.var_name] += sample;
-    };
-
-    // Transform the previous uniform distribution on a arcsin distribution
-    // Ref: Item 6.4.6.4 from JCGM_101_2008_E.pdf
-    if(u.distribution === "arcsine"){
+    if(u.distribution !== "arcsine"){
       for (var i = that.mc.M - 1; i >= 0; i--) {
-        sample = this.mc._scope[i][this.var_name];
-        this.mc._scope[i][this.var_name] = ((-u.value + u.value)/2)+((u.value + u.value)/2) * Math.sin(2*Math.PI*sample);
+        sample = pdf_sampler.apply(void 0, args);
+        // Sum samples to expectation/modified expectation
+        // and update scope value for the iteration
+        this.mc._scope[i][this.var_name] += sample;
       };
     }
+
+    
+    if(u.distribution === "arcsine"){
+      var mean_value = this._scope[this.var_name];
+
+      for (var i = that.mc.M - 1; i >= 0; i--) {
+        sample = pdf_sampler.apply(void 0, args);
+        this.mc._scope[i][this.var_name] += ((sample - 0.5) * 2) * Math.abs(u.value);
+        /*
+        //sample = pdf_sampler.apply(void 0, args);
+        sample = this.mc._scope[i][this.var_name];
+        this.mc._scope[i][this.var_name] = ((-u.value + u.value)/2)+((u.value + u.value)/2) * Math.sin(2*Math.PI*sample);
+        */
+      };
+    }
+    // Other possible solution to arcsin from :Transform the previous uniform distribution on a arcsin distribution
+    // Ref: Item 6.4.6.4 from JCGM_101_2008_E.pdf
+    
 
   }
 

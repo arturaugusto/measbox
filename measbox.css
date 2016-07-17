@@ -1,5 +1,14 @@
 /* CSS declarations go here */
 
+.hidden-row {
+  display: none;
+}
+
+#instruments, #procedures {
+  overflow-y: scroll;
+
+}
+
 #pdfChartContainer svg {
   width:100%;
   height:100%;
@@ -14,9 +23,6 @@
   height:80%;
   margin: 0px;
   padding: 0px;
-}
-.cellContentWrap {
-  pointer-events: none;  
 }
 
 #redrawRangeChartBtn {
@@ -33,18 +39,21 @@ svg text{
   font-family: sans-serif;
 }
 
+.input-group {
+  padding-bottom: 4px !important;
+}
 
 .wrap {
   min-height: 100%;
   right: 60%;
 }
 
-
 .bottom-row,
 .top-row {
   position: absolute;
   width: 60%;
-  overflow-y: scroll;
+  overflow-y: hidden;
+  /*overflow-y: scroll;*/
 }
 
 .top-row {
@@ -100,6 +109,11 @@ svg text{
   align-content: center;
 }
 
+.top-row .tab-content {
+  /*height: 30%;
+  overflow-y: scroll;*/
+}
+
 .bottom-row .tab-content {
   overflow-y: auto;
 }
@@ -153,6 +167,7 @@ svg text{
   background: #494B54;
 }
 */
+
 .btn.btn-squared {
   border-radius: 0;
 }
@@ -163,6 +178,7 @@ svg text{
 .json-editor-holder {
   padding: 12px;
 }
+
 
 .nav-tabs a {
   color: black;

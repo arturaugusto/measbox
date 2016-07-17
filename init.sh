@@ -1,5 +1,5 @@
-export MONGO_URL=mongodb://localhost:27017/measbox
+export MONGO_URL=mongodb://localhost:27017/measbox;meteor
 
-mongod --config /etc/mongodb.conf
+#mongod --config /etc/mongodb.conf
 
-mongod --dbpath /var/lib/mongodb/
+#mongod --dbpath /var/lib/mongodb/

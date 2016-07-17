@@ -1,3 +1,12 @@
+// From https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa
+// ucs-2 string to base64 encoded ascii
+this.utoa = function(str) {
+  return window.btoa(unescape(encodeURIComponent(str)));
+}
+// base64 encoded ascii to ucs-2 string
+this.atou = function(str) {
+  return decodeURIComponent(escape(window.atob(str)));
+}
 this.captalize = function (str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
@@ -26,22 +35,108 @@ this.getDocumentId = function() {
   return Spreadsheets.findOne()._id;
 };
 
-this.setNestedFieldData = function(el) {
+/*this.setNestedFieldData = function(el) {
   var parent = el.getAttribute("data-parent");
   var parentId = el.getAttribute("data-parent-id");
   var field = el.getAttribute("name");
   var data = el.value;
   Meteor.call("setNestedFieldData", getDocumentId(), parent, parentId, field, data);
+}*/
+
+
+this.findIds = function(idArr) {
+  return $.find( idArr.map( function(id) { return "#"+id} ).toString() );
 }
+
+this.addNewRow = function (worksheetId, n, cb) {
+  var rows = [];
+  var id;
+  for (var i = n - 1; i >= 0; i--) {
+    id = Random.id();
+    rows.push({_id: id});
+  }
+  
+  var data = { 
+    $each: rows
+  }
+
+  Meteor.call(
+    "setNestedFieldData",
+    getDocumentId(),
+    "worksheets",       //parent
+    worksheetId,        //parentId
+    "rows",             //field
+    data,               //data
+    "$addToSet",        //operator
+    function(err, cbData) {
+      setTimeout(function() {
+        Session.set( "addedRowsIdsArr", _.pluck(rows, '_id') );
+      }, 100);
+    }
+  );
+}
+
+this.getSelectedWorksheetRowById = function(id) {
+  var currWorksheet = _.findWhere(
+    Spreadsheets.findOne()['worksheets'], 
+    {'_id': Session.get("selectedWorksheetId")}
+  );
+  return _.findWhere(currWorksheet.rows, {'_id': id});
+}
+
+
+this.extractRowDOMData = function(tr) {
+  var varName;
+  var data = [];
+  var obj;
+  $(tr).children().each(function(i, td){
+    varName = td.getAttribute('var-name');
+    if ((varName !== null) && (varName !== undefined)) {
+      obj = {};
+      obj.varName = varName;
+      obj.value = td.innerHTML;
+      data.push(obj);
+    }
+  });
+  return data;
+}
+
 
 this.setChangedCells = function(cb) {
   var data = {};
-  $('td[changed=true]').each(function(i, td){
-    var key = $(td).attr("db-path");
-    data[key] = $(td).text();
-    $(td).removeAttr("changed");
-  });
-  setData(data, cb);
+  var extractRowData;
+  var rowData;
+  var rowId;
+  var varNameGroups;
+  var varNameGroupsKeys;
+  ['td', 'tr'].map(function(elType) {
+    $(elType+'[changed=true]').each(function(i, el) {
+      if (el.nodeName === 'TR') {
+        rowId = el.getAttribute("id");
+        if (rowId !== undefined) {
+          rowData = getSelectedWorksheetRowById(rowId);
+          extractRowData = extractRowDOMData(el);
+          varNameGroups = _.groupBy(extractRowData, 'varName');
+          varNameGroupsKeys = _.keys(varNameGroups);
+          varNameGroupsKeys.map(function(k) {
+            var kData = []
+            for (var i = 0; i < varNameGroups[k].length; i++) {
+              kData.push(varNameGroups[k][i].value);
+            }
+            rowData[k] = kData;
+          });
+        }
+      }
+
+      //data[key] = $(el).text();
+      $(el).removeAttr("changed");
+      if (rowData !== undefined) {
+        var key = $(el).attr("db-path");
+        data[key] = rowData;
+        setData(data, cb);
+      }
+    });
+  })
 }
 
 this.setData = function(data, cb) {
@@ -51,6 +146,14 @@ this.setData = function(data, cb) {
       cb(data);
     }
   });
+}
+
+this.setRowVisibility = function(row, toBeVisible) {
+  var dbPath;
+  var data = {};
+  dbPath = row.getAttribute('db-path');
+  data[dbPath+"._deleted"] = toBeVisible;
+  setData(data);
 }
 
 this.setFieldData = function(el, cb) {
@@ -64,19 +167,6 @@ this.setFieldData = function(el, cb) {
   }
   setData(data, cb);
 }
-
-this.addNewRow = function (worksheetId) {
-  Meteor.call(
-    "setNestedFieldData",
-    getDocumentId(),
-    "worksheets",       //parent
-    worksheetId,        //parentId
-    "rows",             //field
-    {_id: Random.id()}, //data
-    "$push"            //operator
-  );
-}
-
 
 this.mathjsResult = function (expr, scope) {
   var data = mathjs.eval(expr, scope);

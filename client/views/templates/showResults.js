@@ -23,15 +23,13 @@ this.selectedRowData = function() {
   return {row: row, worksheet: worksheet};
 };
 
-this.paddedLinesData = function(ciLow, ciHigh, xStart, xEnd, yMax) {
+this.paddedLinesData = function(ciLow, ciHigh, yMax) {
   return [
-    {x:xStart,y:null}, // pad left
     {x:ciLow,y:0.0},{x:ciLow,y:yMax}, // low endpoint
 
     {x:ciLow,y:null}, // pad center
     
-    {x:ciHigh,y:0.0},{x:ciHigh,y:yMax}, // high endpoint
-    {x:xEnd,y:null} //pad right
+    {x:ciHigh,y:0.0},{x:ciHigh,y:yMax} // high endpoint
   ]
 }
 
@@ -44,8 +42,9 @@ var EMPTY_CHART_DATA = [{
 
 this.histogramDatum = function() {
   var data = selectedRowData();
-  if (!data) return EMPTY_CHART_DATA;
-  if (!data.row._results) return EMPTY_CHART_DATA;
+  if (data === undefined) return EMPTY_CHART_DATA;
+  if (data.row === undefined) return EMPTY_CHART_DATA;
+  if (data.row._results === undefined) return EMPTY_CHART_DATA;
   // MC data
   var hist = data.row._results.mc.histogram;
   var histRows = [];
@@ -55,23 +54,19 @@ this.histogramDatum = function() {
 
   // GUM data
   var gumCurve = data.row._results.mc.gum_curve;
-  var gumCurveRows = [];
-  for (var i = 0; i < gumCurve.length; i++) {
-    gumCurveRows.push({x: hist.x[i], y: gumCurve[i] });
-  }  
   var y = data.row._results.y;
   var U = data.row._results.U;
   var sci = data.row._results.mc.sci_limits;
   var histSize = hist.x.length;
 
-  var gumMaxY = Math.max.apply(0,gumCurve); // TODO optimize
+  //var gumMaxY = Math.max.apply(0,gumCurve); // TODO optimize
   var mcMaxY = Math.max.apply(0,hist.y);
 
   var axUnit = data.row._results.uutUnit;
   if (axUnit === "" || axUnit === undefined) axUnit = "unit";
 
   pdfChart.xAxis.axisLabel("("+axUnit+")");
-  pdfChart.yAxis1.axisLabel("Probability density/(1/" + axUnit + ")");
+  pdfChart.yAxis.axisLabel("Probability density/(1/" + axUnit + ")");
 
 
   var gumColor = "#EC0000";
@@ -81,29 +76,32 @@ this.histogramDatum = function() {
     {
       type: "line",
       yAxis: 1,
-      values: gumCurveRows,
+      values: gumCurve,
       key: "GUM",
       color: gumColor
-    },
+    }
+    ,
     {
       type: "line",
       yAxis: 1,
-      values: paddedLinesData(y-U, y+U, hist.x[0], hist.x[histSize-1], gumMaxY),
+      values: paddedLinesData(y-U, y+U, mcMaxY),
       key: "GUM end points",
       color: gumColor,
       classed: 'dashed'
-    },
+    }
+    ,
     {
-      type: "bar",
+      type: "line",
       yAxis: 1,
       values: histRows,
       key: "MC",
       color: mcColor
-    },
+    }
+    ,
     {
       type: "line",
       yAxis: 1,
-      values: paddedLinesData(sci[0], sci[1], hist.x[0], hist.x[histSize-1], mcMaxY),
+      values: paddedLinesData(sci[0], sci[1], mcMaxY),
       key: "MC end points",
       color: "#0018EC"
     }
@@ -122,7 +120,10 @@ this.renderResults = function() {
     var resultsRenderedParsed = $.parseHTML(resultsRendered);
     $("#renderedResult").html(resultsRenderedParsed);
     // Add class to tables rendered from markdown on results
-    $("#renderedResult table").addClass("table")
+    var $tbl = $("#renderedResult table");
+    $tbl.addClass("table table-bordered table-condensed");
+    $tbl.prepend("<caption>Results</caption>");
+
   } catch (e) {
     $("#renderedResult").html("");
     console.log(e);
@@ -131,21 +132,21 @@ this.renderResults = function() {
 
 Template.showResults.rendered = function() {
   var that = this;
-  window.pdfChart = nv.models.multiChart()
+  window.pdfChart = nv.models.lineChart()
     .margin({left: 100, bottom: 100})
     //.useInteractiveGuideline(true)
-    //.duration(250)
-    //.showXAxis(true)
+    .duration(250)
+    .showXAxis(true)
   ;
   var axUnit = "unit";
   
   nv.addGraph(function() {
     pdfChart.xAxis
       .tickFormat(d3.format(',.1e'));
-    pdfChart.yAxis1
+    pdfChart.yAxis
       .tickFormat(d3.format(',.1e'));
     pdfChart
-      .showLegend(false);
+      .showLegend(true);
     pdfChart.tooltip.contentGenerator(
       function (obj) {
         var dataSrc = obj.point || obj.data;
@@ -158,7 +159,9 @@ Template.showResults.rendered = function() {
     d3.select("#pdfChartContainer svg").datum(
       histogramDatum()
     ).call(pdfChart);
-    nv.utils.windowResize(function() { pdfChart.update(); });
+    nv.utils.windowResize(function() { 
+      pdfChart.update();
+    });
     return pdfChart;
   });
 
@@ -186,6 +189,7 @@ Template.showResults.helpers({
 
     var data = selectedRowData();
     if (!data) return [];
+    if (!data.row) return [];
     var results = data.row._results;
     if (!results) return [];
     var worksheet = data.worksheet;

@@ -29,8 +29,10 @@ Template.jsonEditorForm.onCreated(function() {
 Template.jsonEditorForm.events({
   'click .set-field-data': function() {
     var field = this.field;
-    var data = JsonEditorInstances[field].getValue();
-    var id = getDocumentId();
-    setData(field, data);
+    var data = {};
+    data[field] = JsonEditorInstances[field].getValue();
+    // Triger click events for selected worksheet
+    $(".active .select-worksheet").trigger("click");
+    setData(data);
   }
 });

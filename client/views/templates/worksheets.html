@@ -22,25 +22,23 @@
             </select>
           </div>
 
-        <br>
-        <div class="row">
-        {{#each variables this.procedureId}}
-          <div class="col-md-4">
-            <div class="input-group">
-              <span class="input-group-addon">{{name}}</span>
-              <select class="form-control" name="{{name}}InstrumentId" db-path="worksheets.{{worksheetIndex}}.{{name}}InstrumentId">
-                {{#if instrumentIdIsNothing worksheetIndex}}
-                <option value="">Choose a instrument...</option>
-                {{/if}}
-                {{#each instrumentNameAndIdMap name ..}}
-                <option value="{{this.id}}" {{isSelected}}>{{this.name}}</option>
-                {{/each}}
-              </select>
-            </div>
-          </div><!-- /input-group -->
-        {{/each}}
-        </div>
-        <br>
+          <div class="row">
+          {{#each variables this.procedureId}}
+            <div class="col-md-4">
+              <div class="input-group">
+                <span class="input-group-addon">{{name}}</span>
+                <select class="form-control" name="{{name}}InstrumentId" db-path="worksheets.{{worksheetIndex}}.{{name}}InstrumentId">
+                  {{#if instrumentIdIsNothing worksheetIndex}}
+                  <option value="">Choose a instrument...</option>
+                  {{/if}}
+                  {{#each instrumentNameAndIdMap name ..}}
+                  <option value="{{this.id}}" {{isSelected}}>{{this.name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div><!-- /input-group -->
+          {{/each}}
+          </div>
         </div>
 
       </div>
@@ -48,11 +46,13 @@
 
   </div>
   <!-- EDIT TABLE -->
+  
   <div class="editTable">
 
-    {{#if this.procedureId}}
+    
     {{#let procedureId=this.procedureId worksheetId=this._id}}
-    <table class="etCore" spellcheck="false" index="{{index}}">
+
+    <table class="etCore" spellcheck="false" index="{{index}}" style="display: {{noneWhenUndefined this.procedureId}};">
       <thead>           
         <tr>
           <th></th>
@@ -64,13 +64,14 @@
       <tbody>
         {{#each rowsWithIndex}}
         {{#let rowDBIndex=dbIndex}}
-        <tr id="{{id}}" db-index={{dbIndex}}>
+        <tr id="{{id}}" class="{{visibilityClass}}" db-index={{dbIndex}} db-path="worksheets.{{worksheetIndex}}.rows.{{rowDBIndex}}">
           <td>{{index}}</td>
           {{#each variablesWithIndex procedureId worksheetIndex rowDBIndex ..}}
-            <!--{{{content worksheetIndex rowDBIndex}}}-->
-            
-            <td var-name="{{varName}}" style="background-color: {{this.color}}" db-path="worksheets.{{worksheetIndex}}.rows.{{rowDBIndex}}.{{varName}}.{{readoutIndex}}"><span class="cellContentWrap">{{this.readout}}</span></td>
-            
+
+            {{#let cellId=randomId}}
+            {{> cells cellId=cellId readout=this.readout color=this.color worksheetIndex=worksheetIndex rowDBIndex=rowDBIndex varName=varName readoutIndex=readoutIndex}}
+            {{/let}}
+
           {{/each}}
         </tr>
         {{/let}}
@@ -79,9 +80,10 @@
       <!--{{setEditTableCurrent}}-->
     </table>
     {{/let}}<!--procedureId=this.procedureId worksheetId=this._id-->
-    {{/if}}<!--if this.procedureId-->
+    
 
   </div>
+  
   <!-- EDIT TABLE -->
   {{/let}}<!--worksheetIndex=index-->
 </template>

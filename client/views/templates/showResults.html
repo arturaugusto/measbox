@@ -1,11 +1,5 @@
 <template name="showResults">
   
-  <div>
-    <div id="renderedResult">
-    </div>  
-  </div>
-  
-
   {{#with rowData._results}}
   <center>
     <strong>Mathematical model: </strong>
@@ -23,7 +17,7 @@
     <div>
       {{#with uncertaintiesChartDatum}}
       <table class="table table-bordered table-condensed" id="uncertaintiesComponents">
-        <caption>Uncertainty budget:</caption>
+        <caption>Uncertainty budget</caption>
         <thead>
           <tr>
             <th style="text-align:left">quantity</th>
@@ -52,6 +46,9 @@
 
   </div>
   
-
+  <div>
+    <div id="renderedResult">
+    </div>  
+  </div>
 
 </template>

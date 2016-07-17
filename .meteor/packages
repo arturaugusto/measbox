@@ -29,3 +29,5 @@ cosmos:browserify
 d3js:d3
 fortawesome:fontawesome
 jesperwe:bootstrap-select
+accounts-ui
+accounts-password
