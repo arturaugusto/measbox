@@ -4,7 +4,7 @@ Template.worksheets.rendered = function() {
 
   this.autorun(function() {
     var addedRowsIdsArr = Session.get("addedRowsIdsArr");
-    if (addedRowsIdsArr.length) {
+    if (addedRowsIdsArr.length && editor) {
       editor.registerRows(findIds(addedRowsIdsArr));
     }
   });
@@ -120,18 +120,19 @@ Template.worksheets.rendered = function() {
         editor.redo();
       },
       addRowAbove: function(editor) {
-        console.log(editor);
         var refRow = editor.getSelectedRows().first();
+        var qtd = getAddRowQtd('addRowAboveVal');
         addNewRow(
           Session.get("selectedWorksheetId"),
-          1
+          qtd
         );
       },
       addRowBelow: function(editor) {
         var refRow = editor.getSelectedRows().last();
+        var qtd = getAddRowQtd('addRowBelowVal');
         addNewRow(
           Session.get("selectedWorksheetId"),
-          1
+          qtd
         );
       }
     },
@@ -142,14 +143,14 @@ Template.worksheets.rendered = function() {
           <span>
             <a href="#" name="addRowAbove">Insert row above</a>
             <p>&times</p>
-            <input type="number" step="1" value="1" min="1" max="20" />
+            <input type="number" id="addRowAboveVal" step="1" value="1" min="1" max="20" />
           </span>
         </li>
         <li>
           <span>
             <a href="#" name="addRowBelow">Insert row below</a>
             <p>&times</p>
-            <input type="number" step="1" value="1" min="1" max="20" />
+            <input type="number" id="addRowBelowVal" step="1" value="1" min="1" max="20" />
           </span>
         </li>
         <li><a href="#" name="hideRow">Remove row</a></li>

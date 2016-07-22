@@ -301,8 +301,10 @@
           that.setContentEditble(false);
         } else {
           // If editing, return early
-          // dont prevent default
-          if (that.selectedTd.contentEditable) {
+          // dont prevent default.
+          // this allow selecting range of contenteditable,
+          // and other mouse actions will not intefer
+          if (that.selectedTd.contentEditable == 'true') {
             return;
           }
         }
@@ -811,9 +813,7 @@
     };
     var sourceWidth;
     var targetWidth;
-
     
-
     for (var i = 0; i < targetHeight; i++) {
       dataCells = dataRows[i % sourceHeight];
       sourceWidth = dataCells.length;
@@ -821,6 +821,7 @@
         sourceWidth,
         selectionLineSize
       );
+      
       for (var j = 0; j < targetWidth; j++) {
         pos = that.getTdPosIncludeHidden($nextCell[0]);
         // loop no select
@@ -847,8 +848,8 @@
         break;
       }
 
-      // jump hidden lines
-      while (!$nextRow.is(':visible')) {
+      while ( $nextRow.is(':hidden') && $nextRow.length ) {
+        console.log($nextRow);
         $nextRow = $nextRow.next();
       }
       

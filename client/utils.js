@@ -53,7 +53,10 @@ this.addNewRow = function (worksheetId, n, cb) {
   var id;
   for (var i = n - 1; i >= 0; i--) {
     id = Random.id();
-    rows.push({_id: id});
+    rows.push({
+      _id: id,
+      _order: (Date.now()*100)+i
+    });
   }
   
   var data = { 
@@ -137,6 +140,15 @@ this.setChangedCells = function(cb) {
       }
     });
   })
+}
+
+
+this.getAddRowQtd = function(id) {
+  return qtd = parseInt(
+    $(".editTableContextMenu").
+    find("#"+id)
+    .val()
+  );
 }
 
 this.setData = function(data, cb) {
