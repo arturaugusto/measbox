@@ -1,6 +1,3 @@
-//permitir alinhamento do texto a esquerda
-
-
 (function() {var EditTable = function(el, options) {
   var that = this;
   this.editor = el;
@@ -11,9 +8,11 @@
   this.options.contextMenuFunctions = this.options.contextMenuFunctions || {};
   this.options.contextMenuHTML = this.options.contextMenuHTML || '';
   // Used on undo/redo
-  this.changeHistory = [];
-  this.changeHistoryIndex = -1;
-  this.prevCellText = undefined;
+  this.dataHistory = this.options.dataHistory || {
+    changeHistory: [],
+    changeHistoryIndex: -1,
+    prevCellText: undefined
+  }
   // Hidden element used to detect firt char to insert
   // when user is on navigation mode and start typing
   var $charEl = '<input type="text" class="editTableInvisible" tabindex="-1">';
@@ -94,6 +93,18 @@
     }
   }
 
+  this.rowByID = function(change) {
+    //var tr = $(that.editor).find("tbody>tr")[change.y];
+    var tr = $(that.editor).find("#"+change.id).get(0);
+    return tr;
+  }
+
+  this.changedRows = function() {
+    return that.dataHistory.changeHistory[that.dataHistory.changeHistoryIndex].map(function(change) {
+      return that.rowByID(change);
+    });
+  }
+
   this.validateChange = function() {
     // Avoid adding to history if user only enter edit mode
     // without change the content
@@ -105,15 +116,25 @@
     }
   }
 
-  this.addToChangeHistory = function(change) {
-    if (that.changeHistory.length > (that.changeHistoryIndex+1)) {
-      that.changeHistory.splice(
-        that.changeHistoryIndex+1
-      );
-    }
-    that.changeHistory.push(change);
-    that.changeHistoryIndex = that.changeHistory.length-1;
+  this.triggerOnChangeOption = function() {
+    if (typeof that.options.onChange === "function") {
+      that.options.onChange(that);
+    }    
+  }
 
+  this.addToChangeHistory = function(change) {
+    if (change[0].kind === "cellChange") {
+      if ( that.dataHistory.changeHistory.length > ( that.dataHistory.changeHistoryIndex + 1 ) ) {
+        that.dataHistory.changeHistory.splice(
+          that.dataHistory.changeHistoryIndex+1
+        );
+        that.dataHistory.changeHistoryIndex = that.dataHistory.changeHistory.length;
+      } else {
+        that.dataHistory.changeHistoryIndex++;
+      }
+    }
+    that.dataHistory.changeHistory.push(change);
+    that.triggerOnChangeOption();
   }
 
   this.getTdPosIncludeHidden = function(td) {
@@ -131,6 +152,11 @@
     return obj;
   }
 
+
+  this.selectedRowId = function() {
+    return $(that.selectedTd).parent().attr("id");
+  }
+
   this.onChangeCellValue = function() {
     var td = that.selectedTd;
     var pos = that.getTdPosIncludeHidden(td);
@@ -140,13 +166,10 @@
         'kind': 'cellChange',
         'x': pos.x,
         'y': pos.y,
+        'id': that.selectedRowId(),
         'content': that.prevCellText
       }];
-
       that.addToChangeHistory(change);
-      if (typeof that.options.onChange === "function") {
-        that.options.onChange(td);
-      }
     }
   }
 
@@ -595,9 +618,9 @@
     }
   });
 */
-  this.applyChange = function(change) {
-    var tr = $(that.editor).find("tbody>tr")[change.y];
-    var $tr = $(tr)
+  this.applyChange = function(change, operation) {
+    var tr = that.rowByID(change);
+    var $tr = $(tr);
     if (change.kind === "cellChange") {
       var td = $(tr).children()[change.x];
       // swap the content value, so 
@@ -605,12 +628,39 @@
       var swap = $(td).text();
       $(td).text(change.content);
       change.content = swap;
+    }
 
-      if (typeof that.options.onChange === "function") {
-        that.options.onChange(td);
+    if (change.kind === "dimissRow") {
+      if ((typeof that.options.onRowRecovery === "function") && (operation === "undo")) {
+        that.options.onRowRecovery(change);
+      }
+      if ((typeof that.options.onRowDimiss === "function") && (operation === "redo")) {
+        that.options.onRowDimiss([change]);
       }
     }
-    if ( (change.kind === "hideRow") || (change.kind === "addRow") ) {
+
+    if (change.kind === "addRow") {
+      if ((typeof that.options.onRowDimiss === "function") && (operation === "undo")) {
+        console.log("aqui");
+        that.options.onRowDimiss([change]);
+      }
+      if ((typeof that.options.onRowRecovery === "function") && (operation === "redo")) {
+        // isRedo can be used to avoid register again the row
+        change.isRedo = true;
+        that.options.onRowRecovery(change);
+      }
+    }
+    return;
+    ///////////////
+
+    if ((typeof that.options.onRowRecovery === "function") && (change.kind === "addRow")) {
+      that.options.onRowRecovery(tr);
+    }
+    if (change.kind === "dimissRow") {
+
+    }
+    /*
+    if ( (change.kind === "dimissRow") || (change.kind === "addRow") ) {
       var currClass;
       // recovery class from cells
       for (var i = 0; i < tr.cells.length; i++) {
@@ -625,23 +675,36 @@
       }
       // recovery selection
       that.rangeSelection = change.rangeSelection;
-      if ((typeof that.options.onRowRecovery === "function") && $tr.is(':hidden')) {
-        that.options.onRowRecovery(tr);
+      if ($tr.is(':hidden')) {
+        //$tr.show();
+        if (typeof that.options.onRowRecovery === "function") {
+          that.options.onRowRecovery(tr);
+        }
       }
-      if ((typeof that.options.onRowDismiss === "function") && $tr.is(':visible')) {
-        that.options.onRowDismiss(tr);
+      if ($tr.is(':visible')) {
+        //$tr.hide();
+        if (typeof that.options.onRowDimiss === "function") {
+          that.options.onRowDimiss(tr);
+        }
       }
-      $tr.toggle();
     }
+    */
   }
 
   
+
+  this.allRowsSelected = function() {
+    var nVisible = that.visibleRows().length;
+    var nSelected = that.getSelectedRows().length;
+    return nSelected === nVisible;
+  }
+
   this.hasUndo = function() {
-    return that.changeHistoryIndex > -1;
+    return that.dataHistory.changeHistoryIndex > -1;
   }
 
   this.hasRedo = function() {
-    return that.changeHistoryIndex !== (that.changeHistory.length-1);
+    return that.dataHistory.changeHistoryIndex !== (that.dataHistory.changeHistory.length-1);
   }
   
   this.redo = function() {
@@ -649,13 +712,14 @@
     if (!that.hasRedo()) {
       return;
     }
-    var changes = that.changeHistory[that.changeHistoryIndex+1];
+    var changes = that.dataHistory.changeHistory[that.dataHistory.changeHistoryIndex+1];
 
     that.clearSelection();
     for (var i = changes.length - 1; i >= 0; i--) {
-      that.applyChange(changes[i]);
+      that.applyChange(changes[i], "redo");
     };
-    that.changeHistoryIndex++;
+    that.dataHistory.changeHistoryIndex++;
+    that.triggerOnChangeOption(); // Important be after increment
   }
 
   this.undo = function() {
@@ -663,13 +727,14 @@
     if (!that.hasUndo()) {
       return;
     }
-    var changes = that.changeHistory[that.changeHistoryIndex];
+    var changes = that.dataHistory.changeHistory[that.dataHistory.changeHistoryIndex];
     
     that.clearSelection();
     for (var i = changes.length - 1; i >= 0; i--) {
-      that.applyChange(changes[i]);
+      that.applyChange(changes[i], "undo");
     };
-    that.changeHistoryIndex--;
+    that.triggerOnChangeOption(); // Important be before increment
+    that.dataHistory.changeHistoryIndex--;
   }
 
   this.setClipboardText = function() {
@@ -700,6 +765,11 @@
     return $(that.editor).find(".editTableSelected, .editTableCurrent").parent();
   }
 
+  this.cellParentRowId = function(cell) {
+    return $(cell).parent().attr("id");
+  }
+
+  // Not working yet...
   this.registerRows = function(elements) {
     var changes = [];
     for (var i = 0; i < elements.length; i++) {
@@ -707,42 +777,61 @@
       changes.push({
         'kind': 'addRow',
         'y': that.getTdPosIncludeHidden(cells[0]).y,
+        'id': that.cellParentRowId(cells[0]),
         'classForTd': [],
         'rangeSelection': that.rangeSelection
       });
     }
+    // Nao executar linhas abaixo quando for redo. Como fazer isto?
     that.addToChangeHistory(changes);
+    that.dataHistory.changeHistoryIndex++;
   }
   
-  this.hideSelectedRow = function() {
+  // Not working yet...
+  this.dimissSelectedRow = function(funToGetRowDataById) {
+    var change = {};
     var changes = [];
-    var rowsToHide = that.getSelectedRows();
+    var rowsToDimiss = that.getSelectedRows();
     var tr;
-    rowsToHide.each(function(i, tr) {
+    rowsToDimiss.each(function(i, tr) {
       var cells = tr.cells;
       var classForTd = [];
       for (var i = 0; i < cells.length-1; i++) {
         classForTd.push(cells[i].classList.value);
         //$(cells[i]).removeClass(["editTableSelected","editTableCurrent"]);
       }
-      changes.push({
-        'kind': 'hideRow',
-        'y': that.getTdPosIncludeHidden(cells[0]).y,
-        'classForTd': classForTd,
-        'rangeSelection': that.rangeSelection
-      });
-      
-      if ($(tr).is(':visible')) {
-        $(tr).hide();
+      var prevData = {};
+      var rowId = that.cellParentRowId(cells[0]);
+      if (typeof funToGetRowDataById === "function") {
+        prevData = funToGetRowDataById(rowId);
       }
+      change = {
+        'kind': 'dimissRow',
+        'y': that.getTdPosIncludeHidden(cells[0]).y,
+        'id': rowId,
+        'classForTd': classForTd,
+        'rangeSelection': that.rangeSelection,
+        'prevData': prevData
+      }
+      
+      changes.push(change);
+
+
     });
-    var $selectedTr = $(rowsToHide[rowsToHide.length-1]).next();
+    
+    if (typeof that.options.onRowDimiss === "function") {
+      that.options.onRowDimiss(changes);
+    }
+    
+    var $selectedTr = $(rowsToDimiss[rowsToDimiss.length-1]).next();
     var selectedColIndex = $(that.selectedTd).index();
     
     that.setSelectedTd($selectedTr.children()[selectedColIndex]);
 
     that.addToChangeHistory(changes);
-    return rowsToHide;
+    that.dataHistory.changeHistoryIndex++;
+
+    return changes;
   }
 
   $(that.$clipEl)
@@ -829,6 +918,7 @@
           'kind': 'cellChange',
           'x': pos.x,
           'y': pos.y,
+          'id': that.cellParentRowId($nextCell[0]),
           'content': $nextCell.text()
         };
         changes.push(change);
@@ -971,6 +1061,7 @@
                 'kind': 'cellChange',
                 'x': pos.x,
                 'y': pos.y,
+                'id': that.cellParentRowId(el),
                 'content': $el.text()
               });
               $el.text("");

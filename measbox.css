@@ -1,5 +1,11 @@
 /* CSS declarations go here */
 
+#processing-msg {
+  position: absolute;
+  left: 50%;
+  z-index: 9999;
+}
+
 .hidden-row {
   display: none;
 }

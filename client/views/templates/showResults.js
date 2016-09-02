@@ -126,7 +126,7 @@ this.renderResults = function() {
 
   } catch (e) {
     $("#renderedResult").html("");
-    console.log(e);
+    //console.log(e);
   }
 }
 

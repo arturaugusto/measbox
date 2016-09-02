@@ -12,22 +12,19 @@ mpeFmt          = fmtToFixed(mpe / uutPrefixVal, UPrec)
 tur             = fmtToFixed(mpe/U, 2)
 veffFmt         = veff > 9999 ? "∞" : round(veff)`;
 
-var resultsTemplateDefault = `<span style="color:#00628C">
-Reference: <%=correctValueFmt%> <%=uutPrefix%><%=uutUnit%>
-U: <%=UFmt%> <%=uutPrefix%><%=uutUnit%>
-</span>
+var resultsTemplateDefault = `Parameter           | Value                                            
+:---------------:   |:-----------------------------------------------:
+Reference           | <%=correctValueFmt%> <%=uutPrefix%><%=uutUnit%>  
+U                   | <%=UFmt%> <%=uutPrefix%><%=uutUnit%>             
+<%=uutName%>        | <%=uutReadoutFmt%> <%=uutPrefix%><%=uutUnit%>    
+MPE                 | <%=mpeFmt%> <%=uutPrefix%><%=uutUnit%>           
+Error               | <%=errFmt%> <%=uutPrefix%><%=uutUnit%>  
+TUR                 | <%=tur%>                                
+k                   | <%=kFmt%>                               
+_v_<sub>eff</sub>   | <%=veffFmt%>                            
 
-<span style="color:rgb(170,0,0)">
-<%=uutName%>: <%=uutReadoutFmt%> <%=uutPrefix%><%=uutUnit%>
-MPE: <%=mpeFmt%> <%=uutPrefix%><%=uutUnit%>
-</span>
 
-Error: <%=errFmt%> <%=uutPrefix%><%=uutUnit%>
-TUR: <%=tur%>
-
-k: <%=kFmt%>
-
-<i>v</i><sub>eff</sub>: <%=veffFmt%>`;
+`;
 
 confirmDeleteFunc = function (arg) {
   return window.confirm("Confirm remove " + arg.item_title + "?");
@@ -220,27 +217,6 @@ JsonEditorSchemas.instruments = {
             }
           }
         }
-      },
-      automation: {
-        type: "object",
-        title: "Automation",
-        options: {
-          collapsed: true,
-          disable_edit_json: true,
-          disable_properties: false
-        },
-        properties: {
-          code: {
-            type: "code",
-            title: "Code",
-            format: "python",
-            propertyOrder: 4,
-            options: {
-              height: "100px"
-            },
-            "default": "@Feat(None)\n" + "def readout(self):\n" + "    return (self.query('OUT?'))\n\n" + "@readout.setter\n" + "def readout(self, value):\n" + " self.write('OUT {:.8f} V'.format(value))"
-          }
-        }
       }
     }
   }
@@ -360,14 +336,6 @@ JsonEditorSchemas.procedures = {
             title: 'Confidence level',
             "default": 0.953
           },
-          automation: {
-            type: "code",
-            title: "Automation Script",
-            format: "python",
-            options: {
-              height: "200px"
-            }
-          },
           postProcessing: {
             type: 'code',
             format: 'python',
@@ -387,7 +355,7 @@ JsonEditorSchemas.procedures = {
             }
           }   
         },
-        defaultProperties: ["cl", "automation", "postProcessing"]
+        defaultProperties: ["cl", "postProcessing"]
       }
     }
   }

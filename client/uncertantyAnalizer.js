@@ -99,8 +99,10 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
 
   this.getGroupInstrumentRange = function (instrument) {
     var isThisRange;
+    var range;
     for (var i = 0; i < instrument.ranges.length; i++) {
       range = instrument.ranges[i];
+      range.kind = instrument.kind;
       isThisRange = that.testRange(range);
       if (isThisRange) {
         return range;
@@ -110,8 +112,9 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   }
 
   this.setRangeIdOnDB = function(rangeId, varName) {
-    var path = that.rowDBPath + "." + varName + "RangeId";
-    that.data[path] = rangeId;
+    var pathBase = that.rowDBPath + "." + varName;
+    var pathId = pathBase + "RangeId";
+    that.data[pathId] = rangeId;
   }
 
   this.setUUTResolution = function(range) {
@@ -136,6 +139,16 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       }
       var solvedUncertainties = [];
       var solvedUncertainty;
+      
+      // Execute nominal value function
+      var gumArgVar = _.findWhere(that.gumArg.variables, {name: "Rp"});
+      var nominalValueNode = mathjs.parse(range.nominalValue);
+      var nominalValueNodeFunc = nominalValueNode.compile().eval;
+      that.scope[varName] = that.scope.readout;
+      var valueUpdated = nominalValueNodeFunc(that.scope);
+      // Set varName value to updated readout value
+      gumArgVar.value = valueUpdated;
+
       for (var i = 0; i < range.uncertainties.length; i++) {
         solvedUncertainty = that.solveUncertainties(range.uncertainties[i], varName);
         if (solvedUncertainty) {
@@ -160,6 +173,11 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   this.extractRowData = function (varName) {
     var res = [];
     var cells = rowData[varName];
+    
+    if (cells[0] === null) {
+      return [""];
+    }
+    
     var parserResult;
 
     cells.map(function(cellValue, readoutIndex) {
@@ -196,12 +214,14 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       return;
     }
     var node = mathjs.parse(that.procedure.func);
-    that.results.funcLaTeX = node.toTex();
+    that.results.funcLaTeX = node.toString();
     that.gumArg.func = node.compile().eval;
     
+    that.gumArg.cl = that.procedure.additionalOptions.cl;
+
     // Conventionally, the first variable is UUT
     that.uutVarName = that.procedure.variables[0].name;
-    // First we need to iteratr thoug all itens
+    // First we need to iterate all items
     // to set data and get uncertainties
     _.filter(that.procedure.variables, function(v) {
       return v.kind !== "Influence" })
@@ -243,4 +263,5 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   this.results._groups = this.groups;
   data[this.rowDBPath+"._results"] = this.results;
   setData(data);
+  console.log(data);
 }

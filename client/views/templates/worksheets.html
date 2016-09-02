@@ -49,15 +49,17 @@
   
   <div class="editTable">
 
-    
+    {{#unless updateTable}}
     {{#let procedureId=this.procedureId worksheetId=this._id}}
-
     <table class="etCore" spellcheck="false" index="{{index}}" style="display: {{noneWhenUndefined this.procedureId}};">
       <thead>           
         <tr>
           <th></th>
           {{#each colHeaders}}
+          
+          {{#unless colForVarIsFixed this.name}}
           <th>{{this.name}}{{#unless this.isInfluence}}<sub>{{plusOne this.index}}</sub>{{/unless}}</th>
+          {{/unless}}
           {{/each}}
         </tr>
       </thead>
@@ -65,12 +67,15 @@
         {{#each rowsWithIndex}}
         {{#let rowDBIndex=dbIndex}}
         <tr id="{{id}}" class="{{visibilityClass}}" db-index={{dbIndex}} db-path="worksheets.{{worksheetIndex}}.rows.{{rowDBIndex}}">
-          <td>{{index}}</td>
+          <td>{{visibleIndex}}</td>
           {{#each variablesWithIndex procedureId worksheetIndex rowDBIndex ..}}
 
+            
+            {{#unless colForVarIsFixed varName}}
             {{#let cellId=randomId}}
             {{> cells cellId=cellId readout=this.readout color=this.color worksheetIndex=worksheetIndex rowDBIndex=rowDBIndex varName=varName readoutIndex=readoutIndex}}
             {{/let}}
+            {{/unless}}
 
           {{/each}}
         </tr>
@@ -80,6 +85,7 @@
       <!--{{setEditTableCurrent}}-->
     </table>
     {{/let}}<!--procedureId=this.procedureId worksheetId=this._id-->
+    {{/unless}}
     
 
   </div>

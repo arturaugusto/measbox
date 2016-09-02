@@ -48,42 +48,125 @@ this.findIds = function(idArr) {
   return $.find( idArr.map( function(id) { return "#"+id} ).toString() );
 }
 
-this.addNewRow = function (worksheetId, n, cb) {
-  var rows = [];
-  var id;
-  for (var i = n - 1; i >= 0; i--) {
-    id = Random.id();
-    rows.push({
-      _id: id,
-      _order: (Date.now()*100)+i
-    });
+this.indexOfCurrentWorksheet = function() {
+  var ids = _.pluck(Spreadsheets.findOne().worksheets, "_id");
+
+  return _.indexOf(
+    ids, 
+    Session.get("selectedWorksheetId")
+  );
+}
+
+this.addNewRow = function (n, position, rows, isRedo) {
+  var data;
+  //if ( (rows === undefined) || (rows[0] === undefined) || (!rows.length) ) {
+  //if (!isRedo) {
+  if (true) {
+    rows = [];
+    var id;
+    for (var i = n - 1; i >= 0; i--) {
+      console.log("criando novo id.. Deveria?");
+      id = Random.id();
+      rows.push({
+        _id: id
+      });
+    }
   }
-  
-  var data = { 
-    $each: rows
+  data = { 
+    $each: rows,
+    $position: position
   }
 
   Meteor.call(
     "setNestedFieldData",
     getDocumentId(),
     "worksheets",       //parent
-    worksheetId,        //parentId
+    Session.get("selectedWorksheetId"), //parentId
     "rows",             //field
     data,               //data
-    "$addToSet",        //operator
+    "$push",        //operator
     function(err, cbData) {
-      setTimeout(function() {
+      refreshEditTable();
+      /*
+      //Not implemented yet
+      if (!isRedo) {
         Session.set( "addedRowsIdsArr", _.pluck(rows, '_id') );
-      }, 100);
+      } else {
+        Session.set( "addedRowsIdsArr", [] );
+      }
+      */
     }
   );
 }
 
-this.getSelectedWorksheetRowById = function(id) {
+this.getIndexOfCurrentWorksheet = function() {
+  return _.indexOf(
+    _.pluck(
+      Spreadsheets.findOne().worksheets,
+      "_id"
+    ), 
+    Session.get("selectedWorksheetId")
+  )
+}
+
+this.calculatePendingRows = function(scope) {
+  clearTimeout(scope.changedCellsTimeout);
+  scope.changedCellsTimeout = setTimeout(function() {
+    Session.set("processing", true);
+    setChangedCells(function(data) {
+      var uniqChangedRowsPath = _.uniq(
+        _.keys(data).map(function(path) {
+          //console.log(path);
+          return path.split(".").slice(0,4).join(".");
+        })
+      );
+      uniqChangedRowsPath.map(function(path) {
+        // TODO: Use some lib to get item by dot-notation
+        // Get rows for path
+        var rows = _.findWhere(Spreadsheets.findOne().worksheets,
+          {_id: Session.get("selectedWorksheetId")}
+        ).rows;
+        // Get data from row, by index from the path
+        var rowData = rows[parseInt(path.split(".rows.")[1])];
+        
+        try {
+          UncertantyAnalizer(rowData, path, scope.data._id);
+        }
+        catch (e) {
+          console.log(e);
+        }
+      });
+    }, editor.dataHistory);
+  }, 2000);
+}
+
+this.removeRows = function(rowIds) {
+  var rowIdObjArr = rowIds.map(function(id) {
+    return {
+      _id: id
+    }
+  });
+  Meteor.call(
+    "removeTableRow",
+    getDocumentId(),
+    getIndexOfCurrentWorksheet(),
+    {$or: rowIdObjArr},
+    function(err, cbData) {
+      refreshEditTable();
+    }    
+  );  
+}
+
+this.getCurrentWorksheet = function() {
   var currWorksheet = _.findWhere(
     Spreadsheets.findOne()['worksheets'], 
     {'_id': Session.get("selectedWorksheetId")}
   );
+  return currWorksheet;
+}
+
+this.getSelectedWorksheetRowById = function(id) {
+  var currWorksheet = getCurrentWorksheet();
   return _.findWhere(currWorksheet.rows, {'_id': id});
 }
 
@@ -105,7 +188,7 @@ this.extractRowDOMData = function(tr) {
 }
 
 
-this.setChangedCells = function(cb) {
+this.setChangedCells = function(cb, dataHistory) {
   var data = {};
   var extractRowData;
   var rowData;
@@ -139,7 +222,13 @@ this.setChangedCells = function(cb) {
         setData(data, cb);
       }
     });
-  })
+
+    var dataToSetHistory = {};
+    var pathToSetHistory = 'worksheets.'+indexOfCurrentWorksheet()+'.dataHistory';
+    dataToSetHistory[pathToSetHistory] = dataHistory;
+    setData(dataToSetHistory);
+
+  });
 }
 
 
@@ -160,11 +249,11 @@ this.setData = function(data, cb) {
   });
 }
 
-this.setRowVisibility = function(row, toBeVisible) {
+this.setRowDeletedProp = function(row, toBeDeleted) {
   var dbPath;
   var data = {};
   dbPath = row.getAttribute('db-path');
-  data[dbPath+"._deleted"] = toBeVisible;
+  data[dbPath+"._deleted"] = toBeDeleted;
   setData(data);
 }
 
@@ -270,3 +359,18 @@ this.addEvent = function(object, type, callback) {
     object["on"+type] = callback;
   }
 };
+
+this.refreshEditTable = function(el) {
+  var $target;
+  if (el !== undefined) {
+    $target = $(el.target);
+  } else {
+    $target = $(".active .select-worksheet");
+  }
+  
+  $(".editTable tbody").html("");
+  Session.set("selectedWorksheetId", "");
+  setTimeout(function() {
+    Session.set("selectedWorksheetId", $target.data("worksheet"));
+  }, 100);
+}

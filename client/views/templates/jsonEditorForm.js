@@ -2,7 +2,7 @@ Template.jsonEditorForm.onRendered(function() {
   var that = this;
   var field = this.data.field;
   var $el = $(this.firstNode).find(".json-editor-holder");
-  JsonEditorInstances[field] = new JSONEditor($el[0], {
+  this.instance = JsonEditorInstances[field] = new JSONEditor($el[0], {
     theme: "bootstrap3",
     iconlib: "bootstrap3",
     enhanced_ui: "selectize",
@@ -12,10 +12,24 @@ Template.jsonEditorForm.onRendered(function() {
   });
   
   //$el.find("h3").first().hide();
-  /*
-  JsonEditorInstances[field].on("change", function() {
-    var data = JsonEditorInstances[field].getValue();
-  });*/
+  
+  this.onChangeTimeoutId = false;
+
+  // Defer on change to avoid blink of editor on start
+  setTimeout(function() {
+    JsonEditorInstances[field].on("change", function() {
+      if (that.onChangeTimeoutId) {
+        clearTimeout(that.onChangeTimeoutId);
+      }
+
+      that.onChangeTimeoutId = setTimeout(function() {
+
+        var data = {};
+        data[field] = that.instance.getValue();
+        setData(data);
+      }, 2000);
+    });
+  }, 10);
   var data = Spreadsheets.findOne()[field];
   if (data !== undefined) {
     JsonEditorInstances[field].setValue(data);  
@@ -24,15 +38,4 @@ Template.jsonEditorForm.onRendered(function() {
 });
 
 Template.jsonEditorForm.onCreated(function() {
-});
-
-Template.jsonEditorForm.events({
-  'click .set-field-data': function() {
-    var field = this.field;
-    var data = {};
-    data[field] = JsonEditorInstances[field].getValue();
-    // Triger click events for selected worksheet
-    $(".active .select-worksheet").trigger("click");
-    setData(data);
-  }
 });

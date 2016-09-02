@@ -3,13 +3,16 @@
     <title>measbox</title>
   </head>
   <body>
+    {{#if isProcessing}}
+    <div id="processing-msg">Processing...</div>
+    {{/if}}
     <div class="wrap">
       <div class="top-row">
 
         <!-- Nav tabs -->
         <div class="tabs-left">
           <ul class="nav nav-tabs">
-            <li class="active"><a href="#worksheets" aria-controls="worksheets" data-toggle="tab"><i class="fa fa-table"></i></a></li>
+            <li class="active"><a href="#worksheets" id="worksheets-tab" aria-controls="worksheets" data-toggle="tab"><i class="fa fa-table"></i></a></li>
             <li><a href="#procedures" aria-controls="procedures" data-toggle="tab"><i class="fa fa-tasks"></i></a></li>
             <li><a href="#instruments" aria-controls="instruments" data-toggle="tab"><i class="fa fa-tachometer"></i></a></li>
             <li>{{> loginButtons}}</li>
@@ -18,9 +21,11 @@
           <!-- Tab panes -->
           <div class="tab-content">
             <div class="tab-pane active" id="worksheets">
+            
             {{#with selectedWorksheetWithIndex}}
               {{> worksheets }}
             {{/with}}
+            
             </div>
             <div class="tab-pane" id="procedures">
               {{> jsonEditorForm field="procedures"}}

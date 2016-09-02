@@ -23,6 +23,9 @@ Template.showSpreadsheet.helpers({
     }
     return void 0;
   },
+  isProcessing: function() {
+    return Session.get("processing");
+  },  
   isSelectedWorksheet: function(id) {
     return Session.get("selectedWorksheetId") === id;
   },

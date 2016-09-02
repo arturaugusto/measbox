@@ -1,23 +1,32 @@
-window.CREATING_NEW_ROW = false;
-Session.set( "addedRowsIdsArr", [] );
+window.CREATING_FIRST_ROW = false;
+Session.set("updateTable", false);
+//Session.set( "addedRowsIdsArr", [] ); //Not implemented yet
 Template.worksheets.rendered = function() {
 
   this.autorun(function() {
+    /*
+    Not implemented yet
     var addedRowsIdsArr = Session.get("addedRowsIdsArr");
-    if (addedRowsIdsArr.length && editor) {
-      editor.registerRows(findIds(addedRowsIdsArr));
+    if (addedRowsIdsArr.length && window.editor) {
+      window.setTimeout(function() {
+        //console.log(findIds(addedRowsIdsArr));
+        window.editor.registerRows(findIds(addedRowsIdsArr));
+        Session.set( "addedRowsIdsArr", [] );
+      }, 10);
     }
+    */
   });
 
   var that = this;
-  this.changedCellsTimeout = null;
   this.cellChangeTimer = null;
+  this.changedCellsTimeout = null;
   
   var editorDiv = $(".editTable")[0];
   if (!editorDiv) {
     return;
   }
-  var editor = new EditTable(editorDiv, {
+  window.editor = new EditTable(editorDiv, {
+    dataHistory: this.data.dataHistory,
     colOffset: 1,
     deleteWhenNull: function(td) {
       var path = td
@@ -33,37 +42,12 @@ Template.worksheets.rendered = function() {
       //that.clearRowTimeout(td);
     },
     
-    onChange: function(td) {
-      //$(td).attr("changed", true);
-      $(td).parent().attr("changed", true);
-
-      clearTimeout(that.changedCellsTimeout);
-      that.changedCellsTimeout = setTimeout(function() {
-        setChangedCells(function(data) {
-          var uniqChangedRowsPath = _.uniq(
-            _.keys(data).map(function(path) {
-              //console.log(path);
-              return path.split(".").slice(0,4).join(".");
-            })
-          );
-          uniqChangedRowsPath.map(function(path) {
-            // TODO: Use some lib to get item by dot-notation
-            // Get rows for path
-            var rows = _.findWhere(Spreadsheets.findOne().worksheets,
-              {_id: Session.get("selectedWorksheetId")}
-            ).rows;
-            // Get data from row, by index from the path
-            var rowData = rows[parseInt(path.split(".rows.")[1])];
-            
-            try {
-              UncertantyAnalizer(rowData, path, that.data._id);
-            }
-            catch (e) {
-              console.log(e);
-            }
-          });
-        });
-      }, 2000);
+    onChange: function(editor) {
+      editor.changedRows().map(function(tr) {
+        console.log(tr);
+        $(tr).attr("changed", true);
+      });
+      calculatePendingRows(that);
     },
     onSelectedCellChange: function(td) {
       var $row = $(td).parent();
@@ -83,15 +67,25 @@ Template.worksheets.rendered = function() {
         console.log(e);
       }
     },
-    onRowDismiss: function(tr) {
-      setRowVisibility(tr, true);
+    /*
+    //Not implemented yet
+    onRowDimiss: function(changes) {
+      removeRows(_.pluck( changes, "id" ));
     },
-    onRowRecovery: function(tr) {
-      setRowVisibility(tr, false);
+    onRowRecovery: function(change) {
+      console.log(change);
+      addNewRow(
+        1,
+        change.y,
+        [change.prevData],
+        change.isRedo
+      );
     },
+    */
     beforeContextMenuShow: function(editor) {
       var $undoEl = editor.$contextMenuEl.find('a[name=undo]');
       var $redoEl = editor.$contextMenuEl.find('a[name=redo]');
+      var $removeEl = editor.$contextMenuEl.find('a[name=removeRows]');
       if (editor.hasUndo()) {
         $undoEl.removeClass('menuItemDisabled');
       } else {
@@ -102,16 +96,26 @@ Template.worksheets.rendered = function() {
       } else {
         $redoEl.addClass('menuItemDisabled');
       }
+      if (editor.allRowsSelected()) {
+        $removeEl.addClass('menuItemDisabled');
+      } else {
+        $removeEl.removeClass('menuItemDisabled');
+      }
+
 
     },
     contextMenuFunctions: {
-      hideRow: function(editor) {
-        var dbPath;
-        var data = {};
-        var $rowsToHide = editor.hideSelectedRow();
-        $rowsToHide.each(function(i, row) {
-          setRowVisibility(row, true);
+      removeRows: function(editor) {
+        /*
+        // Net yet implemented
+        var changes = editor.dimissSelectedRow(function(rowId) {
+          return _.findWhere(
+            worksheetById(Session.get("selectedWorksheetId")).rows,
+            { _id: rowId }
+          )
         });
+        */
+        removeRows(_.pluck(editor.getSelectedRows(), "id"));
       },
       undo: function(editor) {
         editor.undo();
@@ -123,17 +127,23 @@ Template.worksheets.rendered = function() {
         var refRow = editor.getSelectedRows().first();
         var qtd = getAddRowQtd('addRowAboveVal');
         addNewRow(
-          Session.get("selectedWorksheetId"),
-          qtd
+          qtd,
+          refRow.index()
         );
       },
       addRowBelow: function(editor) {
         var refRow = editor.getSelectedRows().last();
         var qtd = getAddRowQtd('addRowBelowVal');
         addNewRow(
-          Session.get("selectedWorksheetId"),
-          qtd
+          qtd, 
+          refRow.index()+1
         );
+      },
+      calculate: function($editor) {
+        $editor.getSelectedRows().map(function(_i, tr) {
+          $(tr).attr("changed", true);
+        });
+        calculatePendingRows(that);
       }
     },
     contextMenuHTML: `
@@ -153,9 +163,10 @@ Template.worksheets.rendered = function() {
             <input type="number" id="addRowBelowVal" step="1" value="1" min="1" max="20" />
           </span>
         </li>
-        <li><a href="#" name="hideRow">Remove row</a></li>
+        <li><a href="#" name="removeRows">Remove row</a></li>
         <li><a href="#" name="undo">Undo</a></li>
         <li><a href="#" name="redo">Redo</a></li>
+        <li><a href="#" name="calculate">Calculate</a></li>
       </ul>
     </div>`
   });
@@ -222,6 +233,17 @@ Template.worksheets.helpers({
     }
     return "table";
   },
+  updateTable: function() {
+    return Session.get("updateTable");
+  },
+  colForVarIsFixed: function(varName) {
+    var inst = getInstrumentById(getCurrentWorksheet()[varName+'InstrumentId']);
+    if (inst === undefined) {
+      return false;
+    } else {
+      return getInstrumentById(getCurrentWorksheet()[varName+'InstrumentId']).kind === "Fixed";
+    }
+  },
   colHeaders: function() {
     var Procedure = getProcedureById(this.procedureId);
     if (Procedure === undefined) {
@@ -246,22 +268,38 @@ Template.worksheets.helpers({
     return x+1;
   },
   rowsWithIndex: function() {
-    var rowsWithDBIndex = this.rows.map(function(r, index) {
+    //var rows = this.rows;
+    var currWorksheet = worksheetById(Session.get("selectedWorksheetId"));
+    if (currWorksheet === undefined) {
+      return;
+    }
+    var rows = currWorksheet.rows;
+    
+    /*var rowsWithDBIndex = [];
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].dbIndex = _.findIndex(rows, function(r) {
+        return r._id = rows[i]._id;
+      });
+      rowsWithDBIndex.push(rows[i]);
+    }*/
+    
+    var rowsWithDBIndex = rows.map(function(r, index) {
       r.dbIndex = index;
       return r;
     })
 
-    if (!rowsWithDBIndex.length && !window.CREATING_NEW_ROW) {
-      window.CREATING_NEW_ROW = true;
-      addNewRow(this._id, 1);
+    if (!rowsWithDBIndex.length && !window.CREATING_FIRST_ROW) {
+      window.CREATING_FIRST_ROW = true;
+      addNewRow(1, 0);
       // Compensates the small delay that blaze have
       // to re-render the template, avoiding seeding
       // multiple rows
       window.setTimeout(function(){
-        window.CREATING_NEW_ROW = false;
+        window.CREATING_FIRST_ROW = false;
       }, 500);
 
     }
+    var visibleIndex = 0;
     return rowsWithDBIndex.map(function(row, index) {
       var deleted;
       if (row._deleted === undefined) {
@@ -270,13 +308,17 @@ Template.worksheets.helpers({
         deleted = row._deleted
       }
 
+      if (!deleted) {
+        visibleIndex = visibleIndex + 1;
+      }
+
       var visibilityClass;
       if (deleted) {
         visibilityClass = 'hidden-row';
       }
       obj = {
         row: row,
-        index: index+1,
+        visibleIndex: visibleIndex,
         id: row._id,
         dbIndex: row.dbIndex,
         deleted: deleted,
