@@ -10,7 +10,6 @@ Template.jsonEditorForm.onRendered(function() {
     form_name_root: false,
     schema: JsonEditorSchemas[field]
   });
-  
   //$el.find("h3").first().hide();
   
   this.onChangeTimeoutId = false;
@@ -34,7 +33,6 @@ Template.jsonEditorForm.onRendered(function() {
   if (data !== undefined) {
     JsonEditorInstances[field].setValue(data);  
   }
-
 });
 
 Template.jsonEditorForm.onCreated(function() {

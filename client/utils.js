@@ -1,5 +1,5 @@
 // From https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa
-// ucs-2 string to base64 encoded ascii
+// ucs-2 string to base64 encoded asii
 this.utoa = function(str) {
   return window.btoa(unescape(encodeURIComponent(str)));
 }
@@ -65,7 +65,6 @@ this.addNewRow = function (n, position, rows, isRedo) {
     rows = [];
     var id;
     for (var i = n - 1; i >= 0; i--) {
-      console.log("criando novo id.. Deveria?");
       id = Random.id();
       rows.push({
         _id: id
@@ -109,18 +108,24 @@ this.getIndexOfCurrentWorksheet = function() {
   )
 }
 
-this.calculatePendingRows = function(scope) {
+this.calculatePendingRows = function(scope, delay) {
   clearTimeout(scope.changedCellsTimeout);
   scope.changedCellsTimeout = setTimeout(function() {
+    var that = this;
     Session.set("processing", true);
+
     setChangedCells(function(data) {
-      var uniqChangedRowsPath = _.uniq(
+      that.uniqChangedRowsPath = _.uniq(
         _.keys(data).map(function(path) {
           //console.log(path);
           return path.split(".").slice(0,4).join(".");
         })
       );
-      uniqChangedRowsPath.map(function(path) {
+    }, editor.dataHistory);
+    // TODO: this should be run just after setCHangedCells
+    // finish, not relaing on timers
+    setTimeout(function() {
+      that.uniqChangedRowsPath.map(function(path) {
         // TODO: Use some lib to get item by dot-notation
         // Get rows for path
         var rows = _.findWhere(Spreadsheets.findOne().worksheets,
@@ -133,11 +138,12 @@ this.calculatePendingRows = function(scope) {
           UncertantyAnalizer(rowData, path, scope.data._id);
         }
         catch (e) {
+          Session.set("processing", false);
           console.log(e);
         }
       });
-    }, editor.dataHistory);
-  }, 2000);
+    }, 1000);
+  }, delay);
 }
 
 this.removeRows = function(rowIds) {
@@ -361,6 +367,7 @@ this.addEvent = function(object, type, callback) {
 };
 
 this.refreshEditTable = function(el) {
+  Session.set("selectedWorksheetId", "");
   var $target;
   if (el !== undefined) {
     $target = $(el.target);
@@ -368,9 +375,7 @@ this.refreshEditTable = function(el) {
     $target = $(".active .select-worksheet");
   }
   
-  $(".editTable tbody").html("");
-  Session.set("selectedWorksheetId", "");
   setTimeout(function() {
     Session.set("selectedWorksheetId", $target.data("worksheet"));
-  }, 100);
+  }, 30);
 }

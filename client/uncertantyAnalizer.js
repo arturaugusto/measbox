@@ -141,13 +141,18 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       var solvedUncertainty;
       
       // Execute nominal value function
-      var gumArgVar = _.findWhere(that.gumArg.variables, {name: "Rp"});
+      
+      var gumArgVarArr = _.findWhere(that.gumArg.variables, {name: varName});
       var nominalValueNode = mathjs.parse(range.nominalValue);
       var nominalValueNodeFunc = nominalValueNode.compile().eval;
-      that.scope[varName] = that.scope.readout;
-      var valueUpdated = nominalValueNodeFunc(that.scope);
+            
+      var valueUpdatedArr = gumArgVarArr.value.map(function(v) {
+        that.scope.readout = v;
+        return nominalValueNodeFunc(that.scope);
+      });
       // Set varName value to updated readout value
-      gumArgVar.value = valueUpdated;
+      gumArgVarArr.value = valueUpdatedArr;
+      
 
       for (var i = 0; i < range.uncertainties.length; i++) {
         solvedUncertainty = that.solveUncertainties(range.uncertainties[i], varName);
@@ -173,6 +178,9 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   this.extractRowData = function (varName) {
     var res = [];
     var cells = rowData[varName];
+    if (!cells) {
+      return [""];
+    }
     
     if (cells[0] === null) {
       return [""];

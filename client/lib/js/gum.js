@@ -572,7 +572,7 @@
     this.mcm = function(){
       this.mc = {};
       this.mc._init_time = Date.now();
-      this.mc.M = 2000;
+      this.mc.M = 5000;
       
       this.mc._iterations = [];
       // Compute simulations for model
@@ -706,7 +706,7 @@
       this.mc.d_high = Math.abs(this.y + this.U - this.mc.sci_limits[1])
       this.mc.GUF_validated = (this.mc.d_low < num_tolerance) && (this.mc.d_high < num_tolerance);
       this.mc._simulation_time = (Date.now() - this.mc._init_time);
-      console.log("Simulation time: " + this.mc._simulation_time);
+      console.log("Simulation time: " + this.mc._simulation_time + " ms");
       //console.log(this.mc);      
     }
     

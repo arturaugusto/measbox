@@ -20,17 +20,17 @@
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
-            <div class="tab-pane active" id="worksheets">
+            <div class="tab-pane fade in active" id="worksheets">
             
             {{#with selectedWorksheetWithIndex}}
               {{> worksheets }}
             {{/with}}
             
             </div>
-            <div class="tab-pane" id="procedures">
+            <div class="tab-pane fade in" id="procedures">
               {{> jsonEditorForm field="procedures"}}
             </div>
-            <div class="tab-pane" id="instruments">
+            <div class="tab-pane fade in" id="instruments">
               {{> jsonEditorForm field="instruments"}}
             </div>
           </div>

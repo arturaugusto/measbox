@@ -1,0 +1,616 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/bin/node',
+1 verbose cli   '/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '--save',
+1 verbose cli   'bcrypt' ]
+2 info using npm@3.10.6
+3 info using node@v4.5.0
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData bcrypt
+8 silly fetchNamedPackageData bcrypt
+9 silly mapToRegistry name bcrypt
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry https://registry.npmjs.org/
+12 silly mapToRegistry data Result {
+12 silly mapToRegistry   raw: 'bcrypt',
+12 silly mapToRegistry   scope: null,
+12 silly mapToRegistry   escapedName: 'bcrypt',
+12 silly mapToRegistry   name: 'bcrypt',
+12 silly mapToRegistry   rawSpec: '',
+12 silly mapToRegistry   spec: 'latest',
+12 silly mapToRegistry   type: 'tag' }
+13 silly mapToRegistry uri https://registry.npmjs.org/bcrypt
+14 verbose request uri https://registry.npmjs.org/bcrypt
+15 verbose request no auth needed
+16 info attempt registry request try #1 at 10:04:18 PM
+17 verbose request id ae119b5ba30169d9
+18 verbose etag "398F192FUE7FBCG521B59OFYJ"
+19 http request GET https://registry.npmjs.org/bcrypt
+20 http 304 https://registry.npmjs.org/bcrypt
+21 verbose headers { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+21 verbose headers   via: '1.1 varnish',
+21 verbose headers   'cache-control': 'max-age=300',
+21 verbose headers   etag: '"398F192FUE7FBCG521B59OFYJ"',
+21 verbose headers   age: '0',
+21 verbose headers   connection: 'keep-alive',
+21 verbose headers   'x-served-by': 'cache-gru7123-GRU',
+21 verbose headers   'x-cache': 'HIT',
+21 verbose headers   'x-cache-hits': '1',
+21 verbose headers   'x-timer': 'S1473642262.195310,VS0,VE195',
+21 verbose headers   vary: 'Accept-Encoding' }
+22 silly get cb [ 304,
+22 silly get   { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+22 silly get     via: '1.1 varnish',
+22 silly get     'cache-control': 'max-age=300',
+22 silly get     etag: '"398F192FUE7FBCG521B59OFYJ"',
+22 silly get     age: '0',
+22 silly get     connection: 'keep-alive',
+22 silly get     'x-served-by': 'cache-gru7123-GRU',
+22 silly get     'x-cache': 'HIT',
+22 silly get     'x-cache-hits': '1',
+22 silly get     'x-timer': 'S1473642262.195310,VS0,VE195',
+22 silly get     vary: 'Accept-Encoding' } ]
+23 verbose etag https://registry.npmjs.org/bcrypt from cache
+24 verbose get saving bcrypt to /home/arturaugusto/.npm/registry.npmjs.org/bcrypt/.cache.json
+25 verbose correctMkdir /home/arturaugusto/.npm correctMkdir not in flight; initializing
+26 silly install normalizeTree
+27 silly loadCurrentTree Finishing
+28 silly loadIdealTree Starting
+29 silly install loadIdealTree
+30 silly cloneCurrentTree Starting
+31 silly install cloneCurrentTreeToIdealTree
+32 silly cloneCurrentTree Finishing
+33 silly loadShrinkwrap Starting
+34 silly install loadShrinkwrap
+35 silly loadShrinkwrap Finishing
+36 silly loadAllDepsIntoIdealTree Starting
+37 silly install loadAllDepsIntoIdealTree
+38 silly resolveWithNewModule bcrypt@0.8.7 checking installable status
+39 silly cache add args [ 'bcrypt', null ]
+40 verbose cache add spec bcrypt
+41 silly cache add parsed spec Result {
+41 silly cache add   raw: 'bcrypt',
+41 silly cache add   scope: null,
+41 silly cache add   escapedName: 'bcrypt',
+41 silly cache add   name: 'bcrypt',
+41 silly cache add   rawSpec: '',
+41 silly cache add   spec: 'latest',
+41 silly cache add   type: 'tag' }
+42 silly addNamed bcrypt@latest
+43 verbose addNamed "latest" is being treated as a dist-tag for bcrypt
+44 info addNameTag [ 'bcrypt', 'latest' ]
+45 silly mapToRegistry name bcrypt
+46 silly mapToRegistry using default registry
+47 silly mapToRegistry registry https://registry.npmjs.org/
+48 silly mapToRegistry data Result {
+48 silly mapToRegistry   raw: 'bcrypt',
+48 silly mapToRegistry   scope: null,
+48 silly mapToRegistry   escapedName: 'bcrypt',
+48 silly mapToRegistry   name: 'bcrypt',
+48 silly mapToRegistry   rawSpec: '',
+48 silly mapToRegistry   spec: 'latest',
+48 silly mapToRegistry   type: 'tag' }
+49 silly mapToRegistry uri https://registry.npmjs.org/bcrypt
+50 verbose addNameTag registry:https://registry.npmjs.org/bcrypt not in flight; fetching
+51 verbose get https://registry.npmjs.org/bcrypt not expired, no request
+52 silly addNameTag next cb for bcrypt with tag latest
+53 silly addNamed bcrypt@0.8.7
+54 verbose addNamed "0.8.7" is a plain semver version for bcrypt
+55 silly cache afterAdd bcrypt@0.8.7
+56 verbose afterAdd /home/arturaugusto/.npm/bcrypt/0.8.7/package/package.json not in flight; writing
+57 verbose correctMkdir /home/arturaugusto/.npm correctMkdir not in flight; initializing
+58 verbose afterAdd /home/arturaugusto/.npm/bcrypt/0.8.7/package/package.json written
+59 silly fetchNamedPackageData bindings
+60 silly mapToRegistry name bindings
+61 silly mapToRegistry using default registry
+62 silly mapToRegistry registry https://registry.npmjs.org/
+63 silly mapToRegistry data Result {
+63 silly mapToRegistry   raw: 'bindings',
+63 silly mapToRegistry   scope: null,
+63 silly mapToRegistry   escapedName: 'bindings',
+63 silly mapToRegistry   name: 'bindings',
+63 silly mapToRegistry   rawSpec: '',
+63 silly mapToRegistry   spec: 'latest',
+63 silly mapToRegistry   type: 'tag' }
+64 silly mapToRegistry uri https://registry.npmjs.org/bindings
+65 silly fetchNamedPackageData nan
+66 silly mapToRegistry name nan
+67 silly mapToRegistry using default registry
+68 silly mapToRegistry registry https://registry.npmjs.org/
+69 silly mapToRegistry data Result {
+69 silly mapToRegistry   raw: 'nan',
+69 silly mapToRegistry   scope: null,
+69 silly mapToRegistry   escapedName: 'nan',
+69 silly mapToRegistry   name: 'nan',
+69 silly mapToRegistry   rawSpec: '',
+69 silly mapToRegistry   spec: 'latest',
+69 silly mapToRegistry   type: 'tag' }
+70 silly mapToRegistry uri https://registry.npmjs.org/nan
+71 verbose request uri https://registry.npmjs.org/nan
+72 verbose request no auth needed
+73 info attempt registry request try #1 at 10:04:19 PM
+74 verbose etag "1OOZJAUMBQC59OINHZGMRRCSL"
+75 http request GET https://registry.npmjs.org/nan
+76 verbose request uri https://registry.npmjs.org/bindings
+77 verbose request no auth needed
+78 info attempt registry request try #1 at 10:04:19 PM
+79 verbose etag "33TX4J3DNTGF7K41ZUV6OA182"
+80 http request GET https://registry.npmjs.org/bindings
+81 http 304 https://registry.npmjs.org/nan
+82 verbose headers { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+82 verbose headers   via: '1.1 varnish',
+82 verbose headers   'cache-control': 'max-age=300',
+82 verbose headers   etag: '"1OOZJAUMBQC59OINHZGMRRCSL"',
+82 verbose headers   age: '125',
+82 verbose headers   connection: 'keep-alive',
+82 verbose headers   'x-served-by': 'cache-gru7123-GRU',
+82 verbose headers   'x-cache': 'HIT',
+82 verbose headers   'x-cache-hits': '1',
+82 verbose headers   'x-timer': 'S1473642262.608676,VS0,VE0',
+82 verbose headers   vary: 'Accept-Encoding' }
+83 silly get cb [ 304,
+83 silly get   { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+83 silly get     via: '1.1 varnish',
+83 silly get     'cache-control': 'max-age=300',
+83 silly get     etag: '"1OOZJAUMBQC59OINHZGMRRCSL"',
+83 silly get     age: '125',
+83 silly get     connection: 'keep-alive',
+83 silly get     'x-served-by': 'cache-gru7123-GRU',
+83 silly get     'x-cache': 'HIT',
+83 silly get     'x-cache-hits': '1',
+83 silly get     'x-timer': 'S1473642262.608676,VS0,VE0',
+83 silly get     vary: 'Accept-Encoding' } ]
+84 verbose etag https://registry.npmjs.org/nan from cache
+85 verbose get saving nan to /home/arturaugusto/.npm/registry.npmjs.org/nan/.cache.json
+86 verbose correctMkdir /home/arturaugusto/.npm correctMkdir not in flight; initializing
+87 silly resolveWithNewModule nan@2.3.5 checking installable status
+88 silly cache add args [ 'nan@2.3.5', null ]
+89 verbose cache add spec nan@2.3.5
+90 silly cache add parsed spec Result {
+90 silly cache add   raw: 'nan@2.3.5',
+90 silly cache add   scope: null,
+90 silly cache add   escapedName: 'nan',
+90 silly cache add   name: 'nan',
+90 silly cache add   rawSpec: '2.3.5',
+90 silly cache add   spec: '2.3.5',
+90 silly cache add   type: 'version' }
+91 silly addNamed nan@2.3.5
+92 verbose addNamed "2.3.5" is a plain semver version for nan
+93 silly mapToRegistry name nan
+94 silly mapToRegistry using default registry
+95 silly mapToRegistry registry https://registry.npmjs.org/
+96 silly mapToRegistry data Result {
+96 silly mapToRegistry   raw: 'nan',
+96 silly mapToRegistry   scope: null,
+96 silly mapToRegistry   escapedName: 'nan',
+96 silly mapToRegistry   name: 'nan',
+96 silly mapToRegistry   rawSpec: '',
+96 silly mapToRegistry   spec: 'latest',
+96 silly mapToRegistry   type: 'tag' }
+97 silly mapToRegistry uri https://registry.npmjs.org/nan
+98 verbose addNameVersion registry:https://registry.npmjs.org/nan not in flight; fetching
+99 verbose get https://registry.npmjs.org/nan not expired, no request
+100 silly cache afterAdd nan@2.3.5
+101 verbose afterAdd /home/arturaugusto/.npm/nan/2.3.5/package/package.json not in flight; writing
+102 verbose correctMkdir /home/arturaugusto/.npm correctMkdir not in flight; initializing
+103 verbose afterAdd /home/arturaugusto/.npm/nan/2.3.5/package/package.json written
+104 http 304 https://registry.npmjs.org/bindings
+105 verbose headers { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+105 verbose headers   via: '1.1 varnish',
+105 verbose headers   'cache-control': 'max-age=300',
+105 verbose headers   etag: '"33TX4J3DNTGF7K41ZUV6OA182"',
+105 verbose headers   age: '184',
+105 verbose headers   connection: 'keep-alive',
+105 verbose headers   'x-served-by': 'cache-gru7120-GRU',
+105 verbose headers   'x-cache': 'HIT',
+105 verbose headers   'x-cache-hits': '1',
+105 verbose headers   'x-timer': 'S1473642262.649025,VS0,VE0',
+105 verbose headers   vary: 'Accept-Encoding' }
+106 silly get cb [ 304,
+106 silly get   { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+106 silly get     via: '1.1 varnish',
+106 silly get     'cache-control': 'max-age=300',
+106 silly get     etag: '"33TX4J3DNTGF7K41ZUV6OA182"',
+106 silly get     age: '184',
+106 silly get     connection: 'keep-alive',
+106 silly get     'x-served-by': 'cache-gru7120-GRU',
+106 silly get     'x-cache': 'HIT',
+106 silly get     'x-cache-hits': '1',
+106 silly get     'x-timer': 'S1473642262.649025,VS0,VE0',
+106 silly get     vary: 'Accept-Encoding' } ]
+107 verbose etag https://registry.npmjs.org/bindings from cache
+108 verbose get saving bindings to /home/arturaugusto/.npm/registry.npmjs.org/bindings/.cache.json
+109 verbose correctMkdir /home/arturaugusto/.npm correctMkdir not in flight; initializing
+110 silly resolveWithNewModule bindings@1.2.1 checking installable status
+111 silly cache add args [ 'bindings@1.2.1', null ]
+112 verbose cache add spec bindings@1.2.1
+113 silly cache add parsed spec Result {
+113 silly cache add   raw: 'bindings@1.2.1',
+113 silly cache add   scope: null,
+113 silly cache add   escapedName: 'bindings',
+113 silly cache add   name: 'bindings',
+113 silly cache add   rawSpec: '1.2.1',
+113 silly cache add   spec: '1.2.1',
+113 silly cache add   type: 'version' }
+114 silly addNamed bindings@1.2.1
+115 verbose addNamed "1.2.1" is a plain semver version for bindings
+116 silly mapToRegistry name bindings
+117 silly mapToRegistry using default registry
+118 silly mapToRegistry registry https://registry.npmjs.org/
+119 silly mapToRegistry data Result {
+119 silly mapToRegistry   raw: 'bindings',
+119 silly mapToRegistry   scope: null,
+119 silly mapToRegistry   escapedName: 'bindings',
+119 silly mapToRegistry   name: 'bindings',
+119 silly mapToRegistry   rawSpec: '',
+119 silly mapToRegistry   spec: 'latest',
+119 silly mapToRegistry   type: 'tag' }
+120 silly mapToRegistry uri https://registry.npmjs.org/bindings
+121 verbose addNameVersion registry:https://registry.npmjs.org/bindings not in flight; fetching
+122 verbose get https://registry.npmjs.org/bindings not expired, no request
+123 silly cache afterAdd bindings@1.2.1
+124 verbose afterAdd /home/arturaugusto/.npm/bindings/1.2.1/package/package.json not in flight; writing
+125 verbose correctMkdir /home/arturaugusto/.npm correctMkdir not in flight; initializing
+126 verbose afterAdd /home/arturaugusto/.npm/bindings/1.2.1/package/package.json written
+127 silly loadAllDepsIntoIdealTree Finishing
+128 silly loadIdealTree Finishing
+129 silly currentTree measbox
+129 silly currentTree ├── d3-array@1.0.0
+129 silly currentTree ├── d3-axis@1.0.0
+129 silly currentTree ├── d3-brush@1.0.1
+129 silly currentTree ├── d3-chord@1.0.0
+129 silly currentTree ├── d3-collection@1.0.0
+129 silly currentTree ├── d3-color@1.0.0
+129 silly currentTree ├── d3-dispatch@1.0.0
+129 silly currentTree ├── d3-drag@1.0.0
+129 silly currentTree ├── d3-dsv@1.0.0
+129 silly currentTree ├── d3-ease@1.0.0
+129 silly currentTree ├── d3-force@1.0.0
+129 silly currentTree ├── d3-format@1.0.0
+129 silly currentTree ├── d3-geo@1.1.1
+129 silly currentTree ├── d3-hierarchy@1.0.0
+129 silly currentTree ├── d3-interpolate@1.1.0
+129 silly currentTree ├── d3-path@1.0.0
+129 silly currentTree ├── d3-polygon@1.0.0
+129 silly currentTree ├── d3-quadtree@1.0.0
+129 silly currentTree ├── d3-queue@3.0.1
+129 silly currentTree ├── d3-random@1.0.0
+129 silly currentTree ├── d3-request@1.0.1
+129 silly currentTree ├── d3-scale@1.0.1
+129 silly currentTree ├── d3-selection@1.0.0
+129 silly currentTree ├── d3-shape@1.0.0
+129 silly currentTree ├── d3-time-format@2.0.0
+129 silly currentTree ├── d3-time@1.0.0
+129 silly currentTree ├── d3-timer@1.0.1
+129 silly currentTree ├── d3-transition@1.0.0
+129 silly currentTree ├── d3-voronoi@1.0.1
+129 silly currentTree ├── d3-zoom@1.0.2
+129 silly currentTree ├── d3@4.1.1
+129 silly currentTree ├── decimal.js-light@1.0.4
+129 silly currentTree ├── kramed@0.5.6
+129 silly currentTree ├─┬ mathjs@3.2.1
+129 silly currentTree │ ├── complex.js@2.0.1
+129 silly currentTree │ ├── decimal.js@5.0.8
+129 silly currentTree │ ├── fraction.js@3.3.1
+129 silly currentTree │ ├── tiny-emitter@1.0.2
+129 silly currentTree │ └── typed-function@0.10.4
+129 silly currentTree ├── rw@1.3.2
+129 silly currentTree └── xmlhttprequest@1.8.0
+130 silly idealTree measbox
+130 silly idealTree ├── bcrypt@0.8.7
+130 silly idealTree ├── bindings@1.2.1
+130 silly idealTree ├── d3-array@1.0.0
+130 silly idealTree ├── d3-axis@1.0.0
+130 silly idealTree ├── d3-brush@1.0.1
+130 silly idealTree ├── d3-chord@1.0.0
+130 silly idealTree ├── d3-collection@1.0.0
+130 silly idealTree ├── d3-color@1.0.0
+130 silly idealTree ├── d3-dispatch@1.0.0
+130 silly idealTree ├── d3-drag@1.0.0
+130 silly idealTree ├── d3-dsv@1.0.0
+130 silly idealTree ├── d3-ease@1.0.0
+130 silly idealTree ├── d3-force@1.0.0
+130 silly idealTree ├── d3-format@1.0.0
+130 silly idealTree ├── d3-geo@1.1.1
+130 silly idealTree ├── d3-hierarchy@1.0.0
+130 silly idealTree ├── d3-interpolate@1.1.0
+130 silly idealTree ├── d3-path@1.0.0
+130 silly idealTree ├── d3-polygon@1.0.0
+130 silly idealTree ├── d3-quadtree@1.0.0
+130 silly idealTree ├── d3-queue@3.0.1
+130 silly idealTree ├── d3-random@1.0.0
+130 silly idealTree ├── d3-request@1.0.1
+130 silly idealTree ├── d3-scale@1.0.1
+130 silly idealTree ├── d3-selection@1.0.0
+130 silly idealTree ├── d3-shape@1.0.0
+130 silly idealTree ├── d3-time-format@2.0.0
+130 silly idealTree ├── d3-time@1.0.0
+130 silly idealTree ├── d3-timer@1.0.1
+130 silly idealTree ├── d3-transition@1.0.0
+130 silly idealTree ├── d3-voronoi@1.0.1
+130 silly idealTree ├── d3-zoom@1.0.2
+130 silly idealTree ├── d3@4.1.1
+130 silly idealTree ├── decimal.js-light@1.0.4
+130 silly idealTree ├── kramed@0.5.6
+130 silly idealTree ├─┬ mathjs@3.2.1
+130 silly idealTree │ ├── complex.js@2.0.1
+130 silly idealTree │ ├── decimal.js@5.0.8
+130 silly idealTree │ ├── fraction.js@3.3.1
+130 silly idealTree │ ├── tiny-emitter@1.0.2
+130 silly idealTree │ └── typed-function@0.10.4
+130 silly idealTree ├── nan@2.3.5
+130 silly idealTree ├── rw@1.3.2
+130 silly idealTree └── xmlhttprequest@1.8.0
+131 silly generateActionsToTake Starting
+132 silly install generateActionsToTake
+133 silly generateActionsToTake Finishing
+134 silly diffTrees action count 3
+135 silly diffTrees add bindings@1.2.1
+136 silly diffTrees add nan@2.3.5
+137 silly diffTrees add bcrypt@0.8.7
+138 silly decomposeActions action count 24
+139 silly decomposeActions fetch bindings@1.2.1
+140 silly decomposeActions extract bindings@1.2.1
+141 silly decomposeActions test bindings@1.2.1
+142 silly decomposeActions preinstall bindings@1.2.1
+143 silly decomposeActions build bindings@1.2.1
+144 silly decomposeActions install bindings@1.2.1
+145 silly decomposeActions postinstall bindings@1.2.1
+146 silly decomposeActions finalize bindings@1.2.1
+147 silly decomposeActions fetch nan@2.3.5
+148 silly decomposeActions extract nan@2.3.5
+149 silly decomposeActions test nan@2.3.5
+150 silly decomposeActions preinstall nan@2.3.5
+151 silly decomposeActions build nan@2.3.5
+152 silly decomposeActions install nan@2.3.5
+153 silly decomposeActions postinstall nan@2.3.5
+154 silly decomposeActions finalize nan@2.3.5
+155 silly decomposeActions fetch bcrypt@0.8.7
+156 silly decomposeActions extract bcrypt@0.8.7
+157 silly decomposeActions test bcrypt@0.8.7
+158 silly decomposeActions preinstall bcrypt@0.8.7
+159 silly decomposeActions build bcrypt@0.8.7
+160 silly decomposeActions install bcrypt@0.8.7
+161 silly decomposeActions postinstall bcrypt@0.8.7
+162 silly decomposeActions finalize bcrypt@0.8.7
+163 silly executeActions Starting
+164 silly install executeActions
+165 silly doSerial global-install 0
+166 silly doParallel fetch 3
+167 verbose correctMkdir /home/arturaugusto/.npm/_locks correctMkdir not in flight; initializing
+168 verbose lock using /home/arturaugusto/.npm/_locks/staging-c80d2b13f9593344.lock for /home/arturaugusto/Documents/measbox/node_modules/.staging
+169 silly doParallel extract 3
+170 silly extract bindings@1.2.1
+171 silly extract nan@2.3.5
+172 silly extract bcrypt@0.8.7
+173 verbose unbuild node_modules/.staging/bindings-1cfefa7c
+174 verbose unbuild node_modules/.staging/nan-81e1f60b
+175 verbose unbuild node_modules/.staging/bcrypt-507fb2ab
+176 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c is being purged from base /home/arturaugusto/Documents/measbox
+177 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
+178 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b is being purged from base /home/arturaugusto/Documents/measbox
+179 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
+180 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab is being purged from base /home/arturaugusto/Documents/measbox
+181 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
+182 verbose tar unpack /home/arturaugusto/.npm/bindings/1.2.1/package.tgz
+183 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
+184 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c is being purged
+185 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
+186 verbose tar unpack /home/arturaugusto/.npm/nan/2.3.5/package.tgz
+187 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
+188 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b is being purged
+189 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
+190 verbose tar unpack /home/arturaugusto/.npm/bcrypt/0.8.7/package.tgz
+191 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
+192 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab is being purged
+193 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
+194 silly gunzTarPerm modes [ '755', '644' ]
+195 silly gunzTarPerm modes [ '755', '644' ]
+196 silly gunzTarPerm modes [ '755', '644' ]
+197 silly gunzTarPerm extractEntry package.json
+198 silly gunzTarPerm extractEntry package.json
+199 silly gunzTarPerm extractEntry package.json
+200 silly gunzTarPerm modified mode [ 'package.json', 436, 420 ]
+201 silly gunzTarPerm extractEntry README.md
+202 silly gunzTarPerm extractEntry bindings.js
+203 silly gunzTarPerm extractEntry .npmignore
+204 silly gunzTarPerm extractEntry README.md
+205 silly gunzTarPerm extractEntry README.md
+206 silly gunzTarPerm modified mode [ 'README.md', 436, 420 ]
+207 silly gunzTarPerm extractEntry include_dirs.js
+208 silly gunzTarPerm modified mode [ 'include_dirs.js', 436, 420 ]
+209 silly gunzTarPerm extractEntry nan_converters.h
+210 silly gunzTarPerm modified mode [ 'nan_converters.h', 436, 420 ]
+211 silly gunzTarPerm extractEntry LICENSE.md
+212 silly gunzTarPerm modified mode [ 'LICENSE.md', 436, 420 ]
+213 silly gunzTarPerm extractEntry doc/node_misc.md
+214 silly gunzTarPerm modified mode [ 'doc/node_misc.md', 436, 420 ]
+215 silly gunzTarPerm extractEntry LICENSE
+216 silly gunzTarPerm extractEntry bcrypt.js
+217 silly gunzTarPerm extractEntry Makefile
+218 silly gunzTarPerm extractEntry .travis.yml
+219 silly gunzTarPerm extractEntry CHANGELOG.md
+220 silly gunzTarPerm extractEntry binding.gyp
+221 silly gunzTarPerm extractEntry examples/async_compare.js
+222 silly gunzTarPerm extractEntry examples/forever_gen_salt.js
+223 silly gunzTarPerm extractEntry test/async.js
+224 silly gunzTarPerm extractEntry test/repetitions.js
+225 silly gunzTarPerm extractEntry test/sync.js
+226 silly gunzTarPerm extractEntry ISSUE_TEMPLATE.md
+227 silly gunzTarPerm extractEntry src/bcrypt.cc
+228 silly gunzTarPerm extractEntry src/bcrypt_node.cc
+229 silly gunzTarPerm extractEntry src/blowfish.cc
+230 silly gunzTarPerm extractEntry src/node_blf.h
+231 silly gunzTarPerm extractEntry werker.yml
+232 silly gunzTarPerm extractEntry doc/asyncworker.md
+233 silly gunzTarPerm modified mode [ 'doc/asyncworker.md', 436, 420 ]
+234 silly gunzTarPerm extractEntry doc/callback.md
+235 silly gunzTarPerm modified mode [ 'doc/callback.md', 436, 420 ]
+236 silly gunzTarPerm extractEntry doc/converters.md
+237 silly gunzTarPerm modified mode [ 'doc/converters.md', 436, 420 ]
+238 silly gunzTarPerm extractEntry doc/errors.md
+239 silly gunzTarPerm modified mode [ 'doc/errors.md', 436, 420 ]
+240 silly gunzTarPerm extractEntry doc/maybe_types.md
+241 silly gunzTarPerm modified mode [ 'doc/maybe_types.md', 436, 420 ]
+242 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c/node_modules is being purged
+243 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c/node_modules
+244 silly gunzTarPerm extractEntry doc/methods.md
+245 silly gunzTarPerm modified mode [ 'doc/methods.md', 436, 420 ]
+246 silly gunzTarPerm extractEntry doc/new.md
+247 silly gunzTarPerm modified mode [ 'doc/new.md', 436, 420 ]
+248 silly gunzTarPerm extractEntry doc/buffers.md
+249 silly gunzTarPerm modified mode [ 'doc/buffers.md', 436, 420 ]
+250 silly gunzTarPerm extractEntry doc/object_wrappers.md
+251 silly gunzTarPerm modified mode [ 'doc/object_wrappers.md', 436, 420 ]
+252 silly gunzTarPerm extractEntry doc/persistent.md
+253 silly gunzTarPerm modified mode [ 'doc/persistent.md', 436, 420 ]
+254 silly gunzTarPerm extractEntry doc/scopes.md
+255 silly gunzTarPerm modified mode [ 'doc/scopes.md', 436, 420 ]
+256 silly gunzTarPerm extractEntry doc/script.md
+257 silly gunzTarPerm modified mode [ 'doc/script.md', 436, 420 ]
+258 silly gunzTarPerm extractEntry doc/string_bytes.md
+259 silly gunzTarPerm modified mode [ 'doc/string_bytes.md', 436, 420 ]
+260 silly gunzTarPerm extractEntry doc/v8_internals.md
+261 silly gunzTarPerm modified mode [ 'doc/v8_internals.md', 436, 420 ]
+262 silly gunzTarPerm extractEntry doc/v8_misc.md
+263 silly gunzTarPerm modified mode [ 'doc/v8_misc.md', 436, 420 ]
+264 silly gunzTarPerm extractEntry nan.h
+265 silly gunzTarPerm modified mode [ 'nan.h', 436, 420 ]
+266 silly gunzTarPerm extractEntry nan_callbacks.h
+267 silly gunzTarPerm modified mode [ 'nan_callbacks.h', 436, 420 ]
+268 silly gunzTarPerm extractEntry nan_callbacks_12_inl.h
+269 silly gunzTarPerm modified mode [ 'nan_callbacks_12_inl.h', 436, 420 ]
+270 silly gunzTarPerm extractEntry nan_callbacks_pre_12_inl.h
+271 silly gunzTarPerm modified mode [ 'nan_callbacks_pre_12_inl.h', 436, 420 ]
+272 silly gunzTarPerm extractEntry nan_converters_43_inl.h
+273 silly gunzTarPerm modified mode [ 'nan_converters_43_inl.h', 436, 420 ]
+274 silly gunzTarPerm extractEntry nan_converters_pre_43_inl.h
+275 silly gunzTarPerm modified mode [ 'nan_converters_pre_43_inl.h', 436, 420 ]
+276 silly gunzTarPerm extractEntry nan_implementation_12_inl.h
+277 silly gunzTarPerm modified mode [ 'nan_implementation_12_inl.h', 436, 420 ]
+278 silly gunzTarPerm extractEntry nan_implementation_pre_12_inl.h
+279 silly gunzTarPerm modified mode [ 'nan_implementation_pre_12_inl.h', 436, 420 ]
+280 silly gunzTarPerm extractEntry nan_maybe_43_inl.h
+281 silly gunzTarPerm modified mode [ 'nan_maybe_43_inl.h', 436, 420 ]
+282 silly gunzTarPerm extractEntry nan_maybe_pre_43_inl.h
+283 silly gunzTarPerm modified mode [ 'nan_maybe_pre_43_inl.h', 436, 420 ]
+284 silly gunzTarPerm extractEntry nan_new.h
+285 silly gunzTarPerm modified mode [ 'nan_new.h', 436, 420 ]
+286 silly gunzTarPerm extractEntry nan_object_wrap.h
+287 silly gunzTarPerm modified mode [ 'nan_object_wrap.h', 436, 420 ]
+288 silly gunzTarPerm extractEntry nan_persistent_12_inl.h
+289 silly gunzTarPerm modified mode [ 'nan_persistent_12_inl.h', 436, 420 ]
+290 silly gunzTarPerm extractEntry nan_persistent_pre_12_inl.h
+291 silly gunzTarPerm modified mode [ 'nan_persistent_pre_12_inl.h', 436, 420 ]
+292 silly gunzTarPerm extractEntry nan_string_bytes.h
+293 silly gunzTarPerm modified mode [ 'nan_string_bytes.h', 436, 420 ]
+294 silly gunzTarPerm extractEntry nan_typedarray_contents.h
+295 silly gunzTarPerm modified mode [ 'nan_typedarray_contents.h', 436, 420 ]
+296 silly gunzTarPerm extractEntry nan_weak.h
+297 silly gunzTarPerm modified mode [ 'nan_weak.h', 436, 420 ]
+298 silly gunzTarPerm extractEntry CHANGELOG.md
+299 silly gunzTarPerm modified mode [ 'CHANGELOG.md', 436, 420 ]
+300 silly gunzTarPerm extractEntry tools/package.json
+301 silly gunzTarPerm modified mode [ 'tools/package.json', 436, 420 ]
+302 silly gunzTarPerm extractEntry tools/README.md
+303 silly gunzTarPerm modified mode [ 'tools/README.md', 436, 420 ]
+304 silly gunzTarPerm extractEntry tools/1to2.js
+305 silly gunzTarPerm modified mode [ 'tools/1to2.js', 509, 493 ]
+306 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab/node_modules is being purged
+307 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab/node_modules
+308 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b/node_modules is being purged
+309 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b/node_modules
+310 silly doParallel preinstall 3
+311 silly preinstall bindings@1.2.1 /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
+312 info lifecycle bindings@1.2.1~preinstall: bindings@1.2.1
+313 silly preinstall nan@2.3.5 /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
+314 info lifecycle nan@2.3.5~preinstall: nan@2.3.5
+315 silly preinstall bcrypt@0.8.7 /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
+316 info lifecycle bcrypt@0.8.7~preinstall: bcrypt@0.8.7
+317 silly lifecycle bindings@1.2.1~preinstall: no script for preinstall, continuing
+318 silly lifecycle nan@2.3.5~preinstall: no script for preinstall, continuing
+319 silly lifecycle bcrypt@0.8.7~preinstall: no script for preinstall, continuing
+320 silly doReverseSerial remove 0
+321 silly doSerial move 0
+322 silly doSerial finalize 3
+323 silly finalize /home/arturaugusto/Documents/measbox/node_modules/bindings
+324 silly finalize /home/arturaugusto/Documents/measbox/node_modules/nan
+325 silly finalize /home/arturaugusto/Documents/measbox/node_modules/bcrypt
+326 silly doSerial build 3
+327 silly build bindings@1.2.1
+328 info linkStuff bindings@1.2.1
+329 silly linkStuff bindings@1.2.1 has /home/arturaugusto/Documents/measbox/node_modules as its parent node_modules
+330 verbose linkBins bindings@1.2.1
+331 verbose linkMans bindings@1.2.1
+332 silly build nan@2.3.5
+333 info linkStuff nan@2.3.5
+334 silly linkStuff nan@2.3.5 has /home/arturaugusto/Documents/measbox/node_modules as its parent node_modules
+335 verbose linkBins nan@2.3.5
+336 verbose linkMans nan@2.3.5
+337 silly build bcrypt@0.8.7
+338 info linkStuff bcrypt@0.8.7
+339 silly linkStuff bcrypt@0.8.7 has /home/arturaugusto/Documents/measbox/node_modules as its parent node_modules
+340 verbose linkBins bcrypt@0.8.7
+341 verbose linkMans bcrypt@0.8.7
+342 silly doSerial global-link 0
+343 silly doParallel update-linked 0
+344 silly doSerial install 3
+345 silly install bindings@1.2.1 /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
+346 info lifecycle bindings@1.2.1~install: bindings@1.2.1
+347 silly lifecycle bindings@1.2.1~install: no script for install, continuing
+348 silly install nan@2.3.5 /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
+349 info lifecycle nan@2.3.5~install: nan@2.3.5
+350 silly lifecycle nan@2.3.5~install: no script for install, continuing
+351 silly install bcrypt@0.8.7 /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
+352 info lifecycle bcrypt@0.8.7~install: bcrypt@0.8.7
+353 verbose lifecycle bcrypt@0.8.7~install: unsafe-perm in lifecycle false
+354 verbose lifecycle bcrypt@0.8.7~install: PATH: /home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/npm/bin/node-gyp-bin:/home/arturaugusto/Documents/measbox/node_modules/bcrypt/node_modules/.bin:/home/arturaugusto/Documents/measbox/node_modules/.bin:/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/bin:/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+355 verbose lifecycle bcrypt@0.8.7~install: CWD: /home/arturaugusto/Documents/measbox/node_modules/bcrypt
+356 silly lifecycle bcrypt@0.8.7~install: Args: [ '-c', 'node-gyp rebuild' ]
+357 silly lifecycle bcrypt@0.8.7~install: Returned: code: 1  signal: null
+358 info lifecycle bcrypt@0.8.7~install: Failed to exec install script
+359 verbose unlock done using /home/arturaugusto/.npm/_locks/staging-c80d2b13f9593344.lock for /home/arturaugusto/Documents/measbox/node_modules/.staging
+360 silly rollbackFailedOptional Starting
+361 silly rollbackFailedOptional Finishing
+362 silly runTopLevelLifecycles Starting
+363 silly runTopLevelLifecycles Finishing
+364 silly install printInstalled
+365 warn enoent ENOENT: no such file or directory, open '/home/arturaugusto/Documents/measbox/package.json'
+366 warn measbox No description
+367 warn measbox No repository field.
+368 warn measbox No README data
+369 warn measbox No license field.
+370 verbose stack Error: bcrypt@0.8.7 install: `node-gyp rebuild`
+370 verbose stack Exit status 1
+370 verbose stack     at EventEmitter.<anonymous> (/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
+370 verbose stack     at emitTwo (events.js:87:13)
+370 verbose stack     at EventEmitter.emit (events.js:172:7)
+370 verbose stack     at ChildProcess.<anonymous> (/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+370 verbose stack     at emitTwo (events.js:87:13)
+370 verbose stack     at ChildProcess.emit (events.js:172:7)
+370 verbose stack     at maybeClose (internal/child_process.js:829:16)
+370 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+371 verbose pkgid bcrypt@0.8.7
+372 verbose cwd /home/arturaugusto/Documents/measbox
+373 error Linux 3.19.0-32-generic
+374 error argv "/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/bin/node" "/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/bin/npm" "install" "--save" "bcrypt"
+375 error node v4.5.0
+376 error npm  v3.10.6
+377 error code ELIFECYCLE
+378 error bcrypt@0.8.7 install: `node-gyp rebuild`
+378 error Exit status 1
+379 error Failed at the bcrypt@0.8.7 install script 'node-gyp rebuild'.
+379 error Make sure you have the latest version of node.js and npm installed.
+379 error If you do, this is most likely a problem with the bcrypt package,
+379 error not with npm itself.
+379 error Tell the author that this fails on your system:
+379 error     node-gyp rebuild
+379 error You can get information on how to open an issue for this project with:
+379 error     npm bugs bcrypt
+379 error Or if that isn't available, you can get their info via:
+379 error     npm owner ls bcrypt
+379 error There is likely additional logging output above.
+380 verbose exit [ 1, true ]

@@ -140,7 +140,7 @@ svg text{
 }
 
 
-
+/*
 *::-webkit-scrollbar {
     width: 1em;
 }
@@ -154,6 +154,7 @@ svg text{
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
+*/
 
 .panel-tools {
   display: inline-block;
@@ -173,6 +174,9 @@ svg text{
   background: #494B54;
 }
 */
+.input-group-addon {
+  height: 20px;
+}
 
 .btn.btn-squared {
   border-radius: 0;

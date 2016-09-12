@@ -9,7 +9,7 @@ this.worksheetById = function(id) {
 };
 
 this.selectedRowData = function() {
-  var selectedRow = Session.get("selectedRow")
+  var selectedRow = Session.get("selectedRow");
   if (selectedRow === undefined) return false;
 
   var worksheet = worksheetById(selectedRow.worksheetId);
@@ -40,8 +40,7 @@ var EMPTY_CHART_DATA = [{
   key: ""
 }];
 
-this.histogramDatum = function() {
-  var data = selectedRowData();
+this.histogramDatum = function(data) {
   if (data === undefined) return EMPTY_CHART_DATA;
   if (data.row === undefined) return EMPTY_CHART_DATA;
   if (data.row._results === undefined) return EMPTY_CHART_DATA;
@@ -108,8 +107,7 @@ this.histogramDatum = function() {
   ];
 };
 
-this.renderResults = function() {
-  var data = selectedRowData();
+this.renderResults = function(data) {
   if (!data.worksheet) return;
 
   try {
@@ -156,8 +154,21 @@ Template.showResults.rendered = function() {
       })
     ;
 
+
+    pdfChart.dispatch.on('renderEnd', function () {
+      //console.log("rendered...");
+      if (Session.get("processing") === true) {
+        setTimeout(function() {
+          // Enable reactive render range chart
+          Session.set("selectedRowUutRangeId", undefined);
+        }, 1000);
+      }
+      
+      Session.set("processing", false);
+    });
+    var data = selectedRowData();
     d3.select("#pdfChartContainer svg").datum(
-      histogramDatum()
+      histogramDatum(data)
     ).call(pdfChart);
     nv.utils.windowResize(function() { 
       pdfChart.update();
@@ -166,16 +177,18 @@ Template.showResults.rendered = function() {
   });
 
   this.autorun(function() {
-
-    renderResults();
-    var datum = histogramDatum();
+    var data = selectedRowData();
+    renderResults(data);
+    
+    var datum = histogramDatum(data);
+    
     if (!datum.length) return;
 
     d3.select("#pdfChartContainer svg")
     .datum(
       datum
     ).call(pdfChart);
-    pdfChart.update();
+    
   });
 };
 

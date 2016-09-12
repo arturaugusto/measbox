@@ -51,5 +51,4 @@ Meteor.startup(function () {
   });
 
   mathjs["import"](distsToImport);
-
 });

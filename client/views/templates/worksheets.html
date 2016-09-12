@@ -3,6 +3,8 @@
   <div class="panel panel-filled panel-c-accent worksheet-selects-panel">
     <div class="panel-heading">
       <div class="panel-tools">
+        <a class="collapse-ws-vars btn btn-default btn-xs">Expand <i class="fa fa-minus"></i></a>
+        <a class="expand-ws-vars btn btn-default btn-xs">Expand <i class="fa fa-plus"></i></a>
         <a class="remove-worksheet btn btn-default btn-xs">Delete <i class="fa fa-times"></i></a>
       </div>
     </div>
@@ -10,7 +12,7 @@
       <div class="form-group">
 
         <div class="instruments-select">
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <span class="input-group-addon">Procedure</span>
             <select class="form-control" name="procedureId" db-path="worksheets.{{worksheetIndex}}.procedureId">
               {{#if procedureIdIsNothing}}
@@ -25,9 +27,11 @@
           <div class="row">
           {{#each variables this.procedureId}}
             <div class="col-md-4">
-              <div class="input-group">
+              
+
+              <div class="input-group input-group-sm">
                 <span class="input-group-addon">{{name}}</span>
-                <select class="form-control" name="{{name}}InstrumentId" db-path="worksheets.{{worksheetIndex}}.{{name}}InstrumentId">
+                <select class="form-control" style="background: {{uiColor}}" name="{{name}}InstrumentId" db-path="worksheets.{{worksheetIndex}}.{{name}}InstrumentId">
                   {{#if instrumentIdIsNothing worksheetIndex}}
                   <option value="">Choose a instrument...</option>
                   {{/if}}
@@ -35,7 +39,9 @@
                   <option value="{{this.id}}" {{isSelected}}>{{this.name}}</option>
                   {{/each}}
                 </select>
+
               </div>
+              
             </div><!-- /input-group -->
           {{/each}}
           </div>

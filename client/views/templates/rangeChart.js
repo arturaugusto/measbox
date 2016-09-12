@@ -3,6 +3,8 @@ var EMPTY_CHART_DATA = [{
   key: ""
 }];
 
+Session.set("selectedRowUutRangeId", undefined);
+
 var COLOR_SCHEMA = ["#4D4D4D", "#5DA5DA", "#FAA43A", "#60BD68", "#F17CB0", "#B2912F", "#B276B2", "#DECF3F", "#F15854"];
 
 nv.utils.symbolMap.set('error-bar-line', function(size) {
@@ -40,9 +42,9 @@ var setChartRangeTitle = function(rangeTitle, uutRangeId) {
   }  
 }
 // get only items from selected row range
-var selectedRangeData = function(notDeleted) {
+var selectedRangeData = function(flattenRows) {
   // Return if no data exists
-  if (!notDeleted.length) {
+  if (!flattenRows.length) {
     return;
   }
   var selectedRowId;
@@ -50,15 +52,15 @@ var selectedRangeData = function(notDeleted) {
 
   var selectedRow = Session.get("selectedRow");
   if (!selectedRow) {
-    selectedRowId = notDeleted[0]._id;
-    selectedRowWorksheetId = notDeleted[0].worksheetId;
+    selectedRowId = flattenRows[0]._id;
+    selectedRowWorksheetId = flattenRows[0].worksheetId;
   } else {
     selectedRowId = selectedRow.id;
     selectedRowWorksheetId = selectedRow.worksheetId;
   }
   
   var selectedRowData = _.findWhere(
-    notDeleted, {_id: selectedRowId}
+    flattenRows, {_id: selectedRowId}
   );
 
   if (!selectedRowData) return;
@@ -84,13 +86,14 @@ var selectedRangeData = function(notDeleted) {
   var rangeTitle = buildRangeTitle(uutRange, instrument);
   setChartRangeTitle(rangeTitle, uutRangeId);
 
-  var selectedRowRangeData = _.filter(notDeleted, function(r) {
+  var selectedRowRangeData = _.filter(flattenRows, function(r) {
     return r[uutName+"RangeId"] === uutRangeId;
   });
   return selectedRowRangeData;
 }
 
-var rangeDatum = function() {
+
+var getSelectedRowRangeData = function() {
   var rows = Spreadsheets
     .findOne()
     .worksheets
@@ -100,13 +103,12 @@ var rangeDatum = function() {
   
   var flattenRows = _.flatten(rows);
 
-  var notDeleted = _.filter(flattenRows,
-    function(r) {
-      return !r._deleted
-    }
-  );
+  var selectedRowRangeData = selectedRangeData(flattenRows);
+  return selectedRowRangeData;
+}
 
-  var selectedRowRangeData = selectedRangeData(notDeleted);
+var rangeDatum = function(selectedRowRangeData) {
+
   if (!selectedRowRangeData) return;
 
   // Set chart unit
@@ -345,27 +347,43 @@ var addGraphRangeChart = function() {
     .interpolate("linear")
     .showLegend(true)
   ;
+  rangeChart.dispatch.on('renderEnd', function () {
+    //console.log("rendered...");
+  });
   nv.addGraph(rangeChartBuilder);
 }
 
-var renderChart = function() {
-  if (!window.rangeChart) {
-    addGraphRangeChart();
-  };
-
-  var datum = rangeDatum();
-  if (!datum) return;
+var renderChart = function(datum) {
   d3.select("#rangeChartContainer svg")
   .datum(
     datum
   ).call(rangeChart);
-  if (rangeChart) rangeChart.update();
-  $('#redrawRangeChartBtn').hide();
+  /*
+  if (rangeChart) {
+    rangeChart.update();
+    $('#redrawRangeChartBtn').hide();
+  }*/
 };
 
 Template.rangeChart.rendered = function() {
   var that = this;
-  this.autorun(renderChart);
+  
+  if (!window.rangeChart) {
+    addGraphRangeChart();
+  };
+  this.autorun(function() {
+    var selectedRowRangeData = getSelectedRowRangeData();
+    var uutName = selectedRowRangeData[0]._results.uutName;
+    var selectedRowUutRangeId = selectedRowRangeData[0][uutName+'RangeId'];
+    if (Session.get("selectedRowUutRangeId") === selectedRowUutRangeId) {
+      return;
+    } else {
+      Session.set("selectedRowUutRangeId", selectedRowUutRangeId);
+      var datum = rangeDatum(selectedRowRangeData);
+      if (!datum) return;
+      renderChart(datum);
+    }
+  });
 
 };
 
@@ -373,6 +391,6 @@ Template.rangeChart.rendered = function() {
 Template.rangeChart.events({
   'click #redrawRangeChartBtn': function(evt) {
     rangeChartNoData();
-    renderChart();
+    Session.set("selectedRowUutRangeId", undefined);
   }
 });

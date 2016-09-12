@@ -38,16 +38,14 @@ Template.worksheets.rendered = function() {
       data[path] = true;
       setData(data);
     },
-    onStartEdit: function(td) {
-      //that.clearRowTimeout(td);
+    onStartEdit: function() {
+      clearTimeout(that.changedCellsTimeout);
     },
-    
     onChange: function(editor) {
       editor.changedRows().map(function(tr) {
-        console.log(tr);
         $(tr).attr("changed", true);
       });
-      calculatePendingRows(that);
+      calculatePendingRows(that, 2000);
     },
     onSelectedCellChange: function(td) {
       var $row = $(td).parent();
@@ -143,7 +141,7 @@ Template.worksheets.rendered = function() {
         $editor.getSelectedRows().map(function(_i, tr) {
           $(tr).attr("changed", true);
         });
-        calculatePendingRows(that);
+        calculatePendingRows(that, 0);
       }
     },
     contextMenuHTML: `
@@ -189,10 +187,6 @@ Template.worksheets.helpers({
   randomId: function() {
     return Random.id();
   },
-  sessionVarUpdate: function() {
-    return Session.get("selectedWorksheetId");
-  },
-
   /*readoutContent: function(content) {
     return '<span class="cellContentWrap">'+content+'</span>';
   },*/
@@ -237,11 +231,17 @@ Template.worksheets.helpers({
     return Session.get("updateTable");
   },
   colForVarIsFixed: function(varName) {
-    var inst = getInstrumentById(getCurrentWorksheet()[varName+'InstrumentId']);
+    var currentWorksheet = getCurrentWorksheet();
+    
+    if (!currentWorksheet) {
+      return false;
+    }
+
+    var inst = getInstrumentById(currentWorksheet[varName+'InstrumentId']);
     if (inst === undefined) {
       return false;
     } else {
-      return getInstrumentById(getCurrentWorksheet()[varName+'InstrumentId']).kind === "Fixed";
+      return getInstrumentById(currentWorksheet[varName+'InstrumentId']).kind === "Fixed";
     }
   },
   colHeaders: function() {
@@ -264,7 +264,7 @@ Template.worksheets.helpers({
     resFlatten = _.flatten(res);
     return resFlatten;
   },
-  plusOne: function  (x) {
+  plusOne: function (x) {
     return x+1;
   },
   rowsWithIndex: function() {
@@ -328,6 +328,8 @@ Template.worksheets.helpers({
     });
   },
   variablesWithIndex: function(procedureId, worksheetIndex, rowDBIndex, worksheet) {
+    
+
     var that = this;
     var Procedure = getProcedureById(procedureId);
     if (Procedure === undefined) {
@@ -351,6 +353,10 @@ Template.worksheets.helpers({
       if ( readoutsIsNotObject || readoutsIsUndefined) {
         readouts = [];
       }
+
+      //////////////////////////////////////////////////////////
+      //esta funcao roda muitas vezes ao adicionar nova linha...
+      
       var readoutsIsEmpty = !readouts.length;
       var readoutsIsNull = (readouts === null);
 
@@ -359,14 +365,19 @@ Template.worksheets.helpers({
         for (var i = n; i > 0; i--) {
           readouts.push(null);
         }
+        /*
         var dbPath = "worksheets."+worksheetIndex+".rows."+rowDBIndex+"."+v.name;
         var data = {};
         data[dbPath] = readouts;
-        setData(data);
+        console.log(data);
+        //setData(data);
+        */
       }
+      
+      //////////////////////////////////////////////////////////
 
+      
       // readouts pode fornecer o tamanho errado quando alteramos o procedimento
-
       var nColsToPad = Math.abs(readouts.length-n);
       for (var i = nColsToPad - 1; i >= 0; i--) {
         readouts.push("");
@@ -398,9 +409,12 @@ Template.worksheets.helpers({
       return;
     }
     var res = [];
+    var currVar;
     for (var i = 0; i < Procedure.variables.length; i++) {
+      currVar = Procedure.variables[i];
       res.push({
-        name: Procedure.variables[i].name
+        name: currVar.name,
+        uiColor: currVar.color
       });
     }
     return res;
