@@ -16,7 +16,13 @@ Meteor.startup(function () {
   mathjs["import"]({
     fmtToPrecision: function(x, sd) {
       x = window.convertIfNotBigNum(x);
-      return x.toPrecision(sd);
+      x = x.toPrecision(sd);
+      // Is in exponential form
+      // force to non exponential
+      if (x.indexOf("e")) {
+        x = Decimal(x).toString();
+      }
+      return x;
     },
     precision: function(x, includeZeros) {
       x = window.convertIfNotBigNum(x);

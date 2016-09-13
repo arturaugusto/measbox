@@ -336,6 +336,11 @@ JsonEditorSchemas.procedures = {
             title: 'Confidence level',
             "default": 0.953
           },
+          M: {
+            type: 'number',
+            title: 'Monte Carlo M',
+            "default": 2000
+          },          
           postProcessing: {
             type: 'code',
             format: 'python',
@@ -355,7 +360,7 @@ JsonEditorSchemas.procedures = {
             }
           }   
         },
-        defaultProperties: ["cl", "postProcessing"]
+        defaultProperties: ["cl", "postProcessing", "resultsTemplate"]
       }
     }
   }

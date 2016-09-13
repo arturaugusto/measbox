@@ -572,7 +572,7 @@
     this.mcm = function(){
       this.mc = {};
       this.mc._init_time = Date.now();
-      this.mc.M = 5000;
+      this.mc.M = 10000;
       
       this.mc._iterations = [];
       // Compute simulations for model
@@ -584,6 +584,8 @@
       var hist_x_min = 0;
       var hist_x_max = 0;
       var check_stable_h = 10;
+      this.burst_M = parseInt(this.mc.M / check_stable_h);
+
       // Monitoring parameters
       var results_of_interest = {s_y: [], s_u: [], s_y_low: [], s_y_high: []};
       var stabilized;
@@ -591,18 +593,18 @@
       //console.log("Computing...");
       while ( true ) {
         // Create MC scope, repeating the expectation values from GUM framework scope
-        this.mc._scope = rep(this._scope, this.mc.M);
+        this.mc._scope = rep(this._scope, this.burst_M);
         // MC distributions inputs simulations
         this.uncertainties.map(mc_simulations.bind(this));
 
-        for (var i = this.mc.M - 1; i >= 0; i--) {
+        for (var i = this.burst_M - 1; i >= 0; i--) {
           this.mc._iterations.push(this._xfunc.iterate(this.mc._scope[i], true));
         };
         // Mean value
-        this.mc._iterations_mean = sum(this.mc._iterations) / (this.mc.M * h);
+        this.mc._iterations_mean = sum(this.mc._iterations) / (this.burst_M * h);
         
         // ref: 7.6 Estimate of the output quantity and the associated standard uncertainty JCGM_101_2008_E.pdf
-        this.mc.uc = Math.sqrt(jStat.sumsqrd( inc_arr(this.mc._iterations, -this.mc._iterations_mean) ) * (1/((this.mc.M * h)-1)));
+        this.mc.uc = Math.sqrt(jStat.sumsqrd( inc_arr(this.mc._iterations, -this.mc._iterations_mean) ) * (1/((this.burst_M * h)-1)));
         // parameter to monitor on adaptative MC
         results_of_interest.s_u.push(this.mc.uc);
         results_of_interest.s_y.push(this.mc._iterations_mean);
@@ -619,6 +621,9 @@
         results_of_interest.s_y_low.push(this.mc.sci_limits[0]);
         results_of_interest.s_y_high.push(this.mc.sci_limits[1]);
         **/
+
+        //console.log("Burst " + h);
+        h = h + 1;
 
         if (h >= check_stable_h){
           // Define numerical tolerance
@@ -642,7 +647,7 @@
           })
 
           if(h > check_stable_h*1){
-            //console.warn("Monte carlo trials exceeded!");
+            console.warn("Monte carlo trials exceeded!");
             this.mc._trials_exceeded = true;
           };
           if (stabilized || this.mc._trials_exceeded){
@@ -666,8 +671,6 @@
             break;
           }          
         }
-        //console.log("Burst " + h);
-        h = h + 1;
       }
       // Update M
       this.mc.M =  this.mc._iterations.length;
@@ -804,7 +807,7 @@
 
     var sample;
     if(u.distribution !== "arcsine"){
-      for (var i = that.mc.M - 1; i >= 0; i--) {
+      for (var i = that.burst_M - 1; i >= 0; i--) {
         sample = pdf_sampler.apply(void 0, args);
         // Sum samples to expectation/modified expectation
         // and update scope value for the iteration
@@ -816,7 +819,7 @@
     if(u.distribution === "arcsine"){
       var mean_value = this._scope[this.var_name];
 
-      for (var i = that.mc.M - 1; i >= 0; i--) {
+      for (var i = that.burst_M - 1; i >= 0; i--) {
         sample = pdf_sampler.apply(void 0, args);
         this.mc._scope[i][this.var_name] += ((sample - 0.5) * 2) * Math.abs(u.value);
         /*

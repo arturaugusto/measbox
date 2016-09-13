@@ -373,6 +373,8 @@ Template.rangeChart.rendered = function() {
   };
   this.autorun(function() {
     var selectedRowRangeData = getSelectedRowRangeData();
+    if (!selectedRowRangeData) return;
+
     var uutName = selectedRowRangeData[0]._results.uutName;
     var selectedRowUutRangeId = selectedRowRangeData[0][uutName+'RangeId'];
     if (Session.get("selectedRowUutRangeId") === selectedRowUutRangeId) {
