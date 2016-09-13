@@ -25,33 +25,33 @@
 13 silly mapToRegistry uri https://registry.npmjs.org/bcrypt
 14 verbose request uri https://registry.npmjs.org/bcrypt
 15 verbose request no auth needed
-16 info attempt registry request try #1 at 10:04:18 PM
-17 verbose request id ae119b5ba30169d9
+16 info attempt registry request try #1 at 3:38:24 PM
+17 verbose request id 1e3f70735da4f13d
 18 verbose etag "398F192FUE7FBCG521B59OFYJ"
 19 http request GET https://registry.npmjs.org/bcrypt
 20 http 304 https://registry.npmjs.org/bcrypt
-21 verbose headers { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+21 verbose headers { date: 'Mon, 12 Sep 2016 18:38:27 GMT',
 21 verbose headers   via: '1.1 varnish',
 21 verbose headers   'cache-control': 'max-age=300',
 21 verbose headers   etag: '"398F192FUE7FBCG521B59OFYJ"',
 21 verbose headers   age: '0',
 21 verbose headers   connection: 'keep-alive',
-21 verbose headers   'x-served-by': 'cache-gru7123-GRU',
+21 verbose headers   'x-served-by': 'cache-gru7125-GRU',
 21 verbose headers   'x-cache': 'HIT',
 21 verbose headers   'x-cache-hits': '1',
-21 verbose headers   'x-timer': 'S1473642262.195310,VS0,VE195',
+21 verbose headers   'x-timer': 'S1473705507.671671,VS0,VE648',
 21 verbose headers   vary: 'Accept-Encoding' }
 22 silly get cb [ 304,
-22 silly get   { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+22 silly get   { date: 'Mon, 12 Sep 2016 18:38:27 GMT',
 22 silly get     via: '1.1 varnish',
 22 silly get     'cache-control': 'max-age=300',
 22 silly get     etag: '"398F192FUE7FBCG521B59OFYJ"',
 22 silly get     age: '0',
 22 silly get     connection: 'keep-alive',
-22 silly get     'x-served-by': 'cache-gru7123-GRU',
+22 silly get     'x-served-by': 'cache-gru7125-GRU',
 22 silly get     'x-cache': 'HIT',
 22 silly get     'x-cache-hits': '1',
-22 silly get     'x-timer': 'S1473642262.195310,VS0,VE195',
+22 silly get     'x-timer': 'S1473705507.671671,VS0,VE648',
 22 silly get     vary: 'Accept-Encoding' } ]
 23 verbose etag https://registry.npmjs.org/bcrypt from cache
 24 verbose get saving bcrypt to /home/arturaugusto/.npm/registry.npmjs.org/bcrypt/.cache.json
@@ -129,39 +129,39 @@
 69 silly mapToRegistry   spec: 'latest',
 69 silly mapToRegistry   type: 'tag' }
 70 silly mapToRegistry uri https://registry.npmjs.org/nan
-71 verbose request uri https://registry.npmjs.org/nan
+71 verbose request uri https://registry.npmjs.org/bindings
 72 verbose request no auth needed
-73 info attempt registry request try #1 at 10:04:19 PM
-74 verbose etag "1OOZJAUMBQC59OINHZGMRRCSL"
-75 http request GET https://registry.npmjs.org/nan
-76 verbose request uri https://registry.npmjs.org/bindings
+73 info attempt registry request try #1 at 3:38:25 PM
+74 verbose etag "33TX4J3DNTGF7K41ZUV6OA182"
+75 http request GET https://registry.npmjs.org/bindings
+76 verbose request uri https://registry.npmjs.org/nan
 77 verbose request no auth needed
-78 info attempt registry request try #1 at 10:04:19 PM
-79 verbose etag "33TX4J3DNTGF7K41ZUV6OA182"
-80 http request GET https://registry.npmjs.org/bindings
+78 info attempt registry request try #1 at 3:38:25 PM
+79 verbose etag "1OOZJAUMBQC59OINHZGMRRCSL"
+80 http request GET https://registry.npmjs.org/nan
 81 http 304 https://registry.npmjs.org/nan
-82 verbose headers { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+82 verbose headers { date: 'Mon, 12 Sep 2016 18:38:28 GMT',
 82 verbose headers   via: '1.1 varnish',
 82 verbose headers   'cache-control': 'max-age=300',
 82 verbose headers   etag: '"1OOZJAUMBQC59OINHZGMRRCSL"',
-82 verbose headers   age: '125',
+82 verbose headers   age: '216',
 82 verbose headers   connection: 'keep-alive',
-82 verbose headers   'x-served-by': 'cache-gru7123-GRU',
+82 verbose headers   'x-served-by': 'cache-gru7125-GRU',
 82 verbose headers   'x-cache': 'HIT',
-82 verbose headers   'x-cache-hits': '1',
-82 verbose headers   'x-timer': 'S1473642262.608676,VS0,VE0',
+82 verbose headers   'x-cache-hits': '5',
+82 verbose headers   'x-timer': 'S1473705508.567287,VS0,VE0',
 82 verbose headers   vary: 'Accept-Encoding' }
 83 silly get cb [ 304,
-83 silly get   { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+83 silly get   { date: 'Mon, 12 Sep 2016 18:38:28 GMT',
 83 silly get     via: '1.1 varnish',
 83 silly get     'cache-control': 'max-age=300',
 83 silly get     etag: '"1OOZJAUMBQC59OINHZGMRRCSL"',
-83 silly get     age: '125',
+83 silly get     age: '216',
 83 silly get     connection: 'keep-alive',
-83 silly get     'x-served-by': 'cache-gru7123-GRU',
+83 silly get     'x-served-by': 'cache-gru7125-GRU',
 83 silly get     'x-cache': 'HIT',
-83 silly get     'x-cache-hits': '1',
-83 silly get     'x-timer': 'S1473642262.608676,VS0,VE0',
+83 silly get     'x-cache-hits': '5',
+83 silly get     'x-timer': 'S1473705508.567287,VS0,VE0',
 83 silly get     vary: 'Accept-Encoding' } ]
 84 verbose etag https://registry.npmjs.org/nan from cache
 85 verbose get saving nan to /home/arturaugusto/.npm/registry.npmjs.org/nan/.cache.json
@@ -198,28 +198,28 @@
 102 verbose correctMkdir /home/arturaugusto/.npm correctMkdir not in flight; initializing
 103 verbose afterAdd /home/arturaugusto/.npm/nan/2.3.5/package/package.json written
 104 http 304 https://registry.npmjs.org/bindings
-105 verbose headers { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+105 verbose headers { date: 'Mon, 12 Sep 2016 18:38:28 GMT',
 105 verbose headers   via: '1.1 varnish',
 105 verbose headers   'cache-control': 'max-age=300',
 105 verbose headers   etag: '"33TX4J3DNTGF7K41ZUV6OA182"',
-105 verbose headers   age: '184',
+105 verbose headers   age: '0',
 105 verbose headers   connection: 'keep-alive',
-105 verbose headers   'x-served-by': 'cache-gru7120-GRU',
+105 verbose headers   'x-served-by': 'cache-gru7125-GRU',
 105 verbose headers   'x-cache': 'HIT',
 105 verbose headers   'x-cache-hits': '1',
-105 verbose headers   'x-timer': 'S1473642262.649025,VS0,VE0',
+105 verbose headers   'x-timer': 'S1473705508.517972,VS0,VE788',
 105 verbose headers   vary: 'Accept-Encoding' }
 106 silly get cb [ 304,
-106 silly get   { date: 'Mon, 12 Sep 2016 01:04:22 GMT',
+106 silly get   { date: 'Mon, 12 Sep 2016 18:38:28 GMT',
 106 silly get     via: '1.1 varnish',
 106 silly get     'cache-control': 'max-age=300',
 106 silly get     etag: '"33TX4J3DNTGF7K41ZUV6OA182"',
-106 silly get     age: '184',
+106 silly get     age: '0',
 106 silly get     connection: 'keep-alive',
-106 silly get     'x-served-by': 'cache-gru7120-GRU',
+106 silly get     'x-served-by': 'cache-gru7125-GRU',
 106 silly get     'x-cache': 'HIT',
 106 silly get     'x-cache-hits': '1',
-106 silly get     'x-timer': 'S1473642262.649025,VS0,VE0',
+106 silly get     'x-timer': 'S1473705508.517972,VS0,VE788',
 106 silly get     vary: 'Accept-Encoding' } ]
 107 verbose etag https://registry.npmjs.org/bindings from cache
 108 verbose get saving bindings to /home/arturaugusto/.npm/registry.npmjs.org/bindings/.cache.json
@@ -258,6 +258,7 @@
 127 silly loadAllDepsIntoIdealTree Finishing
 128 silly loadIdealTree Finishing
 129 silly currentTree measbox
+129 silly currentTree ├── bcryptjs@2.3.0
 129 silly currentTree ├── d3-array@1.0.0
 129 silly currentTree ├── d3-axis@1.0.0
 129 silly currentTree ├── d3-brush@1.0.1
@@ -301,6 +302,7 @@
 129 silly currentTree └── xmlhttprequest@1.8.0
 130 silly idealTree measbox
 130 silly idealTree ├── bcrypt@0.8.7
+130 silly idealTree ├── bcryptjs@2.3.0
 130 silly idealTree ├── bindings@1.2.1
 130 silly idealTree ├── d3-array@1.0.0
 130 silly idealTree ├── d3-axis@1.0.0
@@ -386,40 +388,40 @@
 170 silly extract bindings@1.2.1
 171 silly extract nan@2.3.5
 172 silly extract bcrypt@0.8.7
-173 verbose unbuild node_modules/.staging/bindings-1cfefa7c
-174 verbose unbuild node_modules/.staging/nan-81e1f60b
+173 verbose unbuild node_modules/.staging/nan-81e1f60b
+174 verbose unbuild node_modules/.staging/bindings-1cfefa7c
 175 verbose unbuild node_modules/.staging/bcrypt-507fb2ab
-176 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c is being purged from base /home/arturaugusto/Documents/measbox
-177 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
-178 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b is being purged from base /home/arturaugusto/Documents/measbox
-179 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
-180 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab is being purged from base /home/arturaugusto/Documents/measbox
-181 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
-182 verbose tar unpack /home/arturaugusto/.npm/bindings/1.2.1/package.tgz
-183 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
-184 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c is being purged
-185 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
-186 verbose tar unpack /home/arturaugusto/.npm/nan/2.3.5/package.tgz
-187 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
-188 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b is being purged
-189 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
-190 verbose tar unpack /home/arturaugusto/.npm/bcrypt/0.8.7/package.tgz
-191 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
-192 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab is being purged
-193 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
-194 silly gunzTarPerm modes [ '755', '644' ]
-195 silly gunzTarPerm modes [ '755', '644' ]
+176 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b is being purged from base /home/arturaugusto/Documents/measbox
+177 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
+178 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c is being purged from base /home/arturaugusto/Documents/measbox
+179 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
+180 verbose tar unpack /home/arturaugusto/.npm/nan/2.3.5/package.tgz
+181 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
+182 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b is being purged
+183 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/nan-81e1f60b
+184 verbose tar unpack /home/arturaugusto/.npm/bindings/1.2.1/package.tgz
+185 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
+186 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c is being purged
+187 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c
+188 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab is being purged from base /home/arturaugusto/Documents/measbox
+189 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
+190 silly gunzTarPerm modes [ '755', '644' ]
+191 silly gunzTarPerm modes [ '755', '644' ]
+192 verbose tar unpack /home/arturaugusto/.npm/bcrypt/0.8.7/package.tgz
+193 verbose tar unpacking to /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
+194 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab is being purged
+195 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
 196 silly gunzTarPerm modes [ '755', '644' ]
 197 silly gunzTarPerm extractEntry package.json
 198 silly gunzTarPerm extractEntry package.json
-199 silly gunzTarPerm extractEntry package.json
-200 silly gunzTarPerm modified mode [ 'package.json', 436, 420 ]
+199 silly gunzTarPerm modified mode [ 'package.json', 436, 420 ]
+200 silly gunzTarPerm extractEntry package.json
 201 silly gunzTarPerm extractEntry README.md
 202 silly gunzTarPerm extractEntry bindings.js
-203 silly gunzTarPerm extractEntry .npmignore
-204 silly gunzTarPerm extractEntry README.md
-205 silly gunzTarPerm extractEntry README.md
-206 silly gunzTarPerm modified mode [ 'README.md', 436, 420 ]
+203 silly gunzTarPerm extractEntry README.md
+204 silly gunzTarPerm modified mode [ 'README.md', 436, 420 ]
+205 silly gunzTarPerm extractEntry .npmignore
+206 silly gunzTarPerm extractEntry README.md
 207 silly gunzTarPerm extractEntry include_dirs.js
 208 silly gunzTarPerm modified mode [ 'include_dirs.js', 436, 420 ]
 209 silly gunzTarPerm extractEntry nan_converters.h
@@ -455,12 +457,12 @@
 239 silly gunzTarPerm modified mode [ 'doc/errors.md', 436, 420 ]
 240 silly gunzTarPerm extractEntry doc/maybe_types.md
 241 silly gunzTarPerm modified mode [ 'doc/maybe_types.md', 436, 420 ]
-242 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c/node_modules is being purged
-243 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c/node_modules
-244 silly gunzTarPerm extractEntry doc/methods.md
-245 silly gunzTarPerm modified mode [ 'doc/methods.md', 436, 420 ]
-246 silly gunzTarPerm extractEntry doc/new.md
-247 silly gunzTarPerm modified mode [ 'doc/new.md', 436, 420 ]
+242 silly gunzTarPerm extractEntry doc/methods.md
+243 silly gunzTarPerm modified mode [ 'doc/methods.md', 436, 420 ]
+244 silly gunzTarPerm extractEntry doc/new.md
+245 silly gunzTarPerm modified mode [ 'doc/new.md', 436, 420 ]
+246 silly gentlyRm /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c/node_modules is being purged
+247 verbose gentlyRm don't care about contents; nuking /home/arturaugusto/Documents/measbox/node_modules/.staging/bindings-1cfefa7c/node_modules
 248 silly gunzTarPerm extractEntry doc/buffers.md
 249 silly gunzTarPerm modified mode [ 'doc/buffers.md', 436, 420 ]
 250 silly gunzTarPerm extractEntry doc/object_wrappers.md
@@ -566,8 +568,8 @@
 350 silly lifecycle nan@2.3.5~install: no script for install, continuing
 351 silly install bcrypt@0.8.7 /home/arturaugusto/Documents/measbox/node_modules/.staging/bcrypt-507fb2ab
 352 info lifecycle bcrypt@0.8.7~install: bcrypt@0.8.7
-353 verbose lifecycle bcrypt@0.8.7~install: unsafe-perm in lifecycle false
-354 verbose lifecycle bcrypt@0.8.7~install: PATH: /home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/npm/bin/node-gyp-bin:/home/arturaugusto/Documents/measbox/node_modules/bcrypt/node_modules/.bin:/home/arturaugusto/Documents/measbox/node_modules/.bin:/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/bin:/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+353 verbose lifecycle bcrypt@0.8.7~install: unsafe-perm in lifecycle true
+354 verbose lifecycle bcrypt@0.8.7~install: PATH: /home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/npm/bin/node-gyp-bin:/home/arturaugusto/Documents/measbox/node_modules/bcrypt/node_modules/.bin:/home/arturaugusto/Documents/measbox/node_modules/.bin:/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/bin:/home/arturaugusto/.meteor/packages/meteor-tool/.1.4.1_1.zvw0z7++os.linux.x86_64+web.browser+web.cordova/mt-os.linux.x86_64/dev_bundle/lib/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 355 verbose lifecycle bcrypt@0.8.7~install: CWD: /home/arturaugusto/Documents/measbox/node_modules/bcrypt
 356 silly lifecycle bcrypt@0.8.7~install: Args: [ '-c', 'node-gyp rebuild' ]
 357 silly lifecycle bcrypt@0.8.7~install: Returned: code: 1  signal: null

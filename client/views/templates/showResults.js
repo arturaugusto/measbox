@@ -130,6 +130,7 @@ this.renderResults = function(data) {
 
 Template.showResults.rendered = function() {
   var that = this;
+  this.selectedRowUutRangeIdTOId = undefined;
   window.pdfChart = nv.models.lineChart()
     .margin({left: 100, bottom: 100})
     //.useInteractiveGuideline(true)
@@ -156,19 +157,22 @@ Template.showResults.rendered = function() {
 
 
     pdfChart.dispatch.on('renderEnd', function () {
-      //console.log("rendered...");
+      //console.log("rendered pdf");
       if (Session.get("processing") === true) {
-        setTimeout(function() {
+        that.selectedRowUutRangeIdTOId = setTimeout(function() {
           // Enable reactive render range chart
           Session.set("selectedRowUutRangeId", undefined);
         }, 1000);
+      } else {
+        clearTimeout(that.selectedRowUutRangeIdTOId);
       }
       
       Session.set("processing", false);
     });
-    var data = selectedRowData();
+
+    this.data = selectedRowData();
     d3.select("#pdfChartContainer svg").datum(
-      histogramDatum(data)
+      histogramDatum(this.data)
     ).call(pdfChart);
     nv.utils.windowResize(function() { 
       pdfChart.update();
@@ -177,19 +181,25 @@ Template.showResults.rendered = function() {
   });
 
   this.autorun(function() {
-    var data = selectedRowData();
-    renderResults(data);
+    that.data = selectedRowData();
+    if (!that.data) return;
     
-    var datum = histogramDatum(data);
+    renderResults(that.data);
     
-    if (!datum.length) return;
+    that.datum = histogramDatum(that.data);
+    Session.set("pdfDatum", that.datum);
+    if (!that.datum.length) return;
+  });
 
+  this.autorun(function() {
+    var pdfDatum = Session.get("pdfDatum");
+    if (!pdfDatum) return;
     d3.select("#pdfChartContainer svg")
     .datum(
-      datum
+      pdfDatum
     ).call(pdfChart);
-    
   });
+
 };
 
 
