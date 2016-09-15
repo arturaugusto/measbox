@@ -10,7 +10,16 @@ correctValueFmt = fmtToFixed(correctValue / uutPrefixVal, UPrec)
 errFmt          = fmtToFixed(y / uutPrefixVal, UPrec)
 mpeFmt          = fmtToFixed(mpe / uutPrefixVal, UPrec)
 tur             = fmtToFixed(mpe/U, 2)
-veffFmt         = veff > 9999 ? "∞" : round(veff)`;
+veffFmt         = veff > 9999 ? "∞" : round(veff)
+
+MC_ucFmt        = fmtToPrecision(mc.uc / uutPrefixVal, 2)
+MC_ULowFmt      = fmtToPrecision(mc.sci_limits[1] / uutPrefixVal, 2)
+MC_UHighFmt     = fmtToPrecision(mc.sci_limits[2] / uutPrefixVal, 2)
+MC_dlowFmt      = fmtToPrecision(mc.d_low, 2)
+MC_dhighFmt     = fmtToPrecision(mc.d_high, 2)
+MC_tolerance    = fmtToPrecision(mc.num_tolerance, 2)
+
+`;
 
 var resultsTemplateDefault = `Parameter           | Value                                            
 :---------------:   |:-----------------------------------------------:
@@ -22,7 +31,11 @@ Error               | <%=errFmt%> <%=uutPrefix%><%=uutUnit%>
 TUR                 | <%=tur%>                                
 k                   | <%=kFmt%>                               
 _v_<sub>eff</sub>   | <%=veffFmt%>                            
-
+MC.M                | <%=mc.M%>  
+MC.uc               | <%=MC_ucFmt%> <%=uutPrefix%><%=uutUnit%>  
+MC.Interval | [<%=MC_ULowFmt%>, <%=MC_UHighFmt%>]  <%=uutPrefix%><%=uutUnit%>
+_d_<sub>low</sub>, _d_<sub>high</sub> | <%=MC_dlowFmt%>, <%=MC_dhighFmt%>  
+MC.Validated (δ=<%=MC_tolerance%>) | <%=mc.GUF_validated%>  
 
 `;
 
@@ -338,8 +351,10 @@ JsonEditorSchemas.procedures = {
           },
           M: {
             type: 'number',
-            title: 'Monte Carlo M',
-            "default": 2000
+            title: 'Max. Adaptive Monte Carlo M',
+            "default": 50e4,
+            "enum": [50e3, 20e4, 50e4, 10e5, 50e5, 10e6, 50e6],
+            "default": "Meter"            
           },          
           postProcessing: {
             type: 'code',
@@ -360,7 +375,7 @@ JsonEditorSchemas.procedures = {
             }
           }   
         },
-        defaultProperties: ["cl", "postProcessing", "resultsTemplate"]
+        defaultProperties: ["cl", "M", "postProcessing", "resultsTemplate"]
       }
     }
   }

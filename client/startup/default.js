@@ -19,9 +19,12 @@ Meteor.startup(function () {
       x = x.toPrecision(sd);
       // Is in exponential form
       // force to non exponential
-      if (x.indexOf("e")) {
-        x = Decimal(x).toString();
-      }
+      // but dont work correct for example:
+      // mathjs.eval("fmtToPrecision(3.0, 2)") // Gives 3...
+      // TODO: Solve this
+      //if (x.indexOf("e")) {
+      //  x = Decimal(x).toString();
+      //}
       return x;
     },
     precision: function(x, includeZeros) {

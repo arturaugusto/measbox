@@ -566,13 +566,12 @@
     // Output
     this.y = this._xfunc.iterate();
 
-    // UNDER DEVELOPMENT ***************************************
     // Monte Carlo
-    // 
     this.mcm = function(){
+      console.info("Monte Carlo start...");
       this.mc = {};
       this.mc._init_time = Date.now();
-      this.mc.M = 10000;
+      this.mc.M = obj.M;
       
       this.mc._iterations = [];
       // Compute simulations for model
@@ -583,15 +582,21 @@
 
       var hist_x_min = 0;
       var hist_x_max = 0;
-      var check_stable_h = 10;
-      this.burst_M = parseInt(this.mc.M / check_stable_h);
+      
+      var JCGM_recommended_min_M_burst = 10e4;
+      if (this.mc.M < JCGM_recommended_min_M_burst * 2) {
+        this.burst_M = Math.round(this.mc.M / 4);
+      } else {
+        this.burst_M = JCGM_recommended_min_M_burst;
+      }
 
       // Monitoring parameters
       var results_of_interest = {s_y: [], s_u: [], s_y_low: [], s_y_high: []};
-      var stabilized;
+      var stabilized = false;
       this.mc._trials_exceeded = false;
-      //console.log("Computing...");
       while ( true ) {
+        console.log("MC burst " + h + "/" + (this.mc.M/this.burst_M));
+        
         // Create MC scope, repeating the expectation values from GUM framework scope
         this.mc._scope = rep(this._scope, this.burst_M);
         // MC distributions inputs simulations
@@ -600,32 +605,36 @@
         for (var i = this.burst_M - 1; i >= 0; i--) {
           this.mc._iterations.push(this._xfunc.iterate(this.mc._scope[i], true));
         };
-        // Mean value
-        this.mc._iterations_mean = sum(this.mc._iterations) / (this.burst_M * h);
+
+        if (h > 1) {
+          // Mean value
+          this.mc._iterations_mean = sum(this.mc._iterations) / (this.burst_M * h);
+          
+          // ref: 7.6 Estimate of the output quantity and the associated standard uncertainty JCGM_101_2008_E.pdf
+          this.mc.uc = Math.sqrt(jStat.sumsqrd( inc_arr(this.mc._iterations, -this.mc._iterations_mean) ) * (1/((this.burst_M * h)-1)));
+
+        }
         
-        // ref: 7.6 Estimate of the output quantity and the associated standard uncertainty JCGM_101_2008_E.pdf
-        this.mc.uc = Math.sqrt(jStat.sumsqrd( inc_arr(this.mc._iterations, -this.mc._iterations_mean) ) * (1/((this.burst_M * h)-1)));
-        // parameter to monitor on adaptative MC
-        results_of_interest.s_u.push(this.mc.uc);
-        results_of_interest.s_y.push(this.mc._iterations_mean);
-        // Its slow to run this here
-        // TODO: Think if its mandatory check sci parameters 
-        // for stabilization
-        /**
-        // Sort iterations
-        this.mc._iterations.sort(function sortNumber(a,b){return a - b});
-        // ref: 7.7 Coverage interval for the output quantity
-        this.mc.p = (1 - this.obj.cl);
-        // The shortest coverage interval
-        this.mc.sci_limits = sci(this.mc._iterations, this.mc.p);
-        results_of_interest.s_y_low.push(this.mc.sci_limits[0]);
-        results_of_interest.s_y_high.push(this.mc.sci_limits[1]);
-        **/
 
-        //console.log("Burst " + h);
-        h = h + 1;
+        if (!this.mc._trials_exceeded && h > 1) {
 
-        if (h >= check_stable_h){
+          // parameter to monitor on adaptative MC
+          results_of_interest.s_u.push(this.mc.uc);
+          results_of_interest.s_y.push(this.mc._iterations_mean);
+
+          // Its slow to run this
+          // TODO: Think if its mandatory check sci parameters for stabilization
+          
+          // Sort iterations
+          this.mc._iterations.sort(function sortNumber(a,b){return a - b});
+          // ref: 7.7 Coverage interval for the output quantity
+          this.mc.p = (1 - this.obj.cl);
+          // The shortest coverage interval
+          this.mc.sci_limits = sci(this.mc._iterations, this.mc.p);
+          results_of_interest.s_y_low.push(this.mc.sci_limits[0]);
+          results_of_interest.s_y_high.push(this.mc.sci_limits[1]);
+
+          
           // Define numerical tolerance
           // ref: 7.9.2 Numerical tolerance associated with a numerical value JCGM_101_2008_E.pdf
           num_tolerance = parseFloat("1e"+(this.mc.uc/(Math.pow(10,n_dig-1))).toExponential().split("e")[1])/2;
@@ -638,39 +647,43 @@
             var item_size = results_of_interest[k].length;
             if (item_size > 0) {
               var mean = sum(results_of_interest[k]) / item_size;
-              var s = sd(results_of_interest[k], mean);
-              stabilized = stabilized && (num_tolerance > s*2);
-              //console.log(k);
-              //console.log(s*2);
+              var s_2 = sd(results_of_interest[k], mean) * 2;
+              stabilized = stabilized && (num_tolerance > s_2) && (Math.abs(s_2) > 0);
+              console.log("param:", k, "tolerance:", num_tolerance, "2desviations:", s_2);
             };
             return void 0;
-          })
-
-          if(h > check_stable_h*1){
-            console.warn("Monte carlo trials exceeded!");
-            this.mc._trials_exceeded = true;
-          };
-          if (stabilized || this.mc._trials_exceeded){
-
-            // Sort iterations
-            this.mc._iterations.sort(function sortNumber(a,b){return a - b});
-            // ref: 7.7 Coverage interval for the output quantity
-            this.mc.p = (1 - this.obj.cl);
-            // The shortest coverage interval
-            this.mc.sci_limits = sci(this.mc._iterations, this.mc.p);
-
-            // Compute a histogram
-            this.mc.histogram = {}
-            this.mc.histogram.y = jStat.histogram(this.mc._iterations, 100);
-            iter_n = this.mc._iterations.length;
-            hist_x_min = this.mc._iterations[0];
-            hist_x_max = this.mc._iterations[iter_n-1];
-            this.mc.histogram.x = seq(hist_x_min, hist_x_max, (hist_x_max - hist_x_min) / this.mc.histogram.y.length );
-
-            //console.log("Finish!");
-            break;
-          }          
+          });
+          console.log("Stabilized:", stabilized);
         }
+
+        if (h*this.burst_M >= this.mc.M) {
+          console.warn("Monte carlo trials exceeded!");
+          this.mc._trials_exceeded = true;
+        };
+        
+        if (stabilized || this.mc._trials_exceeded) {
+
+          // Sort iterations
+          this.mc._iterations.sort(function sortNumber(a,b){return a - b});
+          // ref: 7.7 Coverage interval for the output quantity
+          this.mc.p = (1 - this.obj.cl);
+          // The shortest coverage interval
+          this.mc.sci_limits = sci(this.mc._iterations, this.mc.p);
+
+          // Compute a histogram
+          this.mc.histogram = {}
+          this.mc.histogram.y = jStat.histogram(this.mc._iterations, 100);
+          iter_n = this.mc._iterations.length;
+          hist_x_min = this.mc._iterations[0];
+          hist_x_max = this.mc._iterations[iter_n-1];
+          this.mc.histogram.x = seq(hist_x_min, hist_x_max, (hist_x_max - hist_x_min) / this.mc.histogram.y.length );
+
+          //console.log("Finish!");
+          break;
+        }
+
+        h = h + 1;
+
       }
       // Update M
       this.mc.M =  this.mc._iterations.length;
@@ -709,8 +722,7 @@
       this.mc.d_high = Math.abs(this.y + this.U - this.mc.sci_limits[1])
       this.mc.GUF_validated = (this.mc.d_low < num_tolerance) && (this.mc.d_high < num_tolerance);
       this.mc._simulation_time = (Date.now() - this.mc._init_time);
-      console.log("Simulation time: " + this.mc._simulation_time + " ms");
-      //console.log(this.mc);      
+      console.info("Finish. Simulation time: " + this.mc._simulation_time + " ms");
     }
     
     if(this.obj.mc){

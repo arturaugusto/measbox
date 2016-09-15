@@ -13,8 +13,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   this.gumArg = {
     "variables": [],
     "influence_quantities": [],
-    "cl": 0.953,
-    "mc": true
+    "mc": {}
   };
   this.results = {
     mpe:0
@@ -26,7 +25,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   this.rowDBPath = rowDBPath;
   var numberEx = new RegExp(/^[+-]?([\.,]\d+|\d+[\.,]|\d+|\d+[\.,]?\d+|\d*[\.,]?\d*[Ee][+-]?\d*)+/g);
   var propertiesToExport = ('U k uncertainties uncertainties_var_names uc ui veff y df ci');
-  var propertiesToExportMC = ('M _iterations_mean d_high d_low gum_curve histogram p sci_limits uc');
+  var propertiesToExportMC = ('M _iterations_mean d_high d_low gum_curve histogram p sci_limits uc n_dig num_tolerance GUF_validated');
 
 
   this.setRangeAttributesToScope = function (range) {
@@ -226,6 +225,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.gumArg.func = node.compile().eval;
     
     that.gumArg.cl = that.procedure.additionalOptions.cl;
+    that.gumArg.M = that.procedure.additionalOptions.M;
 
     // Conventionally, the first variable is UUT
     that.uutVarName = that.procedure.variables[0].name;
