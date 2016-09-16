@@ -279,7 +279,8 @@ this.mathjsResult = function (expr, scope) {
   var data = mathjs.eval(expr, scope);
   if (typeof data === "object") {
     var len = data.entries.length;
-    return data.entries[len];
+    console.log(data.entries[len-1]);
+    return data.entries[len-1];
   } else {
     return data;
   }

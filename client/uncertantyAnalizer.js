@@ -24,8 +24,8 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
 
   this.rowDBPath = rowDBPath;
   var numberEx = new RegExp(/^[+-]?([\.,]\d+|\d+[\.,]|\d+|\d+[\.,]?\d+|\d*[\.,]?\d*[Ee][+-]?\d*)+/g);
-  var propertiesToExport = ('U k uncertainties uncertainties_var_names uc ui veff y df ci');
-  var propertiesToExportMC = ('M _iterations_mean d_high d_low gum_curve histogram p sci_limits uc n_dig num_tolerance GUF_validated');
+  var propertiesToExport = ('U k uncertainties uncertainties_var_names uc ui veff y df ci ci_ui');
+  var propertiesToExportMC = ('M _iterations_mean d_high d_low gum_curve histogram p sci_limits uc n_dig num_tolerance GUF_validated y');
 
 
   this.setRangeAttributesToScope = function (range) {
@@ -141,13 +141,15 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       
       // Execute nominal value function
       
+      
       var gumArgVarArr = _.findWhere(that.gumArg.variables, {name: varName});
-      var nominalValueNode = mathjs.parse(range.nominalValue);
-      var nominalValueNodeFunc = nominalValueNode.compile().eval;
+      //var nominalValueNode = mathjs.parse(range.nominalValue);
+      //var nominalValueNodeFunc = nominalValueNode.compile().eval;
             
       var valueUpdatedArr = gumArgVarArr.value.map(function(v) {
         that.scope.readout = v;
-        return nominalValueNodeFunc(that.scope);
+        //return nominalValueNodeFunc(that.scope);
+        return mathjsResult(range.nominalValue, that.scope);
       });
       // Set varName value to updated readout value
       gumArgVarArr.value = valueUpdatedArr;
@@ -178,6 +180,9 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     var res = [];
     var cells = rowData[varName];
     if (!cells) {
+      if (varName === that.uutVarName) {
+        that.results.uutPrefix = "";
+      }
       return [""];
     }
     
@@ -259,6 +264,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.postProcessingFuncStr = that.procedure.additionalOptions.postProcessing;
     that.postProcessingFunc = mathjs.compile(that.postProcessingFuncStr).eval;
 
+    console.log(that.results);
     that.postProcessingRes = that.postProcessingFunc(that.results);
     
   }

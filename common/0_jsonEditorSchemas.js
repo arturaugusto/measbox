@@ -13,11 +13,12 @@ tur             = fmtToFixed(mpe/U, 2)
 veffFmt         = veff > 9999 ? "∞" : round(veff)
 
 MC_ucFmt        = fmtToPrecision(mc.uc / uutPrefixVal, 2)
-MC_ULowFmt      = fmtToPrecision(mc.sci_limits[1] / uutPrefixVal, 2)
-MC_UHighFmt     = fmtToPrecision(mc.sci_limits[2] / uutPrefixVal, 2)
+MC_ULowFmt      = fmtToPrecision((mc.sci_limits[1] - mc.y) / uutPrefixVal, 2)
+MC_UHighFmt     = fmtToPrecision((mc.sci_limits[2] - mc.y) / uutPrefixVal, 2)
 MC_dlowFmt      = fmtToPrecision(mc.d_low, 2)
 MC_dhighFmt     = fmtToPrecision(mc.d_high, 2)
 MC_tolerance    = fmtToPrecision(mc.num_tolerance, 2)
+
 
 `;
 

@@ -551,7 +551,7 @@
     // degrees of freedom
     this.df = this.uncertainties.map(function(u, i){
       // If deg of freedon was not defined, return Infinity
-      return u.df === undefined ? 9999 : parseFloat(u.df);
+      return u.df === undefined ? 99999 : parseFloat(u.df);
     })
 
     // Effective degrees of freedom
@@ -722,6 +722,9 @@
       this.mc.d_high = Math.abs(this.y + this.U - this.mc.sci_limits[1])
       this.mc.GUF_validated = (this.mc.d_low < num_tolerance) && (this.mc.d_high < num_tolerance);
       this.mc._simulation_time = (Date.now() - this.mc._init_time);
+
+      // Simulation mean alias to y
+      this.mc.y = this.mc._iterations_mean;
       console.info("Finish. Simulation time: " + this.mc._simulation_time + " ms");
     }
     

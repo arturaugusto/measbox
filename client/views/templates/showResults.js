@@ -218,14 +218,15 @@ Template.showResults.helpers({
     var worksheet = data.worksheet;
     var uncertainties = results.uncertainties;
 
-    var max = Math.max.apply(void 0, results.ui);
+    var max = Math.max.apply(void 0, results.ci_ui);
 
     var datum = uncertainties.map(function(v, i) {
-      var contribution = results.ui[i];
+      var contribution = results.ci_ui[i];
       return {
         label: results.uncertainties_var_names[i]+"."+v.name,
         value: v.value,
-        coef: (1-Math.abs(results.ci[i])) < 0.005 ? 1 : results.ci[i].toExponential(2),
+        //coef: (1-Math.abs(results.ci[i])) < 0.005 ? 1 : results.ci[i].toExponential(2),
+        coef: results.ci[i].toExponential(1),
         contribution: contribution.toExponential(3)+" "+results.uutUnit,
         type: v.type,
         distribution: v.distribution,
