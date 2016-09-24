@@ -24,7 +24,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
 
   this.rowDBPath = rowDBPath;
   var numberEx = new RegExp(/^[+-]?([\.,]\d+|\d+[\.,]|\d+|\d+[\.,]?\d+|\d*[\.,]?\d*[Ee][+-]?\d*)+/g);
-  var propertiesToExport = ('U k uncertainties uncertainties_var_names uc ui veff y df ci ci_ui');
+  var propertiesToExport = ('U k uncertainties uncertainties_var_names uc ui veff y df ci ci_ui _scope');
   var propertiesToExportMC = ('M _iterations_mean d_high d_low gum_curve histogram p sci_limits uc n_dig num_tolerance GUF_validated y');
 
 
@@ -92,7 +92,11 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     return {
       "name": u.name,
       "value": uVal,
-      "distribution": u.distribution
+      "distribution": u.distribution,
+      "ci": u.ci,
+      "k": u.k,
+      "df": u.df,
+      "estimate": u.estimate
     };
   }
 
@@ -141,7 +145,6 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       
       // Execute nominal value function
       
-      
       var gumArgVarArr = _.findWhere(that.gumArg.variables, {name: varName});
       //var nominalValueNode = mathjs.parse(range.nominalValue);
       //var nominalValueNodeFunc = nominalValueNode.compile().eval;
@@ -154,7 +157,6 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       // Set varName value to updated readout value
       gumArgVarArr.value = valueUpdatedArr;
       
-
       for (var i = 0; i < range.uncertainties.length; i++) {
         solvedUncertainty = that.solveUncertainties(range.uncertainties[i], varName);
         if (solvedUncertainty) {
@@ -225,8 +227,10 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     if (that.procedure === undefined) {
       return;
     }
+
     var node = mathjs.parse(that.procedure.func);
-    that.results.funcLaTeX = node.toString();
+    that.gumArg.func_str = node.toString();
+    that.results.funcLaTeX = that.gumArg.func_str;
     that.gumArg.func = node.compile().eval;
     
     that.gumArg.cl = that.procedure.additionalOptions.cl;
@@ -246,7 +250,6 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     .map(setScopeDataInfluence);
 
     that.retrieveUncertainties();
-    
   }
   
   this.postProcess = function() {

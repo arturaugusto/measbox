@@ -3,6 +3,7 @@
   this.editor = el;
 
   this.options = options || {};
+  this.options.keyupFunctions = options.keyupFunctions || {};
   this.options.colOffset = this.options.colOffset || 1; // Forced to 1. TODO: Suport other values
 
   this.options.contextMenuFunctions = this.options.contextMenuFunctions || {};
@@ -957,6 +958,12 @@
       var keyCode = evt.keyCode;
       var strFromCharCode = String.fromCharCode(keyCode);
       //console.log("Key code: " + keyCode);console.log("Str From Char Code: " + strFromCharCode);
+      
+      // Run option function atached to key codes
+      if (that.options.keyupFunctions[keyCode]) {
+        that.options.keyupFunctions[keyCode](that);
+        evt.preventDefault();
+      }
       // Tab
       if (keyCode === 9) {
         that.clearSelection();

@@ -7,6 +7,12 @@ Meteor.startup(function () {
   var distsToImport;
   window.convertIfNotBigNum = function(num) {
     if (typeof num !== "object") {
+      if (num == "Infinity") {
+        num = 9999;
+      }
+      if (isNaN(num)) {
+        num = 0;
+      }
       return new Decimal(parseFloat(num).toPrecision(15));
     } else {
       return num;
@@ -14,6 +20,20 @@ Meteor.startup(function () {
   };
 
   mathjs["import"]({
+    // from: https://github.com/karlbohlmark/si-prefix
+    SIPrefix: function(val) {
+      var prefixes = ["y","z","a","f","p","n","µ","m","","k","M","G","T","P","E","Z","Y"];
+      var expo = val.toExponential();
+      var parts = expo.split( 'e' );
+      var exp = ~~parts[1];
+      var index = Math.floor(exp / 3);
+      
+      var shift = exp - 3 * index;
+
+      //return {"num": parts[0] * Math.pow(10, shift),
+      //  "prefix": prefixes[index + 8]};
+      return prefixes[index + 8];
+    },
     fmtToPrecision: function(x, sd) {
       x = window.convertIfNotBigNum(x);
       x = x.toPrecision(sd);

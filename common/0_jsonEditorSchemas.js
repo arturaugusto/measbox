@@ -2,6 +2,7 @@ JsonEditorSchemas = {};
 JsonEditorInstances = {};
 
 var postProcessingDefault = `kFmt            = fmtToFixed(k, 2)
+#uutPrefix       = SIPrefix(uutReadout)
 uutPrefixVal    = prefixVal(uutPrefix)
 UFmt            = fmtToPrecision(U / uutPrefixVal, 2)
 UPrec           = decimalPlaces(UFmt)
@@ -18,7 +19,6 @@ MC_UHighFmt     = fmtToPrecision((mc.sci_limits[2] - mc.y) / uutPrefixVal, 2)
 MC_dlowFmt      = fmtToPrecision(mc.d_low, 2)
 MC_dhighFmt     = fmtToPrecision(mc.d_high, 2)
 MC_tolerance    = fmtToPrecision(mc.num_tolerance, 2)
-
 
 `;
 
@@ -178,7 +178,7 @@ JsonEditorSchemas.instruments = {
                   distribution: {
                     type: "string",
                     title: "Distribution",
-                    "enum": ["uniform", "normal", "triangular", "arcsine"],
+                    "enum": ["uniform", "normal", "triangular", "arcsine", "studentt"],
                     "default": "uniform"
                   },
                   customDist: {
@@ -188,10 +188,10 @@ JsonEditorSchemas.instruments = {
                     "default": "uniform(-value, value)",
                     height: "100px"
                   },
-                  k: {
+                  df: {
                     type: "number",
-                    title: "k",
-                    "default": 2
+                    title: "df",
+                    "default": 9999
                   },
                   ci: {
                     type: "number",
@@ -204,9 +204,14 @@ JsonEditorSchemas.instruments = {
                     format: "textarea",
                     "default": "u = 0.01 * readout",
                     height: "100px"
+                  },
+                  estimate: {
+                    type: "number",
+                    title: "Estimate",
+                    "default": 0
                   }
                 },
-                defaultProperties: ["name", "description", "distribution", "formula"]
+                defaultProperties: ["name", "description", "distribution", "formula", "estimate"]
               },
               "default": [
                 {

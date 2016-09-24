@@ -82,6 +82,8 @@ var selectedRangeData = function(flattenRows) {
     //
   }
   
+  if (!instrument) return;
+  
   var uutRange = _.findWhere(instrument.ranges, {_id: uutRangeId});
   var rangeTitle = buildRangeTitle(uutRange, instrument);
   setChartRangeTitle(rangeTitle, uutRangeId);

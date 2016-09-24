@@ -42,10 +42,10 @@ Template.worksheets.rendered = function() {
       clearTimeout(that.changedCellsTimeout);
     },
     onChange: function(editor) {
-      editor.changedRows().map(function(tr) {
-        $(tr).attr("changed", true);
-      });
-      calculatePendingRows(that, 2000);
+      //editor.changedRows().map(function(tr) {
+      //  $(tr).attr("changed", true);
+      //});
+      //calculatePendingRows(that, 2000);
     },
     onSelectedCellChange: function(td) {
       var $row = $(td).parent();
@@ -164,9 +164,17 @@ Template.worksheets.rendered = function() {
         <li><a href="#" name="removeRows">Remove row</a></li>
         <li><a href="#" name="undo">Undo</a></li>
         <li><a href="#" name="redo">Redo</a></li>
-        <li><a href="#" name="calculate">Calculate</a></li>
+        <li><a href="#" name="calculate">Calculate (F9)</a></li>
       </ul>
-    </div>`
+    </div>`,
+    "keyupFunctions": {
+      120: function($editor) {
+        $editor.getSelectedRows().map(function(_i, tr) {
+          $(tr).attr("changed", true);
+        });
+        calculatePendingRows(that, 0);
+      }
+    }
   });
 
   // Update resizer elements handlers
@@ -353,9 +361,6 @@ Template.worksheets.helpers({
       if ( readoutsIsNotObject || readoutsIsUndefined) {
         readouts = [];
       }
-
-      //////////////////////////////////////////////////////////
-      //esta funcao roda muitas vezes ao adicionar nova linha...
       
       var readoutsIsEmpty = !readouts.length;
       var readoutsIsNull = (readouts === null);
@@ -375,8 +380,6 @@ Template.worksheets.helpers({
       }
       
       //////////////////////////////////////////////////////////
-
-      
       // readouts pode fornecer o tamanho errado quando alteramos o procedimento
       var nColsToPad = Math.abs(readouts.length-n);
       for (var i = nColsToPad - 1; i >= 0; i--) {
