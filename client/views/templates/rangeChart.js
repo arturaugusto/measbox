@@ -96,8 +96,9 @@ var selectedRangeData = function(flattenRows) {
 
 
 var getSelectedRowRangeData = function() {
-  var rows = Spreadsheets
-    .findOne()
+  var spreadsheet = Spreadsheets.findOne();
+  if (!spreadsheet) return;
+  var rows = spreadsheet
     .worksheets
     .map(function(w){
       return w.rows

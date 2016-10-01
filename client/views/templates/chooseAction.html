@@ -1,0 +1,23 @@
+<template name="chooseAction">
+  <div class="modal fade choose-action" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">MeasBox</h4>
+        </div>
+        <div class="modal-body">
+          <p>Create:</p>
+          <p><i class="fa fa-file-o" aria-hidden="true"></i> <a href="#" id="newSpreadsheet">New Calibration</a></p>
+          {{#with sTemplates}}
+          {{#if hasTemplates this}}
+          <p>Templates:</p>
+          {{#each this}}
+          <p><i class="fa fa-file-text-o" aria-hidden="true"></i> <a href="#" id="newSpreadsheet">{{name}}</a></p>
+          {{/each}}
+          {{/if}}
+          {{/with}}
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</template>

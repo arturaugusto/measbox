@@ -963,6 +963,7 @@
       if (that.options.keyupFunctions[keyCode]) {
         that.options.keyupFunctions[keyCode](that);
         evt.preventDefault();
+        return;
       }
       // Tab
       if (keyCode === 9) {

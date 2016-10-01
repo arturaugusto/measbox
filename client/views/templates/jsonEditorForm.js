@@ -1,6 +1,7 @@
 Template.jsonEditorForm.onRendered(function() {
   var that = this;
   var field = this.data.field;
+  if (!field) return;
   var $el = $(this.firstNode).find(".json-editor-holder");
   this.instance = JsonEditorInstances[field] = new JSONEditor($el[0], {
     theme: "bootstrap3",
@@ -29,6 +30,8 @@ Template.jsonEditorForm.onRendered(function() {
       }, 2000);
     });
   }, 10);
+  var spreadsheet = Spreadsheets.findOne();
+  if (!spreadsheet) return;
   var data = Spreadsheets.findOne()[field];
   if (data !== undefined) {
     JsonEditorInstances[field].setValue(data);  

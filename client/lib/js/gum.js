@@ -842,7 +842,7 @@
 
         return {
           x: i,
-          y: jStat.studentt.pdf((i-that.mc._iterations_mean)/that.uc, that.veff)/that.uc
+          y: (jStat.studentt.pdf((i-that.mc._iterations_mean)/that.uc, that.veff)/that.uc)
 
         }
       });

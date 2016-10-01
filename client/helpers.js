@@ -1,5 +1,6 @@
 Template.showSpreadsheet.helpers({
   worksheetsWithIndex: function() {
+    if (!this.worksheets) return;
     return this.worksheets.map(function(w, index) {
       var obj = w;
       obj.index = index;
@@ -7,6 +8,8 @@ Template.showSpreadsheet.helpers({
     });
   },
   selectedWorksheetWithIndex: function() {
+    if (!this.worksheets) return;
+
     var selectedWorksheetId = Session.get("selectedWorksheetId");
     
     if (selectedWorksheetId === undefined && this.worksheets.length) {

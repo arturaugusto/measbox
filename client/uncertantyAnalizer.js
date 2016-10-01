@@ -267,7 +267,6 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.postProcessingFuncStr = that.procedure.additionalOptions.postProcessing;
     that.postProcessingFunc = mathjs.compile(that.postProcessingFuncStr).eval;
 
-    console.log(that.results);
     that.postProcessingRes = that.postProcessingFunc(that.results);
     
   }
