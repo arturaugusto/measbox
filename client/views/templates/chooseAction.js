@@ -24,21 +24,23 @@ Template.chooseAction.rendered = function() {
       window.ghrepo.contents("templates").read(function(e,c){
         Session.set("sTemplates", c);
       });
-
-
-      //repo.contents("templates/examples.json").read(function(e,c){console.log(c)})
-
     }
   });  
 };
 
 Template.showSpreadsheet.events({
-  'click #newSpreadsheet': function(evt) {
-    Meteor.call(
-      "createSpreadsheet",
-      function(err, newSpreadsheetId) {
-        $(location).attr('href', './' + newSpreadsheetId);
-      }    
-    );
+  'click .newSpreadsheet': function(evt) {
+    var fileName = $(evt.target).data("file");
+    
+    if (fileName) {
+      window.ghrepo.contents("templates/examples.json").read(
+        function(e,c){
+          createSpreadsheet(JSON.parse(c));
+        }
+      );
+    } else {
+      createSpreadsheet();
+    }
+    return;
   }
 });

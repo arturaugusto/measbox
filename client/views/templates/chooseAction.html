@@ -7,12 +7,12 @@
         </div>
         <div class="modal-body">
           <p>Create:</p>
-          <p><i class="fa fa-file-o" aria-hidden="true"></i> <a href="#" id="newSpreadsheet">New Calibration</a></p>
+          <p><i class="fa fa-file-o" aria-hidden="true"></i> <a href="#" class="newSpreadsheet">New Calibration</a></p>
           {{#with sTemplates}}
           {{#if hasTemplates this}}
           <p>Templates:</p>
           {{#each this}}
-          <p><i class="fa fa-file-text-o" aria-hidden="true"></i> <a href="#" id="newSpreadsheet">{{name}}</a></p>
+          <p><i class="fa fa-file-text-o" aria-hidden="true" data-file="{{name}}"></i> <a href="#" class="newSpreadsheet" data-file="{{name}}">{{name}}</a></p>
           {{/each}}
           {{/if}}
           {{/with}}

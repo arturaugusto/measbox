@@ -379,3 +379,13 @@ this.refreshEditTable = function(el) {
     Session.set("selectedWorksheetId", $target.data("worksheet"));
   }, 30);
 }
+
+this.createSpreadsheet = function(content) {  
+  Meteor.call(
+    "createSpreadsheet",
+    content,
+    function(err, newSpreadsheetId) {
+      $(location).attr('href', './' + newSpreadsheetId);
+    }
+  );
+}

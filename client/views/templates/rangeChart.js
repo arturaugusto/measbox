@@ -116,6 +116,9 @@ var rangeDatum = function(selectedRowRangeData) {
 
   // Set chart unit
   var axUnit = selectedRowRangeData[0]._results.uutUnit;
+  if (axUnit === "") {
+    axUnit =  "unit";
+  }
   rangeChart.xAxis.axisLabel("("+axUnit+")");
   rangeChart.yAxis.axisLabel("output (" + axUnit + ")");
 
@@ -233,7 +236,12 @@ var rangeChartBuilder = function() {
     .tickFormat(d3.format(',.1e'));
   rangeChart.tooltip.contentGenerator(
     function (obj) {
-      return obj.point._group+"<br>y: "+obj.point.y.toExponential(3);
+      var content = "";
+      if (obj.point._group.length > 0) {
+        content += obj.point._group + "<br>";
+      }
+      content += "x: "+obj.point.x.toExponential(3)+"<br>y: "+obj.point.y.toExponential(3);
+      return content;
     })
   ;
   //$("#rangeChartContainer")
