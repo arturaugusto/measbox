@@ -32,7 +32,6 @@ Template.report.helpers({
           resKeys.push(t.parameterTemplate);
         }
       });
-    console.log(res);
     return {'res': res, 'keys': resKeys};
   },
   rowrangeTitle: function(rows) {
