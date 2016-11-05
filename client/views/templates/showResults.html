@@ -20,23 +20,23 @@
         <caption>Uncertainty budget</caption>
         <thead>
           <tr>
-            <th style="text-align:left">quantity</th>
+            <th style="text-align:center;width: 8%;">quantity</th>
             <th style="text-align:center;width: 8%;">type</th>
             <th style="text-align:center;width: 8%;">dist.</th>
             <th style="text-align:center;width: 8%;">coef.</th>
             <th style="text-align:center;width: 8%;">contribution</th>
-            <th>chart</th>
+            <th style="text-align:center;width: 12%;">chart</th>
           </tr>
         </thead>
         <tbody>
           {{#each this}}
           <tr>
-            <td style="text-align:left">{{label}}</td>
+            <td style="text-align:center;width: 8%;">{{label}}</td>
             <td style="text-align:center;width: 8%;">{{type}}</td>
             <td style="text-align:center;width: 8%;">{{distribution}}</td>
             <td style="text-align:center;width: 8%;">{{coef}}</td>
             <td style="text-align:center;width: 8%;">{{contribution}}</td>
-            <td><div style="width: {{_barWidth}}%; background: {{_barColor}}"></div></td>
+            <td style="text-align:center;width: 12%;"><div style="width: {{_barWidth}}%; background: {{_barColor}}"></div></td>
           </tr>
           {{/each}}
         </tbody>
@@ -48,6 +48,25 @@
   
   <div>
     <div id="renderedResult">
+    {{#with rowData._results.report}}
+    <table class="table table-bordered table-condensed">
+      <caption>Results</caption>
+      <thead>
+        <tr>
+          <th style="text-align:center;">Parameter</th>
+          <th style="text-align:center;">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this}}
+        <tr>
+          <td style="text-align:center;">{{{ parameterTemplateRes }}}</td>
+          <td style="text-align:center;">{{{ valueTemplateRes }}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{/with}}
     </div>  
   </div>
 

@@ -107,27 +107,6 @@ this.histogramDatum = function(data) {
   ];
 };
 
-this.renderResults = function(data) {
-  if (!data.worksheet) return;
-
-  try {
-    var procedure = getProcedureById(data.worksheet.procedureId);
-    var resultsTemplate = procedure.additionalOptions.resultsTemplate;
-    var resultsTemplateCompiled = _.template(resultsTemplate);
-    var resultsRendered = kramed.parse(resultsTemplateCompiled(data.row._results));
-    var resultsRenderedParsed = $.parseHTML(resultsRendered);
-    $("#renderedResult").html(resultsRenderedParsed);
-    // Add class to tables rendered from markdown on results
-    var $tbl = $("#renderedResult table");
-    $tbl.addClass("table table-bordered table-condensed");
-    $tbl.prepend("<caption>Results</caption>");
-
-  } catch (e) {
-    $("#renderedResult").html("");
-    //console.log(e);
-  }
-}
-
 Template.showResults.rendered = function() {
   var that = this;
   this.selectedRowUutRangeIdTOId = undefined;
@@ -183,8 +162,6 @@ Template.showResults.rendered = function() {
   this.autorun(function() {
     that.data = selectedRowData();
     if (!that.data) return;
-    
-    renderResults(that.data);
     
     that.datum = histogramDatum(that.data);
     Session.set("pdfDatum", that.datum);

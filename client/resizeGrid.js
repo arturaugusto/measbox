@@ -16,7 +16,7 @@ window.ResizeGrid = function() {
   var jsonEditorHolders = $(".json-editor-holder");
 
   // Panels to adjust scroll
-  this.panelListStr = ["procedures", "instruments"];
+  this.panelListStr = ["procedures", "instruments", "report"];
   this.panelListEl = this.panelListStr.map(function(panel) {
     return $("#"+panel);
   });

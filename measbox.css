@@ -10,7 +10,19 @@
   display: none;
 }
 
-#instruments, #procedures {
+
+.report-table td:not(.spaned-cell),
+.report-table th {
+  text-align: center;
+}
+
+.spaned-cell {
+  background: #ddd;
+  text-align: left;
+  font-weight: bold;
+}
+
+#instruments, #procedures, #report {
   overflow-y: scroll;
 
 }
@@ -185,7 +197,7 @@ svg text{
 .instruments-select .input-group {
   padding-bottom: 12px;
 }
-.json-editor-holder {
+.json-editor-holder, .tab-content-holder {
   padding: 12px;
 }
 

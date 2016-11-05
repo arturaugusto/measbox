@@ -389,3 +389,35 @@ this.createSpreadsheet = function(content) {
     }
   );
 }
+
+this.rowsRangeData = function(rows, uutInstrument) {
+  var rowsData = rows.map(function(row) {
+    var result = {};
+    var uutName = row._results.uutName;
+    var uutRangeId = row[uutName+"RangeId"];
+    var range = _.findWhere( uutInstrument.ranges, {"_id": uutRangeId} );
+    return {
+      res: row._results,
+      range: range,
+      uutRangeId: uutRangeId
+    };
+  });
+  return _.groupBy( rowsData, "uutRangeId" );
+}
+
+
+this.reportedResultsFromRow = function(results, procedureId) {
+  var procedure = getProcedureById(procedureId);
+  var resultsTemplate = procedure.additionalOptions.resultsTemplate;
+  var compiledRes = resultsTemplate.map(function(resTemplate) {
+    var parameterTemplateCompiled = _.template(resTemplate.parameterTemplate);
+    var valueTemplateCompiled = _.template(resTemplate.valueTemplate);
+    var parameterTemplateRes = parameterTemplateCompiled(results);
+    var valueTemplateRes = valueTemplateCompiled(results);
+    return({
+      parameterTemplateRes: parameterTemplateRes,
+      valueTemplateRes: valueTemplateRes
+    });
+  });
+  return compiledRes;
+}

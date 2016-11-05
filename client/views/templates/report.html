@@ -1,0 +1,43 @@
+<template name="report">
+  {{#let resTemplates = proceduresResultTemplates}}
+  <div class="tab-content-holder">
+    <table class="table table-bordered table-condensed table-striped report-table">
+      <caption>Results</caption>
+      <thead>
+        <tr>
+          {{#each resTemplates.keys}}
+          <th>{{{this}}}</th>
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each reportData}}
+        {{#let assetRowsData=this}}
+        <tr>
+          <td colspan="{{lenOf resTemplates.keys}}" class="spaned-cell">
+          {{#with currentRowInstrument assetRowsData}}{{this.name}}{{#if this.unit}} ({{this.unit}}){{/if}}{{/with}}
+          [{{#with rowrangeTitle assetRowsData}}{{this.limits.start}} .. {{this.limits.end}}{{/with}}]
+          </td>
+        </tr>
+        {{#each assetRowsData}}
+        <tr>
+
+          {{#with keyResult resTemplates.keys report}}
+          {{#each this}}
+          {{#if valueTemplateRes}}
+          <td>{{{valueTemplateRes}}}</td>
+          {{else}}
+          <td>-</td>
+          {{/if}}
+          {{/each}}
+          {{/with}}
+
+        </tr>
+        {{/each}}
+        {{/let}}
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{/let}}
+</template>

@@ -22,7 +22,7 @@ MC_tolerance    = fmtToPrecision(mc.num_tolerance, 2)
 
 `;
 
-var resultsTemplateDefault = `Parameter           | Value                                            
+var resultsTemplateDefaultOld = `Parameter           | Value                                            
 :---------------:   |:-----------------------------------------------:
 Reference           | <%=correctValueFmt%> <%=uutPrefix%><%=uutUnit%>  
 U                   | <%=UFmt%> <%=uutPrefix%><%=uutUnit%>             
@@ -39,6 +39,75 @@ _d_<sub>low</sub>, _d_<sub>high</sub> | <%=MC_dlowFmt%>, <%=MC_dhighFmt%>
 MC.Validated (δ=<%=MC_tolerance%>) | <%=mc.GUF_validated%>  
 
 `;
+
+
+var resultsTemplateDefault = [
+  {
+    parameterTemplate: 'Reference',
+    valueTemplate: '<%=correctValueFmt%> <%=uutPrefix%><%=uutUnit%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'U',
+    valueTemplate: '<%=UFmt%> <%=uutPrefix%><%=uutUnit%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'UUT',
+    valueTemplate: '<%=uutReadoutFmt%> <%=uutPrefix%><%=uutUnit%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'MPE',
+    valueTemplate: '<%=mpeFmt%> <%=uutPrefix%><%=uutUnit%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'Error',
+    valueTemplate: '<%=errFmt%> <%=uutPrefix%><%=uutUnit%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'TUR',
+    valueTemplate: '<%=tur%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'k',
+    valueTemplate: '<%=kFmt%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: '&#x1D708;<sub>eff</sub>',
+    valueTemplate: '<%=veffFmt%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'MC.M',
+    valueTemplate: '<%=mc.M%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'MC.uc',
+    valueTemplate: '<%=MC_ucFmt%> <%=uutPrefix%><%=uutUnit%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'MC.Interval',
+    valueTemplate: '[<%=MC_ULowFmt%>, <%=MC_UHighFmt%>]  <%=uutPrefix%><%=uutUnit%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: '<i>d</i><sub>low</sub>, <i>d</i><sub>high</sub>',
+    valueTemplate: '<%=MC_dlowFmt%>, <%=MC_dhighFmt%>',
+    toReport: true
+  },
+  {
+    parameterTemplate: 'MC.Validated (δ=<%=MC_tolerance%>)',
+    valueTemplate: '<%=mc.GUF_validated%>',
+    toReport: true
+  }
+]
 
 confirmDeleteFunc = function (arg) {
   return window.confirm("Confirm remove " + arg.item_title + "?");
@@ -371,6 +440,7 @@ JsonEditorSchemas.procedures = {
               height: '200px'
             }
           },
+          /*
           resultsTemplate: {
             type: 'code',
             format: 'markdown',
@@ -379,7 +449,31 @@ JsonEditorSchemas.procedures = {
             options: {
               height: '200px'
             }
-          }   
+          },*/
+          resultsTemplate: {
+            type: 'array',
+            title: 'Results',
+            format: 'table',
+            default: resultsTemplateDefault,
+            items: {
+              type: 'object',
+              properties: {
+                parameterTemplate: {
+                  type: 'string',
+                  title: 'Parameter'
+                },
+                valueTemplate: {
+                  type: 'string',
+                  title: 'Value'
+                },
+                toReport: {
+                  type: 'boolean',
+                  title: 'Report',
+                  format: 'checkbox'
+                }
+              }
+            }
+          }
         },
         defaultProperties: ["cl", "M", "postProcessing", "resultsTemplate"]
       }

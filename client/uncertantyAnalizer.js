@@ -139,6 +139,8 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
         that.setUUTResolution(range);
         that.results.uutUnit = instrument.unit;
         that.results.uutName = varName;
+        that.results.uutRangeId = range._id;
+        that.results.uutInstrumentId = instrument._id;
       }
       var solvedUncertainties = [];
       var solvedUncertainty;
@@ -277,6 +279,8 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   this.gum = new GUM(this.gumArg);
   this.postProcess();
   this.results._groups = this.groups;
+  var reportedRes = reportedResultsFromRow(this.results, worksheet.procedureId);
+  this.results.report = reportedRes;
   data[this.rowDBPath+"._results"] = this.results;
   setData(data);
   console.log(data);
