@@ -42,10 +42,10 @@ Template.worksheets.rendered = function() {
       clearTimeout(that.changedCellsTimeout);
     },
     onChange: function(editor) {
-      //editor.changedRows().map(function(tr) {
-      //  $(tr).attr("changed", true);
-      //});
-      //calculatePendingRows(that, 2000);
+      editor.changedRows().map(function(tr) {
+        $(tr).attr("changed", true);
+      });
+      calculatePendingRows(that, 3000);
     },
     onSelectedCellChange: function(td) {
       var $row = $(td).parent();

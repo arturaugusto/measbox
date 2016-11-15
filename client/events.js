@@ -1,6 +1,6 @@
 Template.showSpreadsheet.events({
   'click #newWorksheet': function(evt) {
-    Meteor.call("newWorksheet");
+    Meteor.call( "newWorksheet", Spreadsheets.findOne()._id );
   },
   // User created tabs to select existing worksheets
   'click .select-worksheet': function(evt) {

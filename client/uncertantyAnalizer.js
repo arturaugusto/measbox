@@ -284,4 +284,5 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   data[this.rowDBPath+"._results"] = this.results;
   setData(data);
   console.log(data);
+  Session.set("processing", false);
 }

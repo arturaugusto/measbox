@@ -815,6 +815,11 @@
           //console.log("Finish!");
           break;
         }
+        // Avoid freezing browser with a timeout
+        if ( (Date.now() - this.mc._init_time) > 10000 ) {
+          console.warn("Simulation Timeout!. Try again with different MC M");
+          break;
+        }
 
         h = h + 1;
       }

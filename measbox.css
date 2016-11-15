@@ -186,13 +186,26 @@ svg text{
   background: #494B54;
 }
 */
+
+
+/*
 .input-group-addon {
-  height: 20px;
 }
+
+*/
+.input-group-addon {
+  height: 6px !important;
+}
+
 
 .btn.btn-squared {
   border-radius: 0;
 }
+
+select {
+  -webkit-appearance: none;
+}
+
 
 .instruments-select .input-group {
   padding-bottom: 12px;

@@ -421,3 +421,22 @@ this.reportedResultsFromRow = function(results, procedureId) {
   });
   return compiledRes;
 }
+
+// Confirm before remove json-editor item 
+document.addEventListener('click', function(e) {
+  var target = e.target;
+  var parent = target.parentNode;
+  var elementToCheckDelete;
+  if (parent.nodeName === 'BUTTON' || parent.nodeName === 'A') {
+    elementToCheckDelete = parent;
+  } else {
+    elementToCheckDelete = target;
+  }
+  if ( elementToCheckDelete.className.indexOf('delete') > -1 ) {
+    var confirm;
+    confirm = window.confirm("Confirm delete this item?");
+    if ( !confirm ) {
+      e.stopPropagation();
+    }
+  }
+}, true);

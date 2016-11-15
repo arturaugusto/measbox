@@ -78,7 +78,7 @@ var resultsTemplateDefault = [
     toReport: true
   },
   {
-    parameterTemplate: '&#x1D708;<sub>eff</sub>',
+    parameterTemplate: '<i>&nu;</i><sub>eff</sub>',
     valueTemplate: '<%=veffFmt%>',
     toReport: true
   },
@@ -280,7 +280,7 @@ JsonEditorSchemas.instruments = {
                     "default": 0
                   }
                 },
-                defaultProperties: ["name", "description", "distribution", "formula", "estimate"]
+                defaultProperties: ["name", "description", "distribution", "formula"]
               },
               "default": [
                 {

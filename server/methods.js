@@ -66,9 +66,9 @@ Meteor.methods({
       {$set: data}
     )
   },
-  newWorksheet: function() {
+  newWorksheet: function(id) {
     Spreadsheets.update({
-      _id: "BgkmDNsuGi7FgEMAH"
+      _id: id
     },{
       $push:{
         "worksheets": {
