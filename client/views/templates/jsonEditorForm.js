@@ -6,7 +6,7 @@ Template.jsonEditorForm.onRendered(function() {
   this.instance = JsonEditorInstances[field] = new JSONEditor($el[0], {
     theme: "bootstrap3",
     iconlib: "bootstrap3",
-    enhanced_ui: "selectize",
+    //enhanced_ui: "selectize",
     disable_collapse: false,
     form_name_root: false,
     schema: JsonEditorSchemas[field]

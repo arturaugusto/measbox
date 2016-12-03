@@ -180,4 +180,4 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
   }
 });
 
-JSONEditor.plugins.selectize.enable = true;
+JSONEditor.plugins.selectize.enable = false;

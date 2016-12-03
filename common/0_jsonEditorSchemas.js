@@ -109,14 +109,9 @@ var resultsTemplateDefault = [
   }
 ]
 
-confirmDeleteFunc = function (arg) {
-  return window.confirm("Confirm remove " + arg.item_title + "?");
-}
-
 JsonEditorSchemas.instruments = {
   type: "array",
   title: "Instruments",
-  confirmDelete: confirmDeleteFunc, 
   items: {
     type: "object",
     title: "Instrument",
@@ -158,7 +153,6 @@ JsonEditorSchemas.instruments = {
         title: "Ranges",
         uniqueItems: true,
         propertyOrder: 3,
-        confirmDelete: confirmDeleteFunc,
         items: {
           type: "object",
           title: "Range",
@@ -220,7 +214,6 @@ JsonEditorSchemas.instruments = {
             uncertainties: {
               type: "array",
               title: "Uncertainties",
-              confirmDelete: confirmDeleteFunc,
               uniqueItems: true,
               options: {
                 collapsed: true
@@ -313,14 +306,13 @@ JsonEditorSchemas.instruments = {
 JsonEditorSchemas.procedures = {
   type: "array",
   title: "Procedures",
-  confirmDelete: confirmDeleteFunc,
   items: {
-    headerTemplate: "{{ self.functionalityTags }}",
+    headerTemplate: "{{ self.name }}",
     type: 'object',
     title: 'Procedure',
     options: {
       disable_edit_json: false,
-      disable_properties: true,
+      disable_properties: false,
       disable_collapse: false,
       collapsed: true
     },
@@ -332,22 +324,16 @@ JsonEditorSchemas.procedures = {
           hidden: true
         }
       },
-      functionalityTags: {
+      name: {
         propertyOrder: 1,
-        type: "array",
-        title: 'Functionality Tags',
-        uniqueItems: true,
-        items: {
-          type: "string"
-        }
+        type: "string",
+        title: 'Name'
       },
       variables: {
-        propertyOrder: 2,
+        propertyOrder: 3,
         title: 'Variables',
-        description: 'The first item from this list will be treated as uut.',
         type: 'array',
         format: 'table',
-        confirmDelete: confirmDeleteFunc,
         options: {
           collapsed: true
         },
@@ -375,8 +361,8 @@ JsonEditorSchemas.procedures = {
             kind: {
               type: "string",
               title: "Kind",
-              "enum": ["Readout", "Influence"],
-              "default": "Readout"
+              "enum": ["Standard", "UUT", "Influence"],// Readout
+              "default": "Standard"
             }
           }
         },
@@ -393,13 +379,13 @@ JsonEditorSchemas.procedures = {
         ]
       },
       n: {
-        propertyOrder: 3,
+        propertyOrder: 4,
         type: 'number',
         title: 'Repetitions',
         "default": 4
       },
       func: {
-        propertyOrder: 4,
+        propertyOrder: 5,
         type: 'code',
         format: 'matlab',
         title: 'Mathematical model',
@@ -409,7 +395,7 @@ JsonEditorSchemas.procedures = {
         }
       },
       additionalOptions: {
-        propertyOrder: 5,
+        propertyOrder: 6,
         type: 'object',
         title: 'Additional Options',
         options: {
@@ -440,16 +426,6 @@ JsonEditorSchemas.procedures = {
               height: '200px'
             }
           },
-          /*
-          resultsTemplate: {
-            type: 'code',
-            format: 'markdown',
-            title: 'Results Template',
-            "default": resultsTemplateDefault,
-            options: {
-              height: '200px'
-            }
-          },*/
           resultsTemplate: {
             type: 'array',
             title: 'Results',

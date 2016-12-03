@@ -111,8 +111,7 @@ var getSelectedRowRangeData = function() {
 }
 
 var rangeDatum = function(selectedRowRangeData) {
-
-  if (!selectedRowRangeData) return;
+  if (!selectedRowRangeData) return [];
 
   // Set chart unit
   var axUnit = selectedRowRangeData[0]._results.uutUnit;
@@ -224,7 +223,6 @@ var rangeDatum = function(selectedRowRangeData) {
     data.push(objMpeBOTTOM);
     
   });
-
   return data;
 }
 
@@ -357,6 +355,7 @@ var addGraphRangeChart = function() {
     })
     .interpolate("linear")
     .showLegend(true)
+    .showXAxis(false)
   ;
   rangeChart.dispatch.on('renderEnd', function () {
     //console.log("rendered...");

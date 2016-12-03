@@ -164,6 +164,11 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
         if (solvedUncertainty) {
           solvedUncertainties.push(solvedUncertainty);
         }
+        var currUnc = range.uncertainties[i];
+        var currSubVar = varName + '.' + currUnc.name;
+        var estimate = currUnc.estimate || 0;
+        // TODO CHECK: colocar estimate no escopo
+        //console.log(currSubVar, estimate);
       }
       that.pushUncertaintiesToGumArg(solvedUncertainties, varName);
       return;
@@ -181,21 +186,25 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   }
 
   this.extractRowData = function (varName) {
-    var res = [];
     var cells = rowData[varName];
+    // When uut, cells doesnt exist.
+    // return artefact val
     if (!cells) {
       if (varName === that.uutVarName) {
         that.results.uutPrefix = "";
       }
-      return [""];
+      return [0];
     }
     
+    // When first cell is null
+    // return zero
     if (cells[0] === null) {
-      return [""];
+      return [0];
     }
     
     var parserResult;
 
+    var res = [];
     cells.map(function(cellValue, readoutIndex) {
       parserResult = that.parseReadout(cellValue);
       if (varName === that.uutVarName && readoutIndex === 0) {
@@ -239,6 +248,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.gumArg.M = that.procedure.additionalOptions.M;
 
     // Conventionally, the first variable is UUT
+    // TODO: Change
     that.uutVarName = that.procedure.variables[0].name;
     // First we need to iterate all items
     // to set data and get uncertainties
@@ -269,6 +279,11 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.postProcessingFuncStr = that.procedure.additionalOptions.postProcessing;
     that.postProcessingFunc = mathjs.compile(that.postProcessingFuncStr).eval;
 
+    // Copy keys, to user access on postprocess
+    Object.keys(that.results._scope).map(function(k) {
+      that.results[k] = that.results._scope[k];
+    });
+    
     that.postProcessingRes = that.postProcessingFunc(that.results);
     
   }
@@ -281,7 +296,8 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   this.results._groups = this.groups;
   var reportedRes = reportedResultsFromRow(this.results, worksheet.procedureId);
   this.results.report = reportedRes;
-  data[this.rowDBPath+"._results"] = this.results;
+  this.data[this.rowDBPath+"._results"] = this.results;
+
   setData(data);
   console.log(data);
   Session.set("processing", false);
