@@ -355,7 +355,6 @@ var addGraphRangeChart = function() {
     })
     .interpolate("linear")
     .showLegend(true)
-    .showXAxis(false)
   ;
   rangeChart.dispatch.on('renderEnd', function () {
     //console.log("rendered...");

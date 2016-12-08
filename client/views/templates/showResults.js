@@ -204,7 +204,7 @@ Template.showResults.helpers({
         value: v.value,
         //coef: (1-Math.abs(results.ci[i])) < 0.005 ? 1 : results.ci[i].toExponential(2),
         coef: results.ci[i].toExponential(1),
-        contribution: contribution.toExponential(3)+" "+results.uutUnit,
+        contribution: contribution.toExponential(3)+" "+(results.uutUnit || ""),
         type: v.type,
         distribution: v.distribution,
         _barWidth: (contribution/max)*100,

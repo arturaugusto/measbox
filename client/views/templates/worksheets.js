@@ -223,7 +223,7 @@ Template.worksheets.helpers({
       }
       return {
         value: p._id,
-        label:p.functionalityTags.toString(),
+        label: p.name,
         isSelected: isSelected
       };
     });

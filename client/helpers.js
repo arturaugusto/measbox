@@ -35,7 +35,7 @@ Template.showSpreadsheet.helpers({
   worksheetName: function() {
     var procedure = getProcedureById(this.procedureId);
     if (procedure === undefined) return "new worksheet";
-    return procedure.functionalityTags.toString()
+    return procedure.name;
   }
 
 });

@@ -362,7 +362,6 @@ JsonEditorSchemas.procedures = {
               type: "string",
               title: "Kind",
               "enum": ["Standard", "UUT", "Influence"],// Readout
-              "default": "Standard"
             }
           }
         },
@@ -370,11 +369,11 @@ JsonEditorSchemas.procedures = {
           {
             "name": "UUT",
             "color": "#ffffe7",
-            "kind": "Readout"
+            "kind": "UUT"
           }, {
             "name": "Ref",
             "color": "#f2f1ff",
-            "kind": "Readout"
+            "kind": "Standard"
           }
         ]
       },
@@ -414,8 +413,7 @@ JsonEditorSchemas.procedures = {
             type: 'number',
             title: 'Max. Adaptive Monte Carlo M',
             "default": 50e4,
-            "enum": [50e3, 20e4, 50e4, 10e5, 50e5, 10e6, 50e6],
-            "default": "Meter"            
+            "enum": [50e3, 20e4, 50e4, 10e5, 50e5, 10e6, 50e6]
           },          
           postProcessing: {
             type: 'code',

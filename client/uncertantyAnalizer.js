@@ -10,6 +10,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   );
 
   this.scope = {};
+  this.uutVarNames = [];
   this.gumArg = {
     "variables": [],
     "influence_quantities": [],
@@ -79,13 +80,17 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
 
   }
 
+  this.varIsUUT = function(varName) {
+    return that.uutVarNames.indexOf(varName) !== -1;
+  }
+
   this.solveUncertainties = function (u, varName) {
     // Clean monitoring variables from scope
     // before calculating uncertainty
     delete that.scope.mpe;
     var uVal = mathjsResult(u.formula, that.scope);
     // UUT MPE dont enter on budget
-    if (varName === that.uutVarName && u.name === "MPE") {
+    if (that.varIsUUT(varName) && u.name === "MPE") {
       that.setMPE();
       return false;
     }
@@ -135,7 +140,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       if (range === undefined) return;
 
       that.setRangeIdOnDB(range._id, varName);
-      if (that.uutVarName === varName) {
+      if (that.varIsUUT(varName)) {
         that.setUUTResolution(range);
         that.results.uutUnit = instrument.unit;
         that.results.uutName = varName;
@@ -190,7 +195,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     // When uut, cells doesnt exist.
     // return artefact val
     if (!cells) {
-      if (varName === that.uutVarName) {
+      if (that.varIsUUT(varName)) {
         that.results.uutPrefix = "";
       }
       return [0];
@@ -207,7 +212,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     var res = [];
     cells.map(function(cellValue, readoutIndex) {
       parserResult = that.parseReadout(cellValue);
-      if (varName === that.uutVarName && readoutIndex === 0) {
+      if (that.varIsUUT(varName) && readoutIndex === 0) {
         that.results.uutPrefix = parserResult.prefix;
       }
       res.push(parserResult.value);      
@@ -229,7 +234,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.pushToGumArg(v.name, readoutArr);
     var mean = jStat.mean(readoutArr);
     that.scope[v.name] = mean;
-    if (that.uutVarName === v.name) that.results.uutReadout = mean;
+    if (that.varIsUUT(v.name)) that.results.uutReadout = mean;
   }
 
   this.buildGumArg = function(worksheet) {
@@ -247,9 +252,18 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.gumArg.cl = that.procedure.additionalOptions.cl;
     that.gumArg.M = that.procedure.additionalOptions.M;
 
-    // Conventionally, the first variable is UUT
-    // TODO: Change
-    that.uutVarName = that.procedure.variables[0].name;
+    // Create array for variables flaged as UUT
+    that.uutVarNames = _.filter(
+      that.procedure.variables, 
+      function(v) {
+        return v.kind === "UUT"
+      }
+    ).map(
+      function(v){
+        return v.name
+      }
+    );
+
     // First we need to iterate all items
     // to set data and get uncertainties
     _.filter(that.procedure.variables, function(v) {
