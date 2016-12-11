@@ -24,17 +24,17 @@ MC_tolerance    = fmtToPrecision(mc.num_tolerance, 2)
 
 var resultsTemplateDefaultOld = `Parameter           | Value                                            
 :---------------:   |:-----------------------------------------------:
-Reference           | <%=correctValueFmt%> <%=uutPrefix%><%=uutUnit%>  
-U                   | <%=UFmt%> <%=uutPrefix%><%=uutUnit%>             
-<%=uutName%>        | <%=uutReadoutFmt%> <%=uutPrefix%><%=uutUnit%>    
-MPE                 | <%=mpeFmt%> <%=uutPrefix%><%=uutUnit%>           
-Error               | <%=errFmt%> <%=uutPrefix%><%=uutUnit%>  
+Reference           | <%=correctValueFmt%> <%=outputPrefix%><%=outputUnit%>  
+U                   | <%=UFmt%> <%=outputPrefix%><%=outputUnit%>             
+<%=uutName%>        | <%=uutReadoutFmt%> <%=outputPrefix%><%=outputUnit%>    
+MPE                 | <%=mpeFmt%> <%=outputPrefix%><%=outputUnit%>           
+Error               | <%=errFmt%> <%=outputPrefix%><%=outputUnit%>  
 TUR                 | <%=tur%>                                
 k                   | <%=kFmt%>                               
 _v_<sub>eff</sub>   | <%=veffFmt%>                            
 MC.M                | <%=mc.M%>  
-MC.uc               | <%=MC_ucFmt%> <%=uutPrefix%><%=uutUnit%>  
-MC.Interval | [<%=MC_ULowFmt%>, <%=MC_UHighFmt%>]  <%=uutPrefix%><%=uutUnit%>
+MC.uc               | <%=MC_ucFmt%> <%=outputPrefix%><%=outputUnit%>  
+MC.Interval | [<%=MC_ULowFmt%>, <%=MC_UHighFmt%>]  <%=outputPrefix%><%=outputUnit%>
 _d_<sub>low</sub>, _d_<sub>high</sub> | <%=MC_dlowFmt%>, <%=MC_dhighFmt%>  
 MC.Validated (δ=<%=MC_tolerance%>) | <%=mc.GUF_validated%>  
 
@@ -44,27 +44,27 @@ MC.Validated (δ=<%=MC_tolerance%>) | <%=mc.GUF_validated%>
 var resultsTemplateDefault = [
   {
     parameterTemplate: 'Reference',
-    valueTemplate: '<%=correctValueFmt%> <%=uutPrefix%><%=uutUnit%>',
+    valueTemplate: '<%=correctValueFmt%> <%=outputPrefix%><%=outputUnit%>',
     toReport: true
   },
   {
     parameterTemplate: 'U',
-    valueTemplate: '<%=UFmt%> <%=uutPrefix%><%=uutUnit%>',
+    valueTemplate: '<%=UFmt%> <%=outputPrefix%><%=outputUnit%>',
     toReport: true
   },
   {
     parameterTemplate: 'UUT',
-    valueTemplate: '<%=uutReadoutFmt%> <%=uutPrefix%><%=uutUnit%>',
+    valueTemplate: '<%=uutReadoutFmt%> <%=outputPrefix%><%=outputUnit%>',
     toReport: true
   },
   {
     parameterTemplate: 'MPE',
-    valueTemplate: '<%=mpeFmt%> <%=uutPrefix%><%=uutUnit%>',
+    valueTemplate: '<%=mpeFmt%> <%=outputPrefix%><%=outputUnit%>',
     toReport: true
   },
   {
     parameterTemplate: 'Error',
-    valueTemplate: '<%=errFmt%> <%=uutPrefix%><%=uutUnit%>',
+    valueTemplate: '<%=errFmt%> <%=outputPrefix%><%=outputUnit%>',
     toReport: true
   },
   {
@@ -89,12 +89,12 @@ var resultsTemplateDefault = [
   },
   {
     parameterTemplate: 'MC.uc',
-    valueTemplate: '<%=MC_ucFmt%> <%=uutPrefix%><%=uutUnit%>',
+    valueTemplate: '<%=MC_ucFmt%> <%=outputPrefix%><%=outputUnit%>',
     toReport: true
   },
   {
     parameterTemplate: 'MC.Interval',
-    valueTemplate: '[<%=MC_ULowFmt%>, <%=MC_UHighFmt%>]  <%=uutPrefix%><%=uutUnit%>',
+    valueTemplate: '[<%=MC_ULowFmt%>, <%=MC_UHighFmt%>]  <%=outputPrefix%><%=outputUnit%>',
     toReport: true
   },
   {
@@ -242,6 +242,11 @@ JsonEditorSchemas.instruments = {
                     title: "Distribution",
                     "enum": ["uniform", "normal", "triangular", "arcsine", "studentt"],
                     "default": "uniform"
+                  },
+                  unit: {
+                    type: "string",
+                    title: "Unit",
+                    "default": ""
                   },
                   customDist: {
                     title: "Custom distribution",

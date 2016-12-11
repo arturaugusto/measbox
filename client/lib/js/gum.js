@@ -692,8 +692,6 @@
     // Output
     this.y = this._xfunc.iterate()["res"];
 
-    console.log(this._xfunc);
-
     // Monte Carlo
     this.mcm = function() {
       console.info("Monte Carlo start...");

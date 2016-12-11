@@ -10,6 +10,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   );
 
   this.scope = {};
+  this.scopeUnits = {};  
   this.uutVarNames = [];
   this.gumArg = {
     "variables": [],
@@ -59,9 +60,9 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     var prefixStr = readout.replace(numberMatch[0], "");
     var res = number*prefixVal(prefixStr);
     return {value: res, prefix: prefixStr};
-  }
-  
-  this.pushUncertaintiesToGumArg = function (uncertainties, varName) {
+  }  
+
+  this.pushUncertaintiesToGumArg = function (uncertainties, varName, instUnit) {
     uncertainties.map(function (u) {
       if (u === undefined) return;
       var gumArgNode = _.findWhere(
@@ -110,6 +111,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     var range;
     for (var i = 0; i < instrument.ranges.length; i++) {
       range = instrument.ranges[i];
+      range.unit = instrument.unit;
       range.kind = instrument.kind;
       isThisRange = that.testRange(range);
       if (isThisRange) {
@@ -131,7 +133,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
 
   this.retrieveUncertainties = function() {
     var varGroups = _.keys(that.scope);
-    varGroups.map(function(varName) {
+    varGroups.map(function(varName, i) {
       var instrument = getInstrumentById(worksheet[varName+"InstrumentId"]);
       if (instrument === undefined) return;
 
@@ -140,13 +142,13 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       if (range === undefined) return;
 
       that.setRangeIdOnDB(range._id, varName);
-      if (that.varIsUUT(varName)) {
-        that.setUUTResolution(range);
-        that.results.uutUnit = instrument.unit;
-        that.results.uutName = varName;
-        that.results.uutRangeId = range._id;
-        that.results.uutInstrumentId = instrument._id;
-      }
+
+      that.results['var'+i+'Unit'] = instrument.unit;
+      that.results[varName+'Unit'] = instrument.unit;
+      //that.results[varName+'Name'] = varName;
+      that.results[varName+'RangeId'] = range._id;
+      that.results[varName+'InstrumentId'] = instrument._id;
+
       var solvedUncertainties = [];
       var solvedUncertainty;
       
@@ -167,15 +169,14 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       for (var i = 0; i < range.uncertainties.length; i++) {
         solvedUncertainty = that.solveUncertainties(range.uncertainties[i], varName);
         if (solvedUncertainty) {
+          solvedUncertainty.unit = range.uncertainties[i].unit;
           solvedUncertainties.push(solvedUncertainty);
         }
         var currUnc = range.uncertainties[i];
         var currSubVar = varName + '.' + currUnc.name;
         var estimate = currUnc.estimate || 0;
-        // TODO CHECK: colocar estimate no escopo
-        //console.log(currSubVar, estimate);
       }
-      that.pushUncertaintiesToGumArg(solvedUncertainties, varName);
+      that.pushUncertaintiesToGumArg(solvedUncertainties, varName, instrument.unit);
       return;
     });
     return;
@@ -190,13 +191,14 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     });
   }
 
-  this.extractRowData = function (varName) {
+  this.extractRowData = function (varName, i) {
     var cells = rowData[varName];
     // When uut, cells doesnt exist.
     // return artefact val
     if (!cells) {
-      if (that.varIsUUT(varName)) {
-        that.results.uutPrefix = "";
+      that.results[varName+'Prefix'] = "";
+      if (i !== undefined) {
+        that.results['var'+i+'Prefix'] = "";
       }
       return [0];
     }
@@ -212,8 +214,11 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     var res = [];
     cells.map(function(cellValue, readoutIndex) {
       parserResult = that.parseReadout(cellValue);
-      if (that.varIsUUT(varName) && readoutIndex === 0) {
-        that.results.uutPrefix = parserResult.prefix;
+      if (readoutIndex === 0) {
+        that.results[varName+'Prefix'] = parserResult.prefix;
+        if (i !== undefined) {
+          that.results['var'+i+'Prefix'] = parserResult.prefix;
+        }
       }
       res.push(parserResult.value);      
     });
@@ -229,12 +234,12 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.groups.push(v.name+ " = " + value.toString());
   }
 
-  this.setScopeData = function (v) {
-    var readoutArr = that.extractRowData(v.name);
+  this.setScopeData = function (v, i) {
+    var readoutArr = that.extractRowData(v.name, i);
     that.pushToGumArg(v.name, readoutArr);
     var mean = jStat.mean(readoutArr);
     that.scope[v.name] = mean;
-    if (that.varIsUUT(v.name)) that.results.uutReadout = mean;
+    //if (that.varIsUUT(v.name)) that.results.uutReadout = mean;
   }
 
   this.buildGumArg = function(worksheet) {
@@ -245,6 +250,7 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     }
 
     var node = mathjs.parse(that.procedure.func);
+    that.parsedProcFunc = node;
     that.gumArg.func_str = node.toString();
     that.results.funcLaTeX = that.gumArg.func_str;
     that.gumArg.func = node.compile().eval;
@@ -287,8 +293,6 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     propertiesToExportMC.split(" ").map(function(propName) {
       that.results.mc[propName] = that.gum.mc[propName];
     });
-
-    that.results.correctValue = that.results.uutReadout - that.results.y;
 
     that.postProcessingFuncStr = that.procedure.additionalOptions.postProcessing;
     that.postProcessingFunc = mathjs.compile(that.postProcessingFuncStr).eval;

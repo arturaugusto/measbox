@@ -61,7 +61,7 @@ this.histogramDatum = function(data) {
   //var gumMaxY = Math.max.apply(0,gumCurve); // TODO optimize
   var mcMaxY = Math.max.apply(0,hist.y);
 
-  var axUnit = data.row._results.uutUnit;
+  var axUnit = data.row._results.outputUnit;
   if (axUnit === "" || axUnit === undefined) axUnit = "unit";
 
   pdfChart.xAxis.axisLabel("("+axUnit+")");
@@ -120,7 +120,7 @@ Template.showResults.rendered = function() {
   
   nv.addGraph(function() {
     pdfChart.xAxis
-      .tickFormat(d3.format(',.1e'));
+      .tickFormat(d3.format(',.6e'));
     pdfChart.yAxis
       .tickFormat(d3.format(',.1e'));
     pdfChart
@@ -129,8 +129,8 @@ Template.showResults.rendered = function() {
       function (obj) {
         var dataSrc = obj.point || obj.data;
         return obj.series[0].key + 
-               "<br>y: "+(dataSrc.y || 0).toExponential(3)+
-               "<br>x: "+(obj.value || 0).toExponential(3);
+               "<br>y: "+(dataSrc.y || 0).toExponential(10)+
+               "<br>x: "+(obj.value || 0).toExponential(10);
       })
     ;
 
@@ -204,7 +204,7 @@ Template.showResults.helpers({
         value: v.value,
         //coef: (1-Math.abs(results.ci[i])) < 0.005 ? 1 : results.ci[i].toExponential(2),
         coef: results.ci[i].toExponential(1),
-        contribution: contribution.toExponential(3)+" "+(results.uutUnit || ""),
+        contribution: contribution.toExponential(3)+" "+(results.outputUnit || ""),
         type: v.type,
         distribution: v.distribution,
         _barWidth: (contribution/max)*100,
