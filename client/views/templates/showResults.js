@@ -155,6 +155,8 @@ Template.showResults.rendered = function() {
     ).call(pdfChart);
     nv.utils.windowResize(function() { 
       pdfChart.update();
+      // Fix when chart have long values on legend
+      //$("#pdfChartContainer svg").width("120%");
     });
     return pdfChart;
   });

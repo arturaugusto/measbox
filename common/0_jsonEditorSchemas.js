@@ -2,7 +2,6 @@ JsonEditorSchemas = {};
 JsonEditorInstances = {};
 
 var postProcessingDefault = `kFmt            = fmtToFixed(k, 2)
-#uutPrefix       = SIPrefix(uutReadout)
 uutPrefixVal    = prefixVal(uutPrefix)
 UFmt            = fmtToPrecision(U / uutPrefixVal, 2)
 UPrec           = decimalPlaces(UFmt)
@@ -13,9 +12,9 @@ mpeFmt          = fmtToFixed(mpe / uutPrefixVal, UPrec)
 tur             = fmtToFixed(mpe/U, 2)
 veffFmt         = veff > 9999 ? "∞" : round(veff)
 
-MC_ucFmt        = fmtToPrecision(mc.uc / uutPrefixVal, 2)
-MC_ULowFmt      = fmtToPrecision((mc.sci_limits[1] - mc.y) / uutPrefixVal, 2)
-MC_UHighFmt     = fmtToPrecision((mc.sci_limits[2] - mc.y) / uutPrefixVal, 2)
+MC_ucFmt        = fmtToPrecision(mc.uc / outputPrefixVal, 2)
+MC_ULowFmt      = fmtToPrecision((mc.sci_limits[1] - mc.y) / outputPrefixVal, 2)
+MC_UHighFmt     = fmtToPrecision((mc.sci_limits[2] - mc.y) / outputPrefixVal, 2)
 MC_dlowFmt      = fmtToPrecision(mc.d_low, 2)
 MC_dhighFmt     = fmtToPrecision(mc.d_high, 2)
 MC_tolerance    = fmtToPrecision(mc.num_tolerance, 2)
@@ -26,9 +25,7 @@ var resultsTemplateDefaultOld = `Parameter           | Value
 :---------------:   |:-----------------------------------------------:
 Reference           | <%=correctValueFmt%> <%=outputPrefix%><%=outputUnit%>  
 U                   | <%=UFmt%> <%=outputPrefix%><%=outputUnit%>             
-<%=uutName%>        | <%=uutReadoutFmt%> <%=outputPrefix%><%=outputUnit%>    
 MPE                 | <%=mpeFmt%> <%=outputPrefix%><%=outputUnit%>           
-Error               | <%=errFmt%> <%=outputPrefix%><%=outputUnit%>  
 TUR                 | <%=tur%>                                
 k                   | <%=kFmt%>                               
 _v_<sub>eff</sub>   | <%=veffFmt%>                            
@@ -50,11 +47,6 @@ var resultsTemplateDefault = [
   {
     parameterTemplate: 'U',
     valueTemplate: '<%=UFmt%> <%=outputPrefix%><%=outputUnit%>',
-    toReport: true
-  },
-  {
-    parameterTemplate: 'UUT',
-    valueTemplate: '<%=uutReadoutFmt%> <%=outputPrefix%><%=outputUnit%>',
     toReport: true
   },
   {
