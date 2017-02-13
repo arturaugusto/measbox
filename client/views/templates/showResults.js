@@ -120,7 +120,7 @@ Template.showResults.rendered = function() {
   
   nv.addGraph(function() {
     pdfChart.xAxis
-      .tickFormat(d3.format(',.6e'));
+      .tickFormat(d3.format(',.5e'));
     pdfChart.yAxis
       .tickFormat(d3.format(',.1e'));
     pdfChart

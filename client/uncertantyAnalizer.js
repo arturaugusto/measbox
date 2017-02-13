@@ -249,6 +249,13 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
       return;
     }
 
+    var additionalOptionsProps = JsonEditorSchemas.procedures.items.properties.additionalOptions.properties;
+    that.procedure.additionalOptions = that.procedure.additionalOptions || {}
+    that.procedure.additionalOptions.M = that.procedure.additionalOptions.M || additionalOptionsProps.M.default;
+    that.procedure.additionalOptions.cl = that.procedure.additionalOptions.cl || additionalOptionsProps.cl.default;
+    that.procedure.additionalOptions.postProcessing = that.procedure.additionalOptions.postProcessing || additionalOptionsProps.postProcessing.default;
+    that.procedure.additionalOptions.resultsTemplate = that.procedure.additionalOptions.resultsTemplate || additionalOptionsProps.resultsTemplate.default;
+
     var node = mathjs.parse(that.procedure.func);
     that.parsedProcFunc = node;
     that.gumArg.func_str = node.toString();
@@ -297,11 +304,19 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
     that.postProcessingFuncStr = that.procedure.additionalOptions.postProcessing;
     that.postProcessingFunc = mathjs.compile(that.postProcessingFuncStr).eval;
 
+    // uutName is also the xaxis for range chart
+    var uutVar = _.findWhere(that.procedure.variables, {'kind': 'UUT'});
+    if (uutVar) {
+      this.results['uutName'] = uutVar.name
+    } else {
+      this.results['uutName'] = 'y';
+    }
+    
+
     // Copy keys, to user access on postprocess
     Object.keys(that.results._scope).map(function(k) {
       that.results[k] = that.results._scope[k];
     });
-    
     that.postProcessingRes = that.postProcessingFunc(that.results);
     
   }
@@ -312,7 +327,8 @@ this.UncertantyAnalizer = function(rowData, rowDBPath, worksheetId) {
   this.gum = new GUM(this.gumArg);
   this.postProcess();
   this.results._groups = this.groups;
-  var reportedRes = reportedResultsFromRow(this.results, worksheet.procedureId);
+  this.results.worksheetId = worksheetId;
+  var reportedRes = reportedResultsFromRow(this.results, this.procedure);
   this.results.report = reportedRes;
   this.data[this.rowDBPath+"._results"] = this.results;
 

@@ -3,6 +3,10 @@ Session.set("updateTable", false);
 //Session.set( "addedRowsIdsArr", [] ); //Not implemented yet
 Template.worksheets.rendered = function() {
 
+
+  // Default
+  Session.set("selectedRow", {"id": '',"worksheetId": ''});
+
   this.autorun(function() {
     /*
     Not implemented yet
@@ -45,7 +49,7 @@ Template.worksheets.rendered = function() {
       editor.changedRows().map(function(tr) {
         $(tr).attr("changed", true);
       });
-      calculatePendingRows(that, 3000);
+      calculatePendingRows(that, 5000);
     },
     onSelectedCellChange: function(td) {
       var $row = $(td).parent();

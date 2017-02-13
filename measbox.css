@@ -27,13 +27,6 @@
 
 }
 
-/*
-#pdfChartContainer .nv-x .tick text, .nv-axisMaxMin-x text {
-  transform: rotate(20deg) translateY(12px);
-
-}*/
-
-
 #rangeChartContainer svg {
   position: absolute;
   min-height: 200px;
@@ -132,12 +125,20 @@ svg text{
   position: initial;
   height:100%;
   min-height: 400px;
+
 }
 
-/* Fix tics text cliping, but problens with other paths */
 #pdfChartContainer svg {
-  transform: translate(-3em, 2em);
-  
+  transform: translate(-2em, 2em);
+}
+
+/*#pdfChartContainer .nv-x .tick text, .nv-axisMaxMin-x text {
+  transform: rotate(20deg) translateY(12px);
+}*/
+
+/* Fix tics text cliping, overwrited by bootstrap */
+#pdfChartContainer svg:not(:root) {
+  overflow: visible;
 }
 
 .top-row .tab-content {

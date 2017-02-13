@@ -1,15 +1,14 @@
 JsonEditorSchemas = {};
 JsonEditorInstances = {};
 
-var postProcessingDefault = `kFmt            = fmtToFixed(k, 2)
-uutPrefixVal    = prefixVal(uutPrefix)
-UFmt            = fmtToPrecision(U / uutPrefixVal, 2)
+var postProcessingDefault = `outputUnit      = var0Unit
+outputPrefix    = SIPrefix(y)
+#outputPrefix    = var0Prefix
+outputPrefixVal = prefixVal(outputPrefix)
+kFmt            = fmtToFixed(k, 2)
+UFmt            = fmtToPrecision(U / outputPrefixVal, 2)
 UPrec           = decimalPlaces(UFmt)
-uutReadoutFmt   = fmtToFixed(uutReadout / uutPrefixVal, decimalPlaces(uutResolution / uutPrefixVal) )
-correctValueFmt = fmtToFixed(correctValue / uutPrefixVal, UPrec)
-errFmt          = fmtToFixed(y / uutPrefixVal, UPrec)
-mpeFmt          = fmtToFixed(mpe / uutPrefixVal, UPrec)
-tur             = fmtToFixed(mpe/U, 2)
+outputFmt       = fmtToFixed(y / outputPrefixVal, UPrec)
 veffFmt         = veff > 9999 ? "∞" : round(veff)
 
 MC_ucFmt        = fmtToPrecision(mc.uc / outputPrefixVal, 2)
@@ -18,86 +17,53 @@ MC_UHighFmt     = fmtToPrecision((mc.sci_limits[2] - mc.y) / outputPrefixVal, 2)
 MC_dlowFmt      = fmtToPrecision(mc.d_low, 2)
 MC_dhighFmt     = fmtToPrecision(mc.d_high, 2)
 MC_tolerance    = fmtToPrecision(mc.num_tolerance, 2)
-
 `;
-
-var resultsTemplateDefaultOld = `Parameter           | Value                                            
-:---------------:   |:-----------------------------------------------:
-Reference           | <%=correctValueFmt%> <%=outputPrefix%><%=outputUnit%>  
-U                   | <%=UFmt%> <%=outputPrefix%><%=outputUnit%>             
-MPE                 | <%=mpeFmt%> <%=outputPrefix%><%=outputUnit%>           
-TUR                 | <%=tur%>                                
-k                   | <%=kFmt%>                               
-_v_<sub>eff</sub>   | <%=veffFmt%>                            
-MC.M                | <%=mc.M%>  
-MC.uc               | <%=MC_ucFmt%> <%=outputPrefix%><%=outputUnit%>  
-MC.Interval | [<%=MC_ULowFmt%>, <%=MC_UHighFmt%>]  <%=outputPrefix%><%=outputUnit%>
-_d_<sub>low</sub>, _d_<sub>high</sub> | <%=MC_dlowFmt%>, <%=MC_dhighFmt%>  
-MC.Validated (δ=<%=MC_tolerance%>) | <%=mc.GUF_validated%>  
-
-`;
-
 
 var resultsTemplateDefault = [
   {
-    parameterTemplate: 'Reference',
-    valueTemplate: '<%=correctValueFmt%> <%=outputPrefix%><%=outputUnit%>',
-    toReport: true
+    "parameterTemplate": "Output",
+    "valueTemplate": "<%=outputFmt%> <%=outputPrefix%><%=outputUnit%>",
+    "toReport": true
   },
   {
-    parameterTemplate: 'U',
-    valueTemplate: '<%=UFmt%> <%=outputPrefix%><%=outputUnit%>',
-    toReport: true
+    "parameterTemplate": "U",
+    "valueTemplate": "<%=UFmt%> <%=outputPrefix%><%=outputUnit%>",
+    "toReport": true
   },
   {
-    parameterTemplate: 'MPE',
-    valueTemplate: '<%=mpeFmt%> <%=outputPrefix%><%=outputUnit%>',
-    toReport: true
+    "parameterTemplate": "k",
+    "valueTemplate": "<%=kFmt%>",
+    "toReport": true
   },
   {
-    parameterTemplate: 'Error',
-    valueTemplate: '<%=errFmt%> <%=outputPrefix%><%=outputUnit%>',
-    toReport: true
+    "parameterTemplate": "&#x1D708;<sub>eff</sub>",
+    "valueTemplate": "<%=veffFmt%>",
+    "toReport": true
   },
   {
-    parameterTemplate: 'TUR',
-    valueTemplate: '<%=tur%>',
-    toReport: true
+    "parameterTemplate": "MC.M",
+    "valueTemplate": "<%=mc.M%>",
+    "toReport": false
   },
   {
-    parameterTemplate: 'k',
-    valueTemplate: '<%=kFmt%>',
-    toReport: true
+    "parameterTemplate": "MC.uc",
+    "valueTemplate": "<%=MC_ucFmt%> <%=outputPrefix%><%=outputUnit%>",
+    "toReport": false
   },
   {
-    parameterTemplate: '<i>&nu;</i><sub>eff</sub>',
-    valueTemplate: '<%=veffFmt%>',
-    toReport: true
+    "parameterTemplate": "MC.Interval",
+    "valueTemplate": "[<%=MC_ULowFmt%>, <%=MC_UHighFmt%>] <%=outputPrefix%><%=outputUnit%>",
+    "toReport": false
   },
   {
-    parameterTemplate: 'MC.M',
-    valueTemplate: '<%=mc.M%>',
-    toReport: true
+    "parameterTemplate": "<i>d</i><sub>low</sub>, <i>d</i><sub>high</sub>",
+    "valueTemplate": "<%=MC_dlowFmt%>, <%=MC_dhighFmt%>",
+    "toReport": false
   },
   {
-    parameterTemplate: 'MC.uc',
-    valueTemplate: '<%=MC_ucFmt%> <%=outputPrefix%><%=outputUnit%>',
-    toReport: true
-  },
-  {
-    parameterTemplate: 'MC.Interval',
-    valueTemplate: '[<%=MC_ULowFmt%>, <%=MC_UHighFmt%>]  <%=outputPrefix%><%=outputUnit%>',
-    toReport: true
-  },
-  {
-    parameterTemplate: '<i>d</i><sub>low</sub>, <i>d</i><sub>high</sub>',
-    valueTemplate: '<%=MC_dlowFmt%>, <%=MC_dhighFmt%>',
-    toReport: true
-  },
-  {
-    parameterTemplate: 'MC.Validated (δ=<%=MC_tolerance%>)',
-    valueTemplate: '<%=mc.GUF_validated%>',
-    toReport: true
+    "parameterTemplate": "MC.Validated (δ=<%=MC_tolerance%>)",
+    "valueTemplate": "<%=String(mc.GUF_validated)%>",
+    "toReport": false
   }
 ]
 
@@ -409,7 +375,7 @@ JsonEditorSchemas.procedures = {
           M: {
             type: 'number',
             title: 'Max. Adaptive Monte Carlo M',
-            "default": 50e4,
+            "default": 50e3,
             "enum": [50e3, 20e4, 50e4, 10e5, 50e5, 10e6, 50e6]
           },          
           postProcessing: {

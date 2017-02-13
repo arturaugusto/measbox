@@ -108,42 +108,103 @@ this.getIndexOfCurrentWorksheet = function() {
   )
 }
 
+this.getChangedRows = function() {
+  return $('tr[changed=true]');
+}
+
+this.buildElRowData = function(el) {
+  var rowId;
+  rowId = el.getAttribute("id");
+  var rowData;
+  rowData = getSelectedWorksheetRowById(rowId);
+  var extractedRowData;
+  extractedRowData = extractRowDOMData(el);
+  var varNameGroups;
+  varNameGroups = _.groupBy(extractedRowData, 'varName');
+  var varNameGroupsKeys;
+  varNameGroupsKeys = _.keys(varNameGroups);
+  varNameGroupsKeys.map(function(k) {
+    var kData = []
+    for (var i = 0; i < varNameGroups[k].length; i++) {
+      kData.push(varNameGroups[k][i].value);
+    }
+    rowData[k] = kData;
+  });
+  var key = $(el).attr("db-path");
+  var data = {};
+  data[key] = rowData;
+  return data;
+}
+
+this.changedRowsPaths = function() {
+  that.uniqChangedRowsPath = _.uniq(
+    _.keys(data).map(function(path) {
+      //console.log(path);
+      return path.split(".").slice(0,4).join(".");
+    })
+  );
+}
+
+
+this.updateWsHistory = function(dataHistory) {
+  var dataToSetHistory = {};
+  var pathToSetHistory = 'worksheets.'+indexOfCurrentWorksheet()+'.dataHistory';
+  dataToSetHistory[pathToSetHistory] = dataHistory;
+  setData(dataToSetHistory);  
+}
+
+this.computeUncertainties = function(scope) {
+  var $changedRows = getChangedRows();
+
+  $changedRows.each(function(i, el) {
+    var path = el.getAttribute("db-path");
+    // TODO: Use some lib to get item by dot-notation
+    // Get rows for path
+    var rows = _.findWhere(Spreadsheets.findOne().worksheets,
+      {_id: Session.get("selectedWorksheetId")}
+    ).rows;
+    // Get data from row, by index from the path
+    var rowData = rows[parseInt(path.split(".rows.")[1])];
+    console.log(rowData);
+    
+    try {
+      UncertantyAnalizer(rowData, path, scope.data._id);
+      $(el).removeAttr('changed');
+    }
+    catch (e) {
+      Session.set('processing', false);
+      //nem sempre quando calcula, o resultado novo se mantem no db... pq?
+      //$(el).removeAttr("changed");
+      console.log(e);
+    }
+  });
+  window.setTimeout(rangeChartMustRedraw, 1000);
+  //$(el).removeAttr("changed");
+}
+
+this.rangeChartMustRedraw = function() {
+  Session.set('rangeChartUpdate', true);
+}
+
 this.calculatePendingRows = function(scope, delay) {
   clearTimeout(scope.changedCellsTimeout);
   scope.changedCellsTimeout = setTimeout(function() {
-    var that = this;
-    Session.set("processing", true);
 
-    setChangedCells(function(data) {
-      that.uniqChangedRowsPath = _.uniq(
-        _.keys(data).map(function(path) {
-          //console.log(path);
-          return path.split(".").slice(0,4).join(".");
-        })
-      );
-    }, editor.dataHistory);
-    // TODO: this should be run just after setCHangedCells
-    // finish, not relaing on timers
-    setTimeout(function() {
-      that.uniqChangedRowsPath.map(function(path) {
-        // TODO: Use some lib to get item by dot-notation
-        // Get rows for path
-        var rows = _.findWhere(Spreadsheets.findOne().worksheets,
-          {_id: Session.get("selectedWorksheetId")}
-        ).rows;
-        // Get data from row, by index from the path
-        var rowData = rows[parseInt(path.split(".rows.")[1])];
-        
-        try {
-          UncertantyAnalizer(rowData, path, scope.data._id);
-        }
-        catch (e) {
-          Session.set("processing", false);
-          console.log(e);
-        }
-      });
-    }, 1000);
+    var that = this;
+    var $changedRows = getChangedRows();
+    var $changedRowsLen = $changedRows.length;
+    $changedRows.each(function(i, el) {
+      setData( buildElRowData(el) );
+      if (i === $changedRowsLen - 1 ) {
+        Session.set('processing', true);
+        window.setTimeout(function() {
+          computeUncertainties(scope);
+        }, 1000);
+        updateWsHistory(editor.dataHistory);
+      }
+    });
   }, delay);
+  return;
 }
 
 this.removeRows = function(rowIds) {
@@ -192,51 +253,6 @@ this.extractRowDOMData = function(tr) {
   });
   return data;
 }
-
-
-this.setChangedCells = function(cb, dataHistory) {
-  var data = {};
-  var extractRowData;
-  var rowData;
-  var rowId;
-  var varNameGroups;
-  var varNameGroupsKeys;
-  ['td', 'tr'].map(function(elType) {
-    $(elType+'[changed=true]').each(function(i, el) {
-      if (el.nodeName === 'TR') {
-        rowId = el.getAttribute("id");
-        if (rowId !== undefined) {
-          rowData = getSelectedWorksheetRowById(rowId);
-          extractRowData = extractRowDOMData(el);
-          varNameGroups = _.groupBy(extractRowData, 'varName');
-          varNameGroupsKeys = _.keys(varNameGroups);
-          varNameGroupsKeys.map(function(k) {
-            var kData = []
-            for (var i = 0; i < varNameGroups[k].length; i++) {
-              kData.push(varNameGroups[k][i].value);
-            }
-            rowData[k] = kData;
-          });
-        }
-      }
-
-      //data[key] = $(el).text();
-      $(el).removeAttr("changed");
-      if (rowData !== undefined) {
-        var key = $(el).attr("db-path");
-        data[key] = rowData;
-        setData(data, cb);
-      }
-    });
-
-    var dataToSetHistory = {};
-    var pathToSetHistory = 'worksheets.'+indexOfCurrentWorksheet()+'.dataHistory';
-    dataToSetHistory[pathToSetHistory] = dataHistory;
-    setData(dataToSetHistory);
-
-  });
-}
-
 
 this.getAddRowQtd = function(id) {
   return qtd = parseInt(
@@ -406,8 +422,7 @@ this.rowsRangeData = function(rows, uutInstrument) {
 }
 
 
-this.reportedResultsFromRow = function(results, procedureId) {
-  var procedure = getProcedureById(procedureId);
+this.reportedResultsFromRow = function(results, procedure) {
   var resultsTemplate = procedure.additionalOptions.resultsTemplate;
   var compiledRes = resultsTemplate.map(function(resTemplate) {
     var parameterTemplateCompiled = _.template(resTemplate.parameterTemplate);
@@ -432,11 +447,15 @@ document.addEventListener('click', function(e) {
   } else {
     elementToCheckDelete = target;
   }
-  if ( elementToCheckDelete.className.indexOf('delete') > -1 ) {
-    var confirm;
-    confirm = window.confirm("Confirm delete this item?");
-    if ( !confirm ) {
-      e.stopPropagation();
+  try {
+    if ( elementToCheckDelete.className.indexOf('delete') > -1 ) {
+      var confirm;
+      confirm = window.confirm("Confirm delete this item?");
+      if ( !confirm ) {
+        e.stopPropagation();
+      }
     }
+  } catch (e) {
+    //
   }
 }, true);
